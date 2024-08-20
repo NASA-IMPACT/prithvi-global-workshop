@@ -1,0 +1,21 @@
+pyyaml
+python == 3.10
+pytorch >= 2.0.0
+torchvision
+xarray
+dask
+netCDF4
+bottleneck
+zarr
+timm
+einops
+yacs
+tqdm
+
+# The following packages are required for preprocessing only
+rasterio
+rioxarray
+geopandas
+pandas
+matplotlib
+scipy
