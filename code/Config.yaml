@@ -1,0 +1,57 @@
+DATA:
+  BANDS: [B02, B03, B04, B05, B06, B07]
+  CHUNK_SIZE: 16
+  DATA_AUGMENTATION: true
+  INPUT_SIZE: [4, 224, 224]
+  MASK_RATIO: 0.75
+  MEAN: [1087.0, 1342.0, 1433.0, 2734.0, 1958.0, 1363.0]
+  META_FILE_PATH: /p/scratch/geofm4eo/HLSv9/train/statistics_rounded.json
+  NO_BLOSC_THREADS: true
+  NUM_WORKERS: 4
+  PIN_MEMORY: false
+  PREFETCH_FACTOR: 4
+  SCALING: standard
+  STD: [2248.0, 2179.0, 2178.0, 1850.0, 1242.0, 1049.0]
+  TRAIN_DIR: /p/scratch/geofm4eo/HLSv9/train
+  VAL_DIR: /p/scratch/geofm4eo/HLSv9/val
+MODEL:
+  COORDS_DROP_RATE: 0.0
+  COORDS_ENCODING: []
+  COORDS_SCALE_LEARN: false
+  DECODER_DEPTH: 8
+  DECODER_EMBED_DIM: 512
+  DECODER_NUM_HEADS: 16
+  DEPTH: 24
+  DROP_CHANNELS_RATE: 0.0
+  EMBED_DIM: 1024
+  MLP_RATIO: 4.0
+  NAME: vit_l
+  NORM_PIX_LOSS: false
+  NUM_HEADS: 16
+  PATCH_SIZE: [1, 16, 16]
+TRAIN:
+  ACCUMULATION_STEPS: 1
+  AMP_DTYPE: torch.bfloat16
+  BASE_OUTPUT_DIR: /p/project1/geofm4eo/pretrained_code/ViT3D_models
+  BATCH_SIZE: 80
+  CLIP_GRAD: 20.0
+  CPU_ONLY: false
+  ENABLE_AMP: true
+  EPOCHS: 400
+  EXP_ID: 2024-07-24_21-52-12
+  LOAD_WEIGHTS: ''
+  LR: 0.0005
+  LR_SCHEDULER: {NAME: cosine, WARMUP_PREFIX: true}
+  MIN_LR: 4.0e-09
+  OPTIMIZER:
+    BETAS: [0.9, 0.95]
+    EPS: 1.0e-08
+  OUTPUT_DIR: /p/project1/geofm4eo/pretrained_code/ViT3D_models/2024-07-24_21-52-12
+  PRINT_FREQ: 10
+  RESUME: /p/project1/geofm4eo/pretrained_code/ViT3D_models/2024-07-24_21-52-12
+  SAVE_FREQ: 200
+  SEED: 2022
+  WARMUP_EPOCHS: 40
+  WARMUP_LR: 1.0e-06
+  WEIGHT_DECAY: 0.05
+  WORLD_SIZE: 48
