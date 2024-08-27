@@ -301,7 +301,7 @@ def main():
             best_loss=epoch_loss_val
             best_miou_val=miou_valid
 
-        if miou_valid<best_miou_val:
+        if miou_valid>best_miou_val:
             save_checkpoint(model, optimizer, i, epoch_loss_train, epoch_loss_val, checkpoint)
             best_miou_val=miou_valid
 
