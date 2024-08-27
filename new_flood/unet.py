@@ -7,7 +7,9 @@ class Conv(nn.Module):
     """(convolution-BatchNorm-ReLU)"""
 
     def __init__(self, in_channels, out_channels,type):
+
         super(Conv, self).__init__()
+
         if type==1:
             self.conv_layer = nn.Sequential(
                 nn.Conv3d(in_channels, out_channels, kernel_size=(1,3,3),stride=(1,2,2),padding=(0,1,1)),
@@ -45,11 +47,14 @@ class Conv(nn.Module):
 
     def forward(self, x):
         return self.conv_layer(x)
-###########################################################################
+    
+########################################################################################
 ########################################################################################
 
 class UNet(nn.Module):
+
     def __init__(self, n_channels, n_classes,n_frame,prithvi_weight,prithvi_config,input_size):
+        
         super(UNet, self).__init__()
 
         self.n_channels = n_channels
@@ -103,18 +108,5 @@ class UNet(nn.Module):
         #print("x10 shape",x10.shape)
         return x10 
 
-    
-    
-'''
-input_tensor = torch.randn(1, 12, 1, 224, 224)  # Input batch,channel,frame,height,width
-mask=torch.randint(0,2,(1,224,224))
-print("mask shape",mask.shape)
-#print("input shape",input_tensor.shape)
-unet=UNet(12, 2) #in_channel=12,n_class=2  #burn scar has 2 classes
-pred=unet(input_tensor)
-print("pred shape",pred.shape)
-print("unet output shape",pred.shape)
-loss=UNet.segmentation_loss(mask,pred)
-print("loss",loss)'''
 
 
