@@ -4,7 +4,7 @@ Checkpoint: [ Pretrained Checkpoint](https://www.nsstc.uah.edu/data/sujit.roy/Pr
 
 ## Architecture:
 
-In this work we attached UNet down and up layers at input and output of prithvi global model. These in and out layer embeddings have skip connection in between them from input to output. This modification in architecture is done because, for CO2 downstream task, there will be MERRA data which the Prithvi_global model has never seen before. However in this repo the config file is provided for 6 channel input for flood mapping downstream task and so is the model trained for. To train this model for C02 downstream task, one have to modify the config.yaml file accordingly.
+In this work we attached UNet down and up layers at input and output of prithvi global model. These in and out layer embeddings have skip connection in between them from input to output. This modification in architecture is purposefully done to help CO2 downstream task, as there will be MERRA data for CO2 downstream, which the Prithvi_global model has never seen before. However in this repo currently the config file is provided for 6 channel input and the model checkpoint provided ("checkpoint_new_flood.pth") in google drive is obtained by training for flood downstream task. To train this model for CO2 downstream task, one have to modify the config.yaml file accordingly.
 
 
 ## Instructions
