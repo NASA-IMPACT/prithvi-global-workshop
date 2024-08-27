@@ -200,8 +200,8 @@ def main():
         param.requires_grad = False
 
     # optimizer=optim.Adam(model.parameters(),lr=0.0001)
-    optimizer = optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=0.00001)
-    scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.8)
+    #optimizer = optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=0.00001)
+    #scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.8)
 
 
     optimizer_params = config["training"]['optimizer']['params']
