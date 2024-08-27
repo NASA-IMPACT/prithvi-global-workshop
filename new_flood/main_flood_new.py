@@ -28,20 +28,18 @@ def data_path(mode,data_dir_input,data_dir_mask,annot):
         with open (annot,"r") as f:
             annot_file=f.readlines()
     
-    #print("annot file:",annot_file)
 
     for i in annot_file:
-        #print("i is:",i)
+        
         mask_name=i.split(",")[1].strip()
         mask_path=os.path.join(data_dir_mask,mask_name)
-        #print("mask path:",mask_path)
+        
         name=i.split(",")[0].strip()
         img_name="_".join(name.split("_")[:-1])+"_S2Hand.tif"
         img_path=os.path.join(data_dir_input,img_name)
-        #print("img path:",img_path)
+       
         path.append([img_path,mask_path])
         
-    #print(path)
 
     return path
 
@@ -50,19 +48,18 @@ def segmentation_loss(mask,pred,device,class_weights,ignore_index):
     
     mask=mask.long()
     pred=pred.squeeze(2) #single timestamp for burn_scar mask, time dim=1 not required
-    #print("mask ",mask)
-    #print("pred",pred)
-            
-    class_weights = torch.tensor(class_weights, dtype=torch.float32).to(device)  # Define class weights
+    
+    class_weights = torch.tensor(class_weights, dtype=torch.float32).to(device)  # Data is imbalanced
+    
     # Initialize the CrossEntropyLoss with weights
     criterion = nn.CrossEntropyLoss(ignore_index=ignore_index,weight=class_weights).to(device) 
     loss=criterion(pred,mask) 
-    #print("loss",loss)
 
     return loss
 
     
 def save_checkpoint(model, optimizer, epoch, train_loss, val_loss, filename):
+    
     checkpoint = {
         'epoch': epoch,
         'model_state_dict': model.state_dict(),
@@ -70,12 +67,14 @@ def save_checkpoint(model, optimizer, epoch, train_loss, val_loss, filename):
         'train_loss': train_loss,
         'val_loss':val_loss
     }
+
     torch.save(checkpoint, filename)
     print(f"Checkpoint saved at {filename}")
 
+
 def compute_accuracy(labels, output):
-    # Get the predicted class by taking the argmax along the class dimension
-    # output shape: (batch_size, 2_class,time_frame,224, 224) -> predicted shape: (batch_size, 224, 224)
+    
+    # output: (batch_size, 2_class,time_frame,224, 224) -> (batch_size, 224, 224)
     output=output.squeeze(2)
     predicted = torch.argmax(output, dim=1)
 
@@ -83,38 +82,31 @@ def compute_accuracy(labels, output):
     correct = (predicted == labels).sum().item()
     total = labels.numel()  # Total number of elements in labels
     
-    # Compute accuracy
     accuracy = correct / total 
-    #print("accuracy:",accuracy)
+    
     return accuracy
 
+
 def plot_output_image(model, device, epoch,means,stds,input_path,prediction_img_dir):
-    model.eval()  # Set model to evaluation mode
+    
+    model.eval()  
 
     if_img=1
     img=load_raster(input_path,if_img,crop=(224, 224))
-    #print("img size",img.shape)
+   
     final_image=preprocess_image(img,means,stds)
     final_image=final_image.to(device)
-    #print("final img size",final_image.shape)
     
     with torch.no_grad():
-        output = model(final_image)  # output shape should be [1, n_segmentation_class, 224, 224]
+        output = model(final_image)  # [1, n_segmentation_class, 224, 224]
 
-    # Remove batch dimension
-    output = output.squeeze(0).squeeze(1)  # shape [n_segmentation_class, 224, 224]
+    # Remove batch dimension, batch=1, and then the time_step dimension, which is 0 also
 
-    # Convert output to predicted class
+    output = output.squeeze(0).squeeze(1)  #[n_segmentation_class, 224, 224]  
     predicted_mask = torch.argmax(output, dim=0)  # shape [224, 224]
-    #print("predicted shape:",predicted_mask.shape)
-    
-    # Convert to numpy for plotting
     predicted_mask = predicted_mask.cpu().numpy()
-
     binary_image = (predicted_mask * 255).astype(np.uint8)
-
-    # Convert to PIL image
-    img = Image.fromarray(binary_image, mode='L')
+    img = Image.fromarray(binary_image, mode='L') #PIL Image
 
     # Save the image
     output_image_path = os.path.join(prediction_img_dir,f"segmentation9_output_epoch_{epoch}.png")
@@ -122,6 +114,7 @@ def plot_output_image(model, device, epoch,means,stds,input_path,prediction_img_
 
 
 #######################################################################################
+
 def main():
     with open('config.yaml', 'r') as file:
         config = yaml.safe_load(file)
@@ -145,7 +138,7 @@ def main():
     ignore_index=config["ignore_index"]
     input_size=config["data"]["input_size"]
 
-    # Print all the configuration parameters
+    # Print some of the configuration parameters
     print(f"Learning Rate: {learning_rate}")
     print(f"Batch Size: {train_batch_size}")
     print(f"Number of Epochs: {n_iteration}")
@@ -166,13 +159,12 @@ def main():
 
     wandb.run.log_code(".")
 
+
+    #initialize dataset class
     means=config["data"]["means"]
     stds=config["data"]["stds"]
     means=np.array(means)
     stds=np.array(stds)
-
-
-    #initialize dataset class
     path_train=data_path("training",data_dir_input,data_dir_mask,train_annot)
     path_val=data_path("validation",data_dir_input,data_dir_mask,val_annot)
     flood_dataset_train=burn_dataset(path_train,means,stds)
@@ -184,25 +176,13 @@ def main():
 
     #initialize model    
     config["prithvi_model_new_weight"]="/rhome/rghosal/Rinki/rinki-hls-foundation-os/Prithvi_global.pt"
-
     config["prithvi_model_new_config"]= get_config(None)  
-    #print("model:",pr_config)
-
-    #n_frame=3
-    #model_prithvi=prithvi(pr_weight,pr_config,n_frame)
-
-    #initialize the model
     model=UNet(n_channel,n_class,n_frame,config["prithvi_model_new_weight"],config["prithvi_model_new_config"],input_size) #wrapper of prithvi #initialization of prithvi is done by initializing prithvi_loader.py
     model=model.to(device)
 
     #while training, prithvi core model weights should be freezed
     for param in model.prithvi.parameters():
         param.requires_grad = False
-
-    # optimizer=optim.Adam(model.parameters(),lr=0.0001)
-    #optimizer = optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=0.00001)
-    #scheduler = lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.8)
-
 
     optimizer_params = config["training"]['optimizer']['params']
     optimizer = getattr(optim, config["training"]['optimizer']['name'])(filter(lambda p: p.requires_grad, model.parameters()), **optimizer_params)
@@ -213,8 +193,8 @@ def main():
     best_loss=0
 
     for i in range(n_iteration):
-        loss_i=0.0
 
+        loss_i=0.0
         acc_dataset_train=[]
         print("iteration started")
 
@@ -226,7 +206,6 @@ def main():
             mask=mask.to(device)
 
             #print(torch.unique(mask)) #check unique classes in target mask #-1,0,1
-            
         
             optimizer.zero_grad()
             out=model(input)
@@ -240,8 +219,6 @@ def main():
             loss.backward()
             optimizer.step()
 
-            #print("loss",loss)
-
         acc_total_train=np.mean(acc_dataset_train)
         epoch_loss_train=(loss_i)/len(train_dataloader.dataset)
         wandb.log({"epoch": i + 1, "train_loss": epoch_loss_train,"acc_train":acc_total_train,"learning_rate": optimizer.param_groups[0]['lr']})
@@ -250,7 +227,6 @@ def main():
         # Validation Phase
         model.eval()
         val_loss = 0.0
-        
         acc_dataset_val=[]
     
         with torch.no_grad():
@@ -261,12 +237,11 @@ def main():
             
                 out=model(input)
 
-                #loss=dice_loss(out, mask)
+                #loss
                 loss=segmentation_loss(mask,out,device,class_weights,ignore_index)
                 batch_acc=compute_accuracy(mask,out)
 
                 acc_dataset_val.append(batch_acc)
-                # Update validation loss and accuracy
                 val_loss += loss.item() * input.size(0)   
     
         acc_total_val=np.mean(acc_dataset_val)
