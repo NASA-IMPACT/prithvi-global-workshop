@@ -40,30 +40,20 @@ class PatchEmbed(nn.Module):
         self.input_size = input_size
         self.patch_size = patch_size
         self.grid_size = [s // p for s, p in zip(self.input_size, self.patch_size)]
-        #print("self.grid_size shape",self.grid_size)
         
         self.num_patches = self.grid_size[0] * self.grid_size[1] * self.grid_size[2]
-        #print("self.num_patches ",self.num_patches)
         self.flatten = flatten
 
+        ## Commented out the projection layer
+        ## image->vit_mae_encoder_embedding_space done sepaartely by attaching unet down legs
+        
         #self.proj = nn.Conv3d(in_chans, embed_dim, kernel_size=patch_size, stride=patch_size, bias=bias)
         self.norm = norm_layer(embed_dim) if norm_layer else nn.Identity()
 
     def forward(self, x):
         B, C, T, H, W = x.shape
-        '''_assert(H == self.input_size[1], f"Input image height ({H}) doesn't match model ({self.input_size[1]}).")
-        _assert(W == self.input_size[2], f"Input image width ({W}) doesn't match model ({self.input_size[2]}).")
-        _assert(T == self.input_size[0], f"Input image width ({T}) doesn't match model ({self.input_size[0]}).")'''
 
-        #print("B, C, T, H, W",B, C, T, H, W)
-
-        '''if H != self.input_size[1]:
-            raise ValueError(f"Input image height ({H}) doesn't match model ({self.input_size[1]}).")
-        if W != self.input_size[2]:
-            raise ValueError(f"Input image width ({W}) doesn't match model ({self.input_size[2]}).")
-        if T != self.input_size[0]:
-            raise ValueError(f"Input image width ({T}) doesn't match model ({self.input_size[0]}).")'''
-        
+        ## Commented out the step for :image->vit_mae_encoder_embedding_space
         #x = self.proj(x)
         if self.flatten:
             x = x.flatten(2).transpose(1, 2)  # B,C,T,H,W -> B,C,L -> B,L,C
@@ -199,7 +189,6 @@ class MaskedAutoencoderViT(nn.Module):
         
         self.patch_embed = PatchEmbed(input_size, patch_size,in_chans, embed_dim)
         num_patches = self.patch_embed.num_patches
-        #print("num_patches",num_patches)
 
         self.temporal_encoding = 'time' in coords_encoding
         self.location_encoding = 'location' in coords_encoding
@@ -212,7 +201,7 @@ class MaskedAutoencoderViT(nn.Module):
 
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
         self.register_buffer("pos_embed", torch.zeros(1, num_patches + 1, embed_dim))
-        #print("pos_embed 1 shape",self.pos_embed.shape)
+        
         self.blocks = nn.ModuleList([
             Block(embed_dim, num_heads, mlp_ratio, qkv_bias=True, norm_layer=norm_layer)
             for i in range(depth)])
@@ -256,6 +245,9 @@ class MaskedAutoencoderViT(nn.Module):
             self.decoder_pos_embed.shape[-1], self.patch_embed.grid_size, cls_token=True
         )
         self.decoder_pos_embed.data.copy_(torch.from_numpy(decoder_pos_embed).float().unsqueeze(0))
+
+        ## below 2 lines not required, not updating patch embedding weights from this code
+        ## patch embedding replace by unet down legs
 
         # initialize patch_embed like nn.Linear (instead of nn.Conv2d)
         #w = self.patch_embed.proj.weight.data
@@ -331,14 +323,13 @@ class MaskedAutoencoderViT(nn.Module):
                         mask_ratio: float):
 
         # Drop input channels
-        #print("x shape",x.shape)
         x = self.drop_channels(x)
-        #print("x shape",x.shape)
+        
         # embed patches
         x = self.patch_embed(x)
-        #print("x shape",x.shape)
+       
         # add pos embed w/o cls token
-        #print("self.pos_embed shape",self.pos_embed.shape)
+       
         x = x + self.pos_embed[:, 1:, :]
 
         if self.temporal_encoding:
