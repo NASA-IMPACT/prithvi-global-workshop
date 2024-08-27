@@ -113,6 +113,40 @@ def plot_output_image(model, device, epoch,means,stds,input_path,prediction_img_
     img.save(output_image_path)
 
 
+def calculate_miou(output, target, device):
+
+
+    eps=1e-6
+    output=output.squeeze(2)
+    num_classes=output.shape[1]
+    preds = torch.argmax(output, dim=1)
+
+    # Flatten the tensors
+    preds = preds.view(-1)  # Flatten predictions
+    target = target.view(-1)  # Flatten target
+
+    # Initialize intersection and union for each class
+    intersection = torch.zeros(num_classes).to(device)
+    union = torch.zeros(num_classes).to(device)
+
+    for cls in range(num_classes):
+
+        # Create binary masks for the current class
+        pred_mask = (preds == cls).float()
+        target_mask = (target == cls).float()
+
+        # Calculate intersection and union
+        intersection[cls] = (pred_mask * target_mask).sum()
+        union[cls] = pred_mask.sum() + target_mask.sum() - intersection[cls]
+
+    # Calculate IoU for each class
+    iou = intersection / (union + eps)  # Add eps to avoid division by zero
+
+    # Calculate mean IoU
+    mean_iou = iou.mean().item()
+
+    return mean_iou
+
 #######################################################################################
 
 def main():
@@ -191,11 +225,13 @@ def main():
     scheduler = getattr(lr_scheduler, config["training"]['scheduler']['name'])(optimizer, **scheduler_params)
 
     best_loss=0
+    best_miou_val=0
 
     for i in range(n_iteration):
 
         loss_i=0.0
         acc_dataset_train=[]
+        miou_train=[]
         print("iteration started")
 
         model.train()
@@ -216,17 +252,21 @@ def main():
             loss_i += loss.item() * input.size(0)  # Multiply by batch size
             acc_dataset_train.append(batch_acc)
 
+            miou_batch=calculate_miou(out, mask, device)
+            miou_train.append(miou_batch)
+    
             loss.backward()
             optimizer.step()
 
         acc_total_train=np.mean(acc_dataset_train)
+        miou_train=np.mean(miou_train)
         epoch_loss_train=(loss_i)/len(train_dataloader.dataset)
-        wandb.log({"epoch": i + 1, "train_loss": epoch_loss_train,"acc_train":acc_total_train,"learning_rate": optimizer.param_groups[0]['lr']})
-    
+        wandb.log({"epoch": i + 1, "train_loss": epoch_loss_train,"acc_train":acc_total_train,"learning_rate": optimizer.param_groups[0]['lr'],"miou_train":miou_train})
 
         # Validation Phase
         model.eval()
         val_loss = 0.0
+        miou_valid=[]
         acc_dataset_val=[]
     
         with torch.no_grad():
@@ -242,22 +282,28 @@ def main():
                 batch_acc=compute_accuracy(mask,out)
 
                 acc_dataset_val.append(batch_acc)
-                val_loss += loss.item() * input.size(0)   
+                val_loss += loss.item() * input.size(0)  
+
+                miou_batch=calculate_miou(out, mask, device)
+                miou_valid.append(miou_batch) 
     
         acc_total_val=np.mean(acc_dataset_val)
         epoch_loss_val = val_loss / len(val_dataloader.dataset)
+        miou_valid=np.mean(miou_valid)
 
-        wandb.log({"epoch": i + 1, "val_loss": epoch_loss_val,"accuracy_val":acc_total_val})
-        print(f"Epoch: {i}, train loss: {epoch_loss_train}, val loss:{epoch_loss_val},accuracy_train:{acc_total_train},accuracy_val:{acc_total_val}")
+        wandb.log({"epoch": i + 1, "val_loss": epoch_loss_val,"accuracy_val":acc_total_val,"miou_val":miou_valid})
+        print(f"Epoch: {i}, train loss: {epoch_loss_train}, val loss:{epoch_loss_val},accuracy_train:{acc_total_train},accuracy_val:{acc_total_val},miou_val:{miou_valid}")
+
 
         scheduler.step()
 
         if i==0:
             best_loss=epoch_loss_val
+            best_miou_val=miou_valid
 
-        if epoch_loss_val<best_loss:
+        if miou_valid<best_miou_val:
             save_checkpoint(model, optimizer, i, epoch_loss_train, epoch_loss_val, checkpoint)
-            best_loss=epoch_loss_val
+            best_miou_val=miou_valid
 
         if i%20==0:
             plot_output_image(model,device,i,means,stds,segment_input,predicted_mask_dir)
