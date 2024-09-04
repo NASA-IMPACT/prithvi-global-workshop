@@ -1,5 +1,5 @@
 
-## Prithvi HLS Global+UNet : finetuning for flood
+## Prithvi HLS Global+ Segmentor (https://arxiv.org/pdf/2105.05633) : finetuning for burn_scar
 <!---- Provide an overview of what is being achieved in this repo ----> 
 Checkpoint: [ Pretrained Checkpoint](https://www.nsstc.uah.edu/data/sujit.roy/Prithvi_checkpoints/)
 
