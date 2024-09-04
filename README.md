@@ -1,5 +1,5 @@
 
-## Prithvi HLS Global+ UNet (https://arxiv.org/pdf/2105.05633) : finetuning for flood map
+## Prithvi HLS Global+ UNet: finetuning for flood map
 <!---- Provide an overview of what is being achieved in this repo ----> 
 Checkpoint: [ Pretrained Checkpoint](https://www.nsstc.uah.edu/data/sujit.roy/Prithvi_checkpoints/)
 
