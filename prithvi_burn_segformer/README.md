@@ -1,4 +1,4 @@
-![IMG_3852](https://github.com/user-attachments/assets/9bcd6228-976e-4a92-9eb5-4f9015766ed6)
+
 ## Prithvi HLS Global+UNet : finetuning for flood
 <!---- Provide an overview of what is being achieved in this repo ----> 
 Checkpoint: [ Pretrained Checkpoint](https://www.nsstc.uah.edu/data/sujit.roy/Prithvi_checkpoints/)
