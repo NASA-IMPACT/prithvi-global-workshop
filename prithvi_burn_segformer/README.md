@@ -5,7 +5,7 @@ Checkpoint: [ Pretrained Checkpoint](https://www.nsstc.uah.edu/data/sujit.roy/Pr
 
 ## Architecture:
 
-MAE_VIT Encoder (Unfreezed) --> Segmentator
+MAE_VIT Encoder (Unfreezed) --> Segmentator(Unfreezed) 
 
 
 ## Instructions
