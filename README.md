@@ -21,3 +21,4 @@ MAE_VIT Encoder+Decoder (freezed) --> UNet(Unfreezed)
 
 5. The unet.py calls prithvi_global_loader.py (wrapper around Prithvi_global model), which actually calls Prithvi_global_v1/mae/models_mae.py (i.e. the core Prithvi model architecture). 
 
+![IMG_3948](https://github.com/user-attachments/assets/ae5c0b64-31e3-495c-b485-6e4cb9eecb06)
