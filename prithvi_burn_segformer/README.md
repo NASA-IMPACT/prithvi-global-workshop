@@ -9,7 +9,7 @@ MAE_VIT Encoder (Unfreezed) --> Segmentator(Unfreezed)
 
 
 ## Instructions
-1. Go to prithvi_burn_mlp_decoder folder
+1. Go to prithvi_burn_segformer folder
 
 2. Run slurm script using:
    ```python
