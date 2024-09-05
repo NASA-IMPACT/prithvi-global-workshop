@@ -1,5 +1,6 @@
+## For Srija to adapt the model for CO2 flux fine tuning
 
-## Prithvi HLS Global+ UNet: finetuning for flood map
+## Model details: Prithvi HLS Global+ UNet: finetuning for flood map
 <!---- Provide an overview of what is being achieved in this repo ----> 
 Checkpoint: [ Pretrained Checkpoint](https://www.nsstc.uah.edu/data/sujit.roy/Prithvi_checkpoints/)
 
