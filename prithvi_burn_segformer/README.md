@@ -21,3 +21,4 @@ MAE_VIT Encoder (Unfreezed) --> Segmentator(Unfreezed)
 
 5. The model.py calls prithvi_global_loader.py (wrapper around Prithvi_global model), which actually calls Prithvi_global_v1/mae/models_mae.py (i.e. the core Prithvi model architecture) and segmentation head part i.e., head.py.
 
+![IMG_3957](https://github.com/user-attachments/assets/c7a351dd-cc56-455b-a613-858667e12245)
