@@ -68,9 +68,9 @@ segment_input_path: "/rhome/rghosal/burn_scar/hls_burn_scars/validation/subsette
 predicted_mask_dir: "./segment_out_prithvi_burn"
 
 segmentor:
-  n_layers: 4
-  n_heads: 4
-  decoder_embed_dim: 112
+  n_layers: 8
+  n_heads: 16
+  decoder_embed_dim: 512
   mlp: 4
   drop_path_rate: 0
-  dropout: 0.2
+  dropout: 0
