@@ -1,8 +1,8 @@
 For all resourcses: https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5RzC3LD92CjcA/edit?usp=drive_link&ouid=107344732858203799494&rtpof=true&sd=true
 
-## For Srija to adapt the model for CO2 flux fine tuning, Rest of the people can use prithvi_burn (or prithvi_burn_segmentor) folder for fine tuning
+## For Srija to adapt the model for CO2 flux fine tuning, Rest of the people can use prithvi_burn (or prithvi_burn_segformer) folder for fine tuning
 
-## Model details: Prithvi HLS Global+ UNet: finetuning for flood map
+## new_flood_v2 Model details: Prithvi HLS Global+ UNet: finetuning for flood map
 <!---- Provide an overview of what is being achieved in this repo ----> 
 Checkpoint: [ Pretrained Checkpoint](https://www.nsstc.uah.edu/data/sujit.roy/Prithvi_checkpoints/)
 
