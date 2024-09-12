@@ -17,6 +17,7 @@ from data_load_prithvi_burn import load_raster
 from data_load_prithvi_burn import preprocess_image
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import ReduceLROnPlateau
+from torch.optim.lr_scheduler import CyclicLR
 
 
 ################################## useful class and functions ##################################################
