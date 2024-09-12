@@ -45,13 +45,8 @@ def segmentation_loss(mask,pred,device,class_weights,ignore_index):
     
 
     mask=mask.long()
-    #un=torch.unique(mask)
-    #print("un",un)
-    
            
-    class_weights = torch.tensor(class_weights, dtype=torch.float32).to(device)  # Define class weights
-    
-    # Initialize the CrossEntropyLoss with weights
+    class_weights = torch.tensor(class_weights, dtype=torch.float32).to(device) 
     criterion = nn.CrossEntropyLoss(ignore_index=ignore_index,weight=class_weights).to(device) 
     loss=criterion(pred,mask) 
 
@@ -97,7 +92,6 @@ def plot_output_image(model, device, epoch,means,stds,input_path,prediction_img_
     final_image=preprocess_image(img,means,stds)
     final_image=final_image.to(device)
 
-    
     with torch.no_grad():
         output = model(final_image)  # [1, n_segmentation_class, 224, 224]
 
@@ -117,13 +111,16 @@ def plot_output_image(model, device, epoch,means,stds,input_path,prediction_img_
 def calculate_miou(output, target, device):
     
     eps=1e-6
+
+    # target.shape = B,H,W
     
-    num_classes=output.shape[1]
+    # output.shape= B,n_class,H,W --> pred.shape= B,H,W  
+    num_classes=output.shape[1] # 5 for burn intensity
     preds = torch.argmax(output, dim=1)
 
     # Flatten the tensors
-    preds = preds.view(-1)  # Flatten predictions
-    target = target.view(-1)  # Flatten target
+    preds = preds.view(-1)  #B,H*W
+    target = target.view(-1) #B,H*W
 
     # Initialize intersection and union for each class
     intersection = torch.zeros(num_classes).to(device)
@@ -140,7 +137,6 @@ def calculate_miou(output, target, device):
         union[cls] = pred_mask.sum() + target_mask.sum() - intersection[cls]
 
     # Calculate IoU for each class for all images in one batch
-
     iou = intersection / (union + eps)  # Add eps to avoid division by zero
 
     # Calculate mean IoU (all class avergae)
@@ -186,7 +182,8 @@ def main():
     print(f"Used device name: {device}")
     print(f"Checkpoint Path: {checkpoint}")
     print(f"Data input dir:{data_dir}")
- 
+
+    
     wandb.init(
             # set the wandb project where this run will be logged
             project=config["wandb_project"]
@@ -207,26 +204,37 @@ def main():
 
 
     #initialize dataloader
-    train_dataloader=DataLoader(flood_dataset_train,batch_size=train_batch_size,shuffle=config["training"]["shuffle"],num_workers=1)
-    val_dataloader=DataLoader(flood_dataset_val,batch_size=val_batch_size,shuffle=config["validation"]["shuffle"],num_workers=1)
+    train_dataloader=DataLoader(flood_dataset_train,batch_size=train_batch_size,
+                                shuffle=config["training"]["shuffle"],num_workers=1)
+    val_dataloader=DataLoader(flood_dataset_val,batch_size=val_batch_size,
+                              shuffle=config["validation"]["shuffle"],num_workers=1)
 
 
     #initialize model    
     config["prithvi_model_new_weight"]="/rhome/rghosal/Rinki/rinki-hls-foundation-os/Prithvi_global.pt"
-    config["prithvi_model_new_config"]= get_config(None)  
-    model=prithvi_wrapper(n_channel,n_class,n_frame,embed_size,input_size,patch_size,config["prithvi_model_new_weight"],config["prithvi_model_new_config"]) #wrapper of prithvi #initialization of prithvi is done by initializing prithvi_loader.py
+    config["prithvi_model_new_config"]= get_config(None) 
+
+    #wrapper of prithvi #initialization of prithvi is done by initializing prithvi_loader.py
+    model=prithvi_wrapper(n_channel,n_class,n_frame,embed_size,input_size,
+                          patch_size,config["prithvi_model_new_weight"],
+                          config["prithvi_model_new_config"]) 
     model=model.to(device)
-   
+    
+    # tried some optimizer and scheduler combinations, so some not being used are commented out
     '''
     optimizer_params = config["training"]['optimizer']['params']
-    optimizer = getattr(optim, config["training"]['optimizer']['name'])(filter(lambda p: p.requires_grad, model.parameters()), **optimizer_params)
-
+    optimizer = getattr(optim, config["training"]['optimizer']['name'])(filter(lambda p:
+                p.requires_grad, model.parameters()), **optimizer_params)
     scheduler_params = config["training"]['scheduler']['params']
     scheduler = getattr(lr_scheduler, config["training"]['scheduler']['name'])(optimizer, **scheduler_params)
     '''
 
     optimizer = AdamW(model.parameters(), lr=6e-5, weight_decay=0.05)
+    #scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.9, patience=5, verbose=True)
+    cyclic_scheduler = CyclicLR(optimizer, base_lr=1e-6, max_lr=10e-5, 
+                                step_size_up=5, mode='triangular', cycle_momentum=False)
     scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.9, patience=5, verbose=True)
+
     
     best_loss=0
     best_miou_val=0
@@ -237,9 +245,9 @@ def main():
         miou_train=[]
         acc_dataset_train=[]
         
-
         print("iteration started")
 
+        #*******************training phase*****************************************************
         model.train()
 
         for j,(input,mask) in enumerate(train_dataloader):
@@ -248,20 +256,15 @@ def main():
             mask=mask.to(device)
 
             #print("img unique",len(torch.unique(input)))
-            #print("mask unique",len(torch.unique(mask.long())))
-            
+            #print("mask unique",len(torch.unique(mask.long()))) 
             #print("input size",input.shape)
             
             optimizer.zero_grad()
             out=model(input)
-
             loss=segmentation_loss(mask,out,device,class_weights,ignore_index)
             batch_acc=compute_accuracy(mask,out)
-            
             loss_i += loss.item() * input.size(0)  # Multiply by batch size
             acc_dataset_train.append(batch_acc)
-
-
             miou_batch=calculate_miou(out, mask, device)
             miou_train.append(miou_batch)
 
@@ -274,10 +277,12 @@ def main():
         miou_train=np.mean(miou_train)
         epoch_loss_train=(loss_i)/len(train_dataloader.dataset)
 
-        wandb.log({"epoch": i + 1, "train_loss": epoch_loss_train,"acc_train":acc_total_train,"learning_rate": optimizer.param_groups[0]['lr'],"miou_train":miou_train})
+        wandb.log({"epoch": i + 1, "train_loss": epoch_loss_train,"acc_train":acc_total_train,
+                   "learning_rate": optimizer.param_groups[0]['lr'],"miou_train":miou_train})
 
-        # Validation Phase
+        # *********************************Validation Phase *********************************
         model.eval()
+        
         val_loss = 0.0
         miou_valid=[]
         acc_dataset_val=[]
@@ -289,15 +294,11 @@ def main():
                 mask=mask.to(device)
                 #print("input size",input.shape)
                 
-                
                 out=model(input)
-
-                #loss=segmentation_loss(mask,out,device,class_weights,ignore_index)
+                loss_v=segmentation_loss(mask,out,device,class_weights,ignore_index)
                 batch_acc=compute_accuracy(mask,out)
-
                 acc_dataset_val.append(batch_acc)
-                val_loss += loss.item() * input.size(0) 
-
+                val_loss += loss_v.item() * input.size(0) 
                 miou_batch=calculate_miou(out, mask, device)
                 miou_valid.append(miou_batch)  
     
@@ -306,7 +307,10 @@ def main():
         miou_valid=np.mean(miou_valid)
 
         wandb.log({"epoch": i + 1, "val_loss": epoch_loss_val,"accuracy_val":acc_total_val,"miou_val":miou_valid})
-        print(f"Epoch: {i}, train loss: {epoch_loss_train}, val loss:{epoch_loss_val},accuracy_train:{acc_total_train},accuracy_val:{acc_total_val},miou_train:{miou_train},miou_val:{miou_valid}")
+        
+        print(f"Epoch: {i}, train loss: {epoch_loss_train}, val loss:{epoch_loss_val},
+                accuracy_train:{acc_total_train},accuracy_val:{acc_total_val},
+                miou_train:{miou_train},miou_val:{miou_valid}")
 
         scheduler.step(epoch_loss_val)
 
