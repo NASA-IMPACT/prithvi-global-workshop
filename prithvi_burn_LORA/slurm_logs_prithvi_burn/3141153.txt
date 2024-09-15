@@ -1,0 +1,187 @@
+Learning Rate: 0.0001
+Batch Size: 8
+Number of Epochs: 125
+Number of Input Channel: 6
+Number of Segmentation Class: 2
+Used device name: cuda
+Checkpoint Path: /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+Data input dir:/rhome/rghosal/burn_scar/hls_burn_scars/
+wandb: Currently logged in as: rinki447 (rinki447-the-university-of-alabama-in-huntsville). Use `wandb login --relogin` to force relogin
+wandb: wandb version 0.17.8 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.17.7
+wandb: Run data is saved locally in /nas/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_merra/prithvi_burn/wandb/run-20240902_124153-2c2vn6qx
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run vivid-feather-65
+wandb: ⭐️ View project at https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal
+wandb: 🚀 View run at https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal/runs/2c2vn6qx
+checkpoint names: dict_keys(['epoch', 'iter', 'model', 'optimizer', 'scheduler', 'scaler', 'loss', 'best_val_loss', 'steps_per_epoch'])
+iteration started
+Epoch: 0, train loss: 0.6300318589916936, val loss:0.5713869080399022,accuracy_train:0.7297810970091162,accuracy_val:0.8925934387426845,miou_train:0.444364458322525,miou_val:0.5257268530481002
+iteration started
+Epoch: 1, train loss: 0.523785921379372, val loss:0.5101532845786123,accuracy_train:0.8160692743894433,accuracy_val:0.8739722207242273,miou_train:0.5428706359337357,miou_val:0.5588226931936601
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 2, train loss: 0.48558875410645097, val loss:0.44588700749657373,accuracy_train:0.8424617405555972,accuracy_val:0.8926019382362319,miou_train:0.576383184422465,miou_val:0.601231724023819
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 3, train loss: 0.4649417667477219, val loss:0.4227757146864226,accuracy_train:0.8689903451615021,accuracy_val:0.9486920012145484,miou_train:0.6101099647143308,miou_val:0.7151448761715609
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 4, train loss: 0.4455601712067922, val loss:0.4409975770748023,accuracy_train:0.8825646591644469,accuracy_val:0.9516619880374023,miou_train:0.6254296368535828,miou_val:0.7235683553359088
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 5, train loss: 0.44983504392482615, val loss:0.40535705107631104,accuracy_train:0.8931426818774385,accuracy_val:0.9513762292026184,miou_train:0.6302133250762435,miou_val:0.7234658949515399
+iteration started
+Epoch: 6, train loss: 0.42843019741552846, val loss:0.411715286247658,accuracy_train:0.9027929775425794,accuracy_val:0.9570508867609545,miou_train:0.6657107700319851,miou_val:0.744334455798654
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 7, train loss: 0.43146785100301105, val loss:0.4130112673297073,accuracy_train:0.912826922761292,accuracy_val:0.9320831115649384,miou_train:0.6689703950987143,miou_val:0.6915172724162831
+iteration started
+Epoch: 8, train loss: 0.4104244589805603, val loss:0.8289694424831506,accuracy_train:0.9197810838202469,accuracy_val:0.5713163927680447,miou_train:0.6917650427888421,miou_val:0.3287541883833268
+iteration started
+Epoch: 9, train loss: 0.4393291484426569, val loss:0.3882919694438125,accuracy_train:0.897771352193221,accuracy_val:0.9586388998958959,miou_train:0.6423284336924553,miou_val:0.7660182994954726
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 10, train loss: 0.41186291023536964, val loss:0.3998679148428368,accuracy_train:0.9191152657352003,accuracy_val:0.9386101364373873,miou_train:0.677873886683408,miou_val:0.7044549935004291
+iteration started
+Epoch: 11, train loss: 0.400813541147444, val loss:0.45744398868445196,accuracy_train:0.9269883246267258,accuracy_val:0.8266384678871548,miou_train:0.7074536361238536,miou_val:0.527950165902867
+iteration started
+Epoch: 12, train loss: 0.40058794264440184, val loss:0.4086853608940587,accuracy_train:0.9235211174313476,accuracy_val:0.940463245845213,miou_train:0.6973263498614816,miou_val:0.7075459361076355
+iteration started
+Epoch: 13, train loss: 0.38976460651115136, val loss:0.3811093559770873,accuracy_train:0.9342172537960497,accuracy_val:0.9569325532947555,miou_train:0.7181038440150374,miou_val:0.7681270171614254
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 14, train loss: 0.3963316948325546, val loss:0.3781539996465047,accuracy_train:0.9391095549547944,accuracy_val:0.9587138566364046,miou_train:0.714062540408443,miou_val:0.774245353306041
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 15, train loss: 0.3955791122383542, val loss:0.38361395218155603,accuracy_train:0.9333435644765719,accuracy_val:0.959722731866184,miou_train:0.7085431862403365,miou_val:0.7656908876755658
+iteration started
+Epoch: 16, train loss: 0.40404837948304634, val loss:0.3846875402060422,accuracy_train:0.9277575654285153,accuracy_val:0.9589533811571503,miou_train:0.6998924201025682,miou_val:0.7626238535432255
+iteration started
+Epoch: 17, train loss: 0.3939264209182174, val loss:0.39292683294325165,accuracy_train:0.9286078811407376,accuracy_val:0.9582422812875151,miou_train:0.6995648325366133,miou_val:0.7799678129308364
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 18, train loss: 0.38135970963372123, val loss:0.37189802617737744,accuracy_train:0.9420640448562239,accuracy_val:0.9532581343084109,miou_train:0.7323413188843166,miou_val:0.75539490405251
+iteration started
+Epoch: 19, train loss: 0.3817230977393963, val loss:0.3936232734810222,accuracy_train:0.9445334408177334,accuracy_val:0.960519193028774,miou_train:0.7324482307714575,miou_val:0.7659444984267739
+iteration started
+Epoch: 20, train loss: 0.38237614344667503, val loss:0.3729280432065328,accuracy_train:0.9498628430864533,accuracy_val:0.9598407722463986,miou_train:0.7404413871905383,miou_val:0.778858928119435
+iteration started
+Epoch: 21, train loss: 0.3708237965901693, val loss:0.38892100615934894,accuracy_train:0.9525766361231992,accuracy_val:0.9639114434836432,miou_train:0.7555732021436972,miou_val:0.7758102872792412
+iteration started
+Epoch: 22, train loss: 0.36687201747187864, val loss:0.37653697620738635,accuracy_train:0.9563559798919568,accuracy_val:0.9636771212391205,miou_train:0.7726293561213157,miou_val:0.8009491036919987
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 23, train loss: 0.36415764203778017, val loss:0.38092958746534406,accuracy_train:0.9573305274258141,accuracy_val:0.9523160094115771,miou_train:0.7738638108267504,miou_val:0.7478217272197499
+iteration started
+Epoch: 24, train loss: 0.3740794406996833, val loss:0.37708714694687817,accuracy_train:0.9503233178036838,accuracy_val:0.9510828501322405,miou_train:0.7535442411899567,miou_val:0.7472084024373222
+Epoch 00025: reducing learning rate of group 0 to 1.5000e-06.
+iteration started
+Epoch: 25, train loss: 0.3644127878877852, val loss:0.37120448730208655,accuracy_train:0.9592910162111721,accuracy_val:0.9546208375928495,miou_train:0.7730823062798556,miou_val:0.7602740491137785
+iteration started
+Epoch: 26, train loss: 0.3628018860463743, val loss:0.374176561832428,accuracy_train:0.9613910505608494,accuracy_val:0.9583442019385879,miou_train:0.7788298818118432,miou_val:0.7744993216851178
+iteration started
+Epoch: 27, train loss: 0.3579410073933778, val loss:0.3760362249432188,accuracy_train:0.9638120506991859,accuracy_val:0.9563430108371475,miou_train:0.7938231952926692,miou_val:0.7673173441606409
+iteration started
+Epoch: 28, train loss: 0.37123194955013417, val loss:0.37421624317313684,accuracy_train:0.9606334965626874,accuracy_val:0.9562983884960234,miou_train:0.773331306874752,miou_val:0.7667836932575002
+iteration started
+Epoch: 29, train loss: 0.3698848360114627, val loss:0.36852872281363513,accuracy_train:0.9628241311172907,accuracy_val:0.960454494297719,miou_train:0.7755009159445763,miou_val:0.7843372681561638
+iteration started
+Epoch: 30, train loss: 0.35468453036414255, val loss:0.37404369043581415,accuracy_train:0.9670153339656177,accuracy_val:0.9553399973270558,miou_train:0.8011709556860083,miou_val:0.7630947092000175
+iteration started
+Epoch: 31, train loss: 0.36512346974125615, val loss:0.37190237731644604,accuracy_train:0.9627070799022732,accuracy_val:0.9557539080085159,miou_train:0.7841664697317516,miou_val:0.7653996734058156
+iteration started
+Epoch: 32, train loss: 0.3572344153015702, val loss:0.3725586605794502,accuracy_train:0.9669113983484019,accuracy_val:0.9578847163865545,miou_train:0.8023532629013062,miou_val:0.774481878561132
+iteration started
+Epoch: 33, train loss: 0.3572865534711767, val loss:0.37087416287624475,accuracy_train:0.9690380668869111,accuracy_val:0.9577759082148485,miou_train:0.8080439024111804,miou_val:0.7733674435054555
+iteration started
+Epoch: 34, train loss: 0.35781569171834876, val loss:0.3701984268246275,accuracy_train:0.9676291292884341,accuracy_val:0.9598477330385281,miou_train:0.804222397506237,miou_val:0.7802083106601939
+iteration started
+Epoch: 35, train loss: 0.3509845108897598, val loss:0.37554436831763294,accuracy_train:0.9669364205643196,accuracy_val:0.9559208204766283,miou_train:0.8145489372751292,miou_val:0.7652829149190117
+Epoch 00036: reducing learning rate of group 0 to 1.5000e-07.
+iteration started
+Epoch: 36, train loss: 0.3566783732838101, val loss:0.3712673711054253,accuracy_train:0.9645886552863333,accuracy_val:0.955882059855192,miou_train:0.7940563419285942,miou_val:0.7646877344916848
+iteration started
+Epoch: 37, train loss: 0.35738729017752185, val loss:0.37024328112602234,accuracy_train:0.9683166723720739,accuracy_val:0.9577879247402086,miou_train:0.7998059821479461,miou_val:0.7728517441188588
+iteration started
+Epoch: 38, train loss: 0.3580042512328536, val loss:0.3749982037327506,accuracy_train:0.9675781689628977,accuracy_val:0.9589612212072329,miou_train:0.8042511343955994,miou_val:0.7771731404697194
+iteration started
+Epoch: 39, train loss: 0.35347087758558765, val loss:0.3735958057822603,accuracy_train:0.9701523431638279,accuracy_val:0.9555713887117346,miou_train:0.8117903151056346,miou_val:0.7631497067563674
+iteration started
+Epoch: 40, train loss: 0.35122053027153016, val loss:0.3698835219397689,accuracy_train:0.9706058204531812,accuracy_val:0.9602768109196804,miou_train:0.8170837093802059,miou_val:0.7837494857171002
+iteration started
+Epoch: 41, train loss: 0.36213847288378964, val loss:0.36463867714910797,accuracy_train:0.9664816976595325,accuracy_val:0.9593407675570227,miou_train:0.8005025404341081,miou_val:0.778776021564708
+iteration started
+Epoch: 42, train loss: 0.3646132411780181, val loss:0.3758025657046925,accuracy_train:0.9679377854657488,accuracy_val:0.9586654974489797,miou_train:0.7956815787097987,miou_val:0.7762240662294275
+iteration started
+Epoch: 43, train loss: 0.3603341747213293, val loss:0.37295157439780957,accuracy_train:0.9626322330690091,accuracy_val:0.9569028050673394,miou_train:0.7875164681497742,miou_val:0.7687705159187317
+iteration started
+Epoch: 44, train loss: 0.360068032918153, val loss:0.37052047523585235,accuracy_train:0.9686302011038789,accuracy_val:0.9576139049369746,miou_train:0.796393495710457,miou_val:0.7719808501355788
+iteration started
+Epoch: 45, train loss: 0.37062981680587487, val loss:0.3679570338942788,accuracy_train:0.9622758038762378,accuracy_val:0.9564405351984543,miou_train:0.7736943662166595,miou_val:0.7668824651662041
+iteration started
+Epoch: 46, train loss: 0.3543867197301653, val loss:0.3693227677634268,accuracy_train:0.9669802002832382,accuracy_val:0.9597899218281062,miou_train:0.8052137112792801,miou_val:0.7810517619637882
+iteration started
+Epoch: 47, train loss: 0.35178047860110245, val loss:0.37000672925602307,accuracy_train:0.9702688082068766,accuracy_val:0.9589453212925795,miou_train:0.8188859149813652,miou_val:0.7778876914697535
+Epoch 00048: reducing learning rate of group 0 to 1.5000e-08.
+iteration started
+Epoch: 48, train loss: 0.35822160288139626, val loss:0.3728710277514024,accuracy_train:0.9677166887262717,accuracy_val:0.9601687354629352,miou_train:0.802470808958306,miou_val:0.7829648116055656
+iteration started
+Epoch: 49, train loss: 0.3627727089104829, val loss:0.36923322623426263,accuracy_train:0.9662054641192417,accuracy_val:0.9598967516694178,miou_train:0.7929733242182171,miou_val:0.7816376019926632
+iteration started
+Epoch: 50, train loss: 0.34973226564901844, val loss:0.37030538735967694,accuracy_train:0.9699845880735108,accuracy_val:0.9587881539334484,miou_train:0.8190437213462942,miou_val:0.7773519158363342
+iteration started
+Epoch: 51, train loss: 0.36107224866195964, val loss:0.3702389083125375,accuracy_train:0.9679844960445116,accuracy_val:0.9574310925542091,miou_train:0.8006103490205372,miou_val:0.7706212681882522
+iteration started
+Epoch: 52, train loss: 0.3586801339078833, val loss:0.3695826837510774,accuracy_train:0.969579836329063,accuracy_val:0.9583056611316403,miou_train:0.8047264516353607,miou_val:0.7756032768417808
+iteration started
+Epoch: 53, train loss: 0.35400801168547735, val loss:0.3721244723507852,accuracy_train:0.9675729300509266,accuracy_val:0.9585848988032714,miou_train:0.8083154795800939,miou_val:0.7757070555406458
+Epoch 00054: reducing learning rate of group 0 to 1.5000e-09.
+iteration started
+Epoch: 54, train loss: 0.36110086043675743, val loss:0.3692478718179645,accuracy_train:0.9684990084901149,accuracy_val:0.9584363042091837,miou_train:0.8040473347201067,miou_val:0.7755221899817971
+iteration started
+Epoch: 55, train loss: 0.3579624118628325, val loss:0.37139562314206903,accuracy_train:0.967382460796819,accuracy_val:0.9616160673253676,miou_train:0.8029268524226021,miou_val:0.7899589538574219
+iteration started
+Epoch: 56, train loss: 0.35807206211266696, val loss:0.3672514602993474,accuracy_train:0.9681658429973552,accuracy_val:0.9586760485444178,miou_train:0.795472016229349,miou_val:0.7759808687602773
+iteration started
+Epoch: 57, train loss: 0.35026608219853156, val loss:0.3703747599413901,accuracy_train:0.9688536058954833,accuracy_val:0.9597782716602266,miou_train:0.8176410807406201,miou_val:0.7808764015927034
+iteration started
+Epoch: 58, train loss: 0.3517158548037211, val loss:0.3682112567352526,accuracy_train:0.9681704957373574,accuracy_val:0.9571281881893382,miou_train:0.8143169871147942,miou_val:0.7704162983333364
+iteration started
+Epoch: 59, train loss: 0.34970687958929275, val loss:0.3749580636168971,accuracy_train:0.9679658850845025,accuracy_val:0.9595884984853316,miou_train:0.817082962130799,miou_val:0.779855349484612
+iteration started
+slurmstepd: error: *** JOB 3141153 ON matrix101 CANCELLED AT 2024-09-02T13:03:16 ***
+WARNING:torch.distributed.elastic.agent.server.api:Received 15 death signal, shutting down workers
+WARNING:torch.distributed.elastic.multiprocessing.api:Sending process 121251 closing signal SIGTERM
+ERROR:torch.distributed.elastic.multiprocessing.errors.error_handler:{
+  "message": {
+    "message": "SignalException: Process 121246 got signal: 15",
+    "extraInfo": {
+      "py_callstack": "Traceback (most recent call last):\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py\", line 345, in wrapper\n    return f(*args, **kwargs)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py\", line 724, in main\n    run(args)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py\", line 715, in run\n    elastic_launch(\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py\", line 131, in __call__\n    return launch_agent(self._config, self._entrypoint, list(args))\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py\", line 236, in launch_agent\n    result = agent.run()\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/metrics/api.py\", line 125, in wrapper\n    result = f(*args, **kwargs)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py\", line 709, in run\n    result = self._invoke_run(role)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py\", line 850, in _invoke_run\n    time.sleep(monitor_interval)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py\", line 60, in _terminate_process_handler\n    raise SignalException(f\"Process {os.getpid()} got signal: {sigval}\", sigval=sigval)\ntorch.distributed.elastic.multiprocessing.api.SignalException: Process 121246 got signal: 15\n",
+      "timestamp": "1725300196"
+    }
+  }
+}
+Traceback (most recent call last):
+  File "/rhome/rghosal/anaconda3/envs/hls2/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py", line 724, in main
+    run(args)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py", line 715, in run
+    elastic_launch(
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 236, in launch_agent
+    result = agent.run()
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/metrics/api.py", line 125, in wrapper
+    result = f(*args, **kwargs)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 709, in run
+    result = self._invoke_run(role)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 850, in _invoke_run
+    time.sleep(monitor_interval)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py", line 60, in _terminate_process_handler
+    raise SignalException(f"Process {os.getpid()} got signal: {sigval}", sigval=sigval)
+torch.distributed.elastic.multiprocessing.api.SignalException: Process 121246 got signal: 15

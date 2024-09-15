@@ -1,0 +1,34 @@
+slurmstepd: error: *** JOB 3129402 ON matrix101 CANCELLED AT 2024-08-27T09:25:24 ***
+WARNING:torch.distributed.elastic.agent.server.api:Received 15 death signal, shutting down workers
+WARNING:torch.distributed.elastic.multiprocessing.api:Sending process 118940 closing signal SIGTERM
+ERROR:torch.distributed.elastic.multiprocessing.errors.error_handler:{
+  "message": {
+    "message": "SignalException: Process 118919 got signal: 15",
+    "extraInfo": {
+      "py_callstack": "Traceback (most recent call last):\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py\", line 345, in wrapper\n    return f(*args, **kwargs)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py\", line 724, in main\n    run(args)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py\", line 715, in run\n    elastic_launch(\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py\", line 131, in __call__\n    return launch_agent(self._config, self._entrypoint, list(args))\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py\", line 236, in launch_agent\n    result = agent.run()\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/metrics/api.py\", line 125, in wrapper\n    result = f(*args, **kwargs)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py\", line 709, in run\n    result = self._invoke_run(role)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py\", line 850, in _invoke_run\n    time.sleep(monitor_interval)\n  File \"/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py\", line 60, in _terminate_process_handler\n    raise SignalException(f\"Process {os.getpid()} got signal: {sigval}\", sigval=sigval)\ntorch.distributed.elastic.multiprocessing.api.SignalException: Process 118919 got signal: 15\n",
+      "timestamp": "1724768724"
+    }
+  }
+}
+Traceback (most recent call last):
+  File "/rhome/rghosal/anaconda3/envs/hls2/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py", line 724, in main
+    run(args)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py", line 715, in run
+    elastic_launch(
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 236, in launch_agent
+    result = agent.run()
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/metrics/api.py", line 125, in wrapper
+    result = f(*args, **kwargs)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 709, in run
+    result = self._invoke_run(role)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 850, in _invoke_run
+    time.sleep(monitor_interval)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py", line 60, in _terminate_process_handler
+    raise SignalException(f"Process {os.getpid()} got signal: {sigval}", sigval=sigval)
+torch.distributed.elastic.multiprocessing.api.SignalException: Process 118919 got signal: 15

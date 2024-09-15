@@ -1,0 +1,312 @@
+Learning Rate: 0.0001
+Batch Size: 8
+Number of Epochs: 125
+Number of Input Channel: 6
+Number of Segmentation Class: 2
+Used device name: cuda
+Checkpoint Path: /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+Data input dir:/rhome/rghosal/burn_scar/hls_burn_scars/
+wandb: Currently logged in as: rinki447 (rinki447-the-university-of-alabama-in-huntsville). Use `wandb login --relogin` to force relogin
+wandb: wandb version 0.17.8 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.17.7
+wandb: Run data is saved locally in /nas/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_merra/prithvi_burn/wandb/run-20240829_014832-cbdgv61v
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run stellar-terrain-61
+wandb: ⭐️ View project at https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal
+wandb: 🚀 View run at https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal/runs/cbdgv61v
+checkpoint names: dict_keys(['epoch', 'iter', 'model', 'optimizer', 'scheduler', 'scaler', 'loss', 'best_val_loss', 'steps_per_epoch'])
+iteration started
+Epoch: 0, train loss: 0.6632742329880044, val loss:0.6778155619447882,accuracy_train:0.6753218010837149,accuracy_val:0.5330601723111119,miou_train:0.39006003803190065,miou_val:0.3029191923492095
+iteration started
+Epoch: 1, train loss: 0.55124353589835, val loss:0.5277806493369016,accuracy_train:0.7681657257629615,accuracy_val:0.9333884432679321,miou_train:0.4954312207067714,miou_val:0.6042151766664842
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 2, train loss: 0.5090573094509266, val loss:0.41368650848215277,accuracy_train:0.8398019852472239,accuracy_val:0.9132056631246249,miou_train:0.5547372896005126,miou_val:0.5891311414101544
+iteration started
+Epoch: 3, train loss: 0.566292632509161, val loss:0.7356175148125851,accuracy_train:0.7900867988797082,accuracy_val:0.4709381066879877,miou_train:0.5033566886011291,miou_val:0.26892852520241456
+iteration started
+Epoch: 4, train loss: 0.49706008588826217, val loss:0.5033453856453751,accuracy_train:0.8413827811397996,accuracy_val:0.9430164643982593,miou_train:0.5691987455767744,miou_val:0.5939834135420182
+iteration started
+Epoch: 5, train loss: 0.478483666755535, val loss:0.42649158564480866,accuracy_train:0.8892222172071954,accuracy_val:0.9559340093459258,miou_train:0.6288006533594692,miou_val:0.6922404064851648
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 6, train loss: 0.4623050764754966, val loss:0.4601006507873535,accuracy_train:0.9137879883398671,accuracy_val:0.9093429363933074,miou_train:0.6654265071539318,miou_val:0.6373960726401385
+iteration started
+Epoch: 7, train loss: 0.44562610078741005, val loss:0.4646020360065229,accuracy_train:0.9156343567700517,accuracy_val:0.9411852631677671,miou_train:0.665226899087429,miou_val:0.6823094031390022
+iteration started
+Epoch: 8, train loss: 0.4221819285993223, val loss:0.4716138442357381,accuracy_train:0.9181475690862283,accuracy_val:0.8750481393729367,miou_train:0.6794419065117836,miou_val:0.5810849596472347
+iteration started
+Epoch: 9, train loss: 0.40694443738019026, val loss:0.40290380066091364,accuracy_train:0.9279253205188326,accuracy_val:0.9497728290534964,miou_train:0.7043235174873296,miou_val:0.7198517112170949
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 10, train loss: 0.40807665365713613, val loss:0.3804324549255949,accuracy_train:0.9331109274764595,accuracy_val:0.9455507789053123,miou_train:0.7042110790224636,miou_val:0.7300703700850991
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 11, train loss: 0.41023266801127684, val loss:0.49795358469991974,accuracy_train:0.9314960969739459,accuracy_val:0.903248799519808,miou_train:0.7023352700121263,miou_val:0.6244066340081832
+iteration started
+Epoch: 12, train loss: 0.39644254092816955, val loss:0.3809187457416997,accuracy_train:0.9240624106087746,accuracy_val:0.9497470374868697,miou_train:0.7012947547961684,miou_val:0.7364214974291184
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 13, train loss: 0.3835338532924652, val loss:0.45205904227314575,accuracy_train:0.9462127502368134,accuracy_val:0.8891858745451305,miou_train:0.7498258273391163,miou_val:0.6054442647625419
+iteration started
+Epoch: 14, train loss: 0.4033701260884603, val loss:0.3607457849112424,accuracy_train:0.9358213866601329,accuracy_val:0.9528685497636556,miou_train:0.7084197660579401,miou_val:0.7430966286098256
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 15, train loss: 0.3944169066570423, val loss:0.39936184973427746,accuracy_train:0.9411377466025472,accuracy_val:0.9571143398765756,miou_train:0.7122786509640077,miou_val:0.7114680199062123
+iteration started
+Epoch: 16, train loss: 0.39922714763217504, val loss:0.3628526113250039,accuracy_train:0.9351932301240807,accuracy_val:0.9584726468712484,miou_train:0.7108859463649637,miou_val:0.7480156176230487
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 17, train loss: 0.37320889278694436, val loss:0.3724077352971742,accuracy_train:0.9418319207565837,accuracy_val:0.9581409468084109,miou_train:0.734824533409932,miou_val:0.764185228768517
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 18, train loss: 0.3798249743602894, val loss:0.3924539459474159,accuracy_train:0.9462145453884678,accuracy_val:0.9428417118800645,miou_train:0.7251891007318216,miou_val:0.7190987467765808
+iteration started
+Epoch: 19, train loss: 0.36073470490950127, val loss:0.3599002135522438,accuracy_train:0.9488863172222014,accuracy_val:0.9500524330826081,miou_train:0.7554161329479778,miou_val:0.739585445207708
+iteration started
+Epoch: 20, train loss: 0.3781465828418732, val loss:0.3700858372630495,accuracy_train:0.9459340254656551,accuracy_val:0.9140365618903812,miou_train:0.7299743877614245,miou_val:0.6481563957298503
+iteration started
+Epoch: 21, train loss: 0.36441772249009874, val loss:0.39176331957181293,accuracy_train:0.9504880687626612,accuracy_val:0.9289459191879876,miou_train:0.7334151601090151,miou_val:0.6758892080363106
+iteration started
+Epoch: 22, train loss: 0.3722846658141525, val loss:0.36443301674091455,accuracy_train:0.9457321258581556,accuracy_val:0.94548227005646,miou_train:0.7425486747832859,miou_val:0.7190650456091937
+iteration started
+Epoch: 23, train loss: 0.36105608895972924, val loss:0.3580604936137344,accuracy_train:0.9543625189333547,accuracy_val:0.9533426163434124,miou_train:0.7514693123452804,miou_val:0.759727583212011
+iteration started
+Epoch: 24, train loss: 0.3758729069321244, val loss:0.36338243340000964,accuracy_train:0.9361458694806047,accuracy_val:0.8955613006921519,miou_train:0.7258209007627824,miou_val:0.6106657298172221
+iteration started
+Epoch: 25, train loss: 0.36785913286385713, val loss:0.3653552568320072,accuracy_train:0.9424261525899422,accuracy_val:0.9537248004670618,miou_train:0.7325611557154095,miou_val:0.745900480186238
+iteration started
+Epoch: 26, train loss: 0.3614070464063574, val loss:0.48740442593892414,accuracy_train:0.9497579915755364,accuracy_val:0.9446998770211209,miou_train:0.7512087637887281,miou_val:0.7187649221981273
+iteration started
+Epoch: 27, train loss: 0.3500369926293691, val loss:0.3433339875755888,accuracy_train:0.9494343147415215,accuracy_val:0.9513429639433899,miou_train:0.7551902370417819,miou_val:0.7495783637551701
+iteration started
+Epoch: 28, train loss: 0.3337053806693466, val loss:0.3699624366832502,accuracy_train:0.9625463222398333,accuracy_val:0.9598767485509829,miou_train:0.7867829874157906,miou_val:0.7572070044629714
+iteration started
+Epoch: 29, train loss: 0.3345954583750831, val loss:0.34674070459423645,accuracy_train:0.961306751704588,accuracy_val:0.9539871856945903,miou_train:0.7940197643988273,miou_val:0.7546725343255436
+iteration started
+Epoch: 30, train loss: 0.33610829887566745, val loss:0.3488959344950589,accuracy_train:0.9672283342047756,accuracy_val:0.9386922737845138,miou_train:0.7974337107118439,miou_val:0.7044272177359637
+iteration started
+Epoch: 31, train loss: 0.3328609707178893, val loss:0.37042806816823554,accuracy_train:0.9624940430273671,accuracy_val:0.9633020444505926,miou_train:0.7828985566602034,miou_val:0.7754955537178937
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 32, train loss: 0.3290591568858535, val loss:0.3594254426883929,accuracy_train:0.9568543726084182,accuracy_val:0.9633824965533089,miou_train:0.7769299990990582,miou_val:0.7811260013019338
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 33, train loss: 0.3256204817030165, val loss:0.3435590249119383,accuracy_train:0.9641538988642333,accuracy_val:0.9583388531193728,miou_train:0.7961392380735454,miou_val:0.7732275654287899
+iteration started
+Epoch: 34, train loss: 0.3280134130407263, val loss:0.3413310610886776,accuracy_train:0.9683202260396345,accuracy_val:0.9594124270802071,miou_train:0.7971458356170094,miou_val:0.7738641956273247
+iteration started
+Epoch: 35, train loss: 0.31749960868446914, val loss:0.33456303856589575,accuracy_train:0.969838887703519,accuracy_val:0.9590232821644281,miou_train:0.8107459159458384,miou_val:0.777283605407266
+iteration started
+Epoch: 36, train loss: 0.31573422109639204, val loss:0.3619282552690217,accuracy_train:0.9672640906948717,accuracy_val:0.9500873835862471,miou_train:0.8118945162962464,miou_val:0.7402016871115741
+iteration started
+Epoch: 37, train loss: 0.31766861257729706, val loss:0.32882665413798706,accuracy_train:0.9690209579925719,accuracy_val:0.9630437624268458,miou_train:0.8083778532112346,miou_val:0.7834444396636066
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 38, train loss: 0.354101813060266, val loss:0.33474235733350116,accuracy_train:0.946093244426677,accuracy_val:0.9490705217633928,miou_train:0.7271662551690551,miou_val:0.7366443206282223
+iteration started
+Epoch: 39, train loss: 0.3244189567036099, val loss:0.3709375307415471,accuracy_train:0.9648817779064752,accuracy_val:0.9299775085815576,miou_train:0.790198461536099,miou_val:0.6863635603119346
+iteration started
+Epoch: 40, train loss: 0.31721543978761746, val loss:0.33563457293943927,accuracy_train:0.9672259528811523,accuracy_val:0.9535259416266506,miou_train:0.8019012033062822,miou_val:0.7527247667312622
+iteration started
+Epoch: 41, train loss: 0.32119488649898104, val loss:0.35086499470652954,accuracy_train:0.9593734466442827,accuracy_val:0.9370060035733044,miou_train:0.7867622879498145,miou_val:0.7034725564367631
+iteration started
+Epoch: 42, train loss: 0.32074139338952523, val loss:0.32941657756314136,accuracy_train:0.9632000138922756,accuracy_val:0.9528725064244448,miou_train:0.7915680461070117,miou_val:0.753549172597773
+iteration started
+Epoch: 43, train loss: 0.3120156210881692, val loss:0.33187281453248224,accuracy_train:0.9722597046631155,accuracy_val:0.9619233679800044,miou_train:0.8186372474712484,miou_val:0.7905725240707397
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 44, train loss: 0.3062522195003651, val loss:0.32997382951505255,accuracy_train:0.9719602806943088,accuracy_val:0.9546115321128451,miou_train:0.8222412317991257,miou_val:0.7628999457639807
+iteration started
+Epoch: 45, train loss: 0.3092413319481744, val loss:0.34404122106956714,accuracy_train:0.9716133035245351,accuracy_val:0.9535907136292018,miou_train:0.8242694512009621,miou_val:0.7457970521029305
+iteration started
+Epoch: 46, train loss: 0.3096374644173516, val loss:0.3534625326142167,accuracy_train:0.9719631382826568,accuracy_val:0.9229658660339135,miou_train:0.8187969546107685,miou_val:0.669305517393
+iteration started
+Epoch: 47, train loss: 0.31619648425667374, val loss:0.32675844792163733,accuracy_train:0.9603855091841424,accuracy_val:0.9643396421068426,miou_train:0.7827865341130424,miou_val:0.793245859005872
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 48, train loss: 0.313886445539969, val loss:0.32561332438931323,accuracy_train:0.9626733017425719,accuracy_val:0.9629382514724639,miou_train:0.7935593478819903,miou_val:0.7893243747598985
+iteration started
+Epoch: 49, train loss: 0.31656597433266814, val loss:0.31640631953875226,accuracy_train:0.9625435012872335,accuracy_val:0.9517776104582457,miou_train:0.7849439930389909,miou_val:0.7392953423892751
+iteration started
+Epoch: 50, train loss: 0.3066847465656422, val loss:0.3295919272032651,accuracy_train:0.9693322885794944,accuracy_val:0.952626240926058,miou_train:0.8141604429658722,miou_val:0.75304355691461
+iteration started
+Epoch: 51, train loss: 0.3015553882828465, val loss:0.3259744716413093,accuracy_train:0.9680662670341575,accuracy_val:0.9615850002110219,miou_train:0.8130265658392626,miou_val:0.7903270756497103
+iteration started
+Epoch: 52, train loss: 0.30222495043719255, val loss:0.31812968217965326,accuracy_train:0.970724556912609,accuracy_val:0.9541273540666267,miou_train:0.8148801808848101,miou_val:0.7559221106417039
+iteration started
+Epoch: 53, train loss: 0.2987001320830098, val loss:0.32929056973168347,accuracy_train:0.9724288885476068,accuracy_val:0.9609438013486645,miou_train:0.8253094396170448,miou_val:0.7835404592401841
+iteration started
+Epoch: 54, train loss: 0.2991675972938538, val loss:0.3130827473871636,accuracy_train:0.9714521795046144,accuracy_val:0.9589818104976366,miou_train:0.8145288649727317,miou_val:0.7786972522735596
+iteration started
+Epoch: 55, train loss: 0.2966916353614242, val loss:0.33490770603671216,accuracy_train:0.973269569058092,accuracy_val:0.9607964523700104,miou_train:0.823020371444085,miou_val:0.7785352398367489
+iteration started
+Epoch: 56, train loss: 0.29613808658387925, val loss:0.33887199651111255,accuracy_train:0.9680451648432812,accuracy_val:0.9440158876050421,miou_train:0.8087442333207411,miou_val:0.7252429723739624
+iteration started
+Epoch: 57, train loss: 0.2926622814602322, val loss:0.32861173514163855,accuracy_train:0.9756512590387719,accuracy_val:0.9566968388918068,miou_train:0.8444169549381032,miou_val:0.7670032872873194
+iteration started
+Epoch: 58, train loss: 0.2927775740623474, val loss:0.3105783119346156,accuracy_train:0.9741974426489347,accuracy_val:0.9594782248837035,miou_train:0.8352658156962955,miou_val:0.7831143070669735
+iteration started
+Epoch: 59, train loss: 0.28926921199869227, val loss:0.3393192444786881,accuracy_train:0.9754756638983717,accuracy_val:0.9501243124202806,miou_train:0.8400640820755678,miou_val:0.7402473092079163
+iteration started
+Epoch: 60, train loss: 0.2890315454315256, val loss:0.3306382515213706,accuracy_train:0.9729769593384229,accuracy_val:0.9587203045280612,miou_train:0.8323053800884415,miou_val:0.7717123592601103
+iteration started
+Epoch: 61, train loss: 0.29264029639738576, val loss:0.3298203033028227,accuracy_train:0.9676859879694064,accuracy_val:0.9444204928064976,miou_train:0.8219039212254917,miou_val:0.7174612669383779
+iteration started
+Epoch: 62, train loss: 0.29151767448142724, val loss:0.33543335939898633,accuracy_train:0.972528317967812,accuracy_val:0.9520188202234019,miou_train:0.8205121895846199,miou_val:0.7496440165183124
+iteration started
+Epoch: 63, train loss: 0.2838713163578952, val loss:0.31077470020814374,accuracy_train:0.9763465689009979,accuracy_val:0.9615841942245648,miou_train:0.8482686579227448,miou_val:0.7833184284322402
+iteration started
+Epoch: 64, train loss: 0.2876964460920404, val loss:0.33398806958487537,accuracy_train:0.9733337548886742,accuracy_val:0.9450326028849041,miou_train:0.8276826331720633,miou_val:0.7230751724804149
+iteration started
+Epoch: 65, train loss: 0.2811734068172949, val loss:0.3101878437128934,accuracy_train:0.9736952031789279,accuracy_val:0.9551648051798846,miou_train:0.8452090147663566,miou_val:0.7598159628755906
+iteration started
+Epoch: 66, train loss: 0.2869019747884185, val loss:0.3209896972685149,accuracy_train:0.9754173397874775,accuracy_val:0.9544739282431722,miou_train:0.8410289432196056,miou_val:0.7542302398120656
+iteration started
+Epoch: 67, train loss: 0.280073579593941, val loss:0.322215682629383,accuracy_train:0.975492992607199,accuracy_val:0.9634693965476816,miou_train:0.8417304429937812,miou_val:0.7959455286755281
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 68, train loss: 0.2812934677909922, val loss:0.33324602697834826,accuracy_train:0.9717702877049256,accuracy_val:0.9633219010260354,miou_train:0.8261015546672484,miou_val:0.7757424010949976
+iteration started
+Epoch: 69, train loss: 0.30381072472642967, val loss:0.3255635879256509,accuracy_train:0.9509588381250937,accuracy_val:0.9426514990761931,miou_train:0.7714205397402539,miou_val:0.7144647030269399
+iteration started
+Epoch: 70, train loss: 0.2861870793280778, val loss:0.3185466798869046,accuracy_train:0.970429199511836,accuracy_val:0.9612064063906812,miou_train:0.8117980715983054,miou_val:0.7733304220087388
+iteration started
+Epoch: 71, train loss: 0.2892824554884875, val loss:0.3233292247309829,accuracy_train:0.9689620843454572,accuracy_val:0.9602627427924295,miou_train:0.8106956907054957,miou_val:0.7758908447097329
+iteration started
+Epoch: 72, train loss: 0.2887234039880611, val loss:0.30381607286857837,accuracy_train:0.9701902611630592,accuracy_val:0.9588709507240395,miou_train:0.8082065196598277,miou_val:0.7701450025334078
+iteration started
+Epoch: 73, train loss: 0.27257334612033984, val loss:0.3161833981672923,accuracy_train:0.9770810423778885,accuracy_val:0.9571446742759603,miou_train:0.8543331658138948,miou_val:0.7656562538707957
+iteration started
+Epoch: 74, train loss: 0.27698882222175597, val loss:0.31376188180663367,accuracy_train:0.9780122864575518,accuracy_val:0.9594862114767783,miou_train:0.8514808626735911,miou_val:0.7713847090216244
+iteration started
+Epoch: 75, train loss: 0.2790854275226593, val loss:0.31490314548665826,accuracy_train:0.9755031040736606,accuracy_val:0.9553895288584182,miou_train:0.8484468850142816,miou_val:0.7578160447232863
+iteration started
+Epoch: 76, train loss: 0.2676754708643313, val loss:0.43025837432254443,accuracy_train:0.9770511842432287,accuracy_val:0.9581712079362996,miou_train:0.8496218065128607,miou_val:0.7685862604309531
+iteration started
+Epoch: 77, train loss: 0.2729655775758955, val loss:0.3022654011394038,accuracy_train:0.972407749720982,accuracy_val:0.9596365645867723,miou_train:0.8317693993449211,miou_val:0.7808155136949876
+iteration started
+Epoch: 78, train loss: 0.2764896328802462, val loss:0.31070443626606103,accuracy_train:0.9727442857025622,accuracy_val:0.9542291281747074,miou_train:0.8320156186819077,miou_val:0.7552589458577773
+iteration started
+Epoch: 79, train loss: 0.27597805504445677, val loss:0.3238864495898738,accuracy_train:0.9760842203092175,accuracy_val:0.9498049952402837,miou_train:0.8379797313143226,miou_val:0.73498294283362
+iteration started
+Epoch: 80, train loss: 0.2790760068981736, val loss:0.34979357322057086,accuracy_train:0.9727717625135992,accuracy_val:0.9607721995048017,miou_train:0.8278067580917302,miou_val:0.764762215754565
+iteration started
+Epoch: 81, train loss: 0.2723037044207255, val loss:0.3095212064006112,accuracy_train:0.9739577715851965,accuracy_val:0.962744741451268,miou_train:0.8344628556686289,miou_val:0.7792244027642643
+iteration started
+Epoch: 82, train loss: 0.26478358352625814, val loss:0.3191359855911948,accuracy_train:0.977286129295468,accuracy_val:0.9622448833048844,miou_train:0.850877566372647,miou_val:0.7855973769636715
+iteration started
+Epoch: 83, train loss: 0.27502739595042336, val loss:0.3080600048556472,accuracy_train:0.976412952876463,accuracy_val:0.9596389825461432,miou_train:0.8403166322147145,miou_val:0.7743314083884744
+iteration started
+Epoch: 84, train loss: 0.2713500170796006, val loss:0.31080954905712244,accuracy_train:0.9730892845419419,accuracy_val:0.9598244327027686,miou_train:0.8354917383369278,miou_val:0.7747400332899654
+iteration started
+Epoch: 85, train loss: 0.27481581060974686, val loss:0.3039030306267016,accuracy_train:0.9731466194876388,accuracy_val:0.9649288914784663,miou_train:0.8313320647267735,miou_val:0.8015974724993986
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 86, train loss: 0.27391259096286913, val loss:0.3218809122389013,accuracy_train:0.9763715544811676,accuracy_val:0.9612711783932322,miou_train:0.8437382587615181,miou_val:0.7865043107201072
+iteration started
+Epoch: 87, train loss: 0.27107592556211685, val loss:0.29650462847767456,accuracy_train:0.9758633067484807,accuracy_val:0.9595186707495498,miou_train:0.836722220568096,miou_val:0.7726991071420557
+iteration started
+Epoch: 88, train loss: 0.2666147110638795, val loss:0.30006094954230567,accuracy_train:0.9757094732424221,accuracy_val:0.962235651096376,miou_train:0.8419424944064197,miou_val:0.7908859042560353
+iteration started
+Epoch: 89, train loss: 0.2720334465856905, val loss:0.29678215673475555,accuracy_train:0.9743065805423733,accuracy_val:0.9621329244588461,miou_train:0.8273338123279459,miou_val:0.7889640892253202
+iteration started
+Epoch: 90, train loss: 0.26648542770632994, val loss:0.3238082762920495,accuracy_train:0.976673249866353,accuracy_val:0.9622009936787215,miou_train:0.8459289626163595,miou_val:0.7875036737498116
+iteration started
+Epoch: 91, train loss: 0.27364615466859604, val loss:0.29923175139860675,accuracy_train:0.9728418466996175,accuracy_val:0.9648650720053645,miou_train:0.8321235372739679,miou_val:0.8001898316776052
+iteration started
+Epoch: 92, train loss: 0.26646230684386357, val loss:0.3139205069252939,accuracy_train:0.9745903610467624,accuracy_val:0.952520583428684,miou_train:0.8393824854317833,miou_val:0.753633464083952
+iteration started
+Epoch: 93, train loss: 0.2601333349943161, val loss:0.30733219692201325,accuracy_train:0.9783004266159587,accuracy_val:0.9621697800213835,miou_train:0.8568071354837978,miou_val:0.7844057959668777
+iteration started
+Epoch: 94, train loss: 0.26084179392567386, val loss:0.3146211559122259,accuracy_train:0.9771193267346,accuracy_val:0.9473856437106093,miou_train:0.865302233134999,miou_val:0.7388946974978727
+iteration started
+Epoch: 95, train loss: 0.26121476071852223, val loss:0.31696663119576196,accuracy_train:0.9795990539770599,accuracy_val:0.9484718203687725,miou_train:0.8649805249536738,miou_val:0.7387600926791921
+iteration started
+Epoch: 96, train loss: 0.2598961916234758, val loss:0.3102705180644989,accuracy_train:0.9794873149455094,accuracy_val:0.9593188593796893,miou_train:0.8646323084831238,miou_val:0.7783118416281307
+iteration started
+Epoch: 97, train loss: 0.25771676456486736, val loss:0.29194967222936224,accuracy_train:0.9770135226942339,accuracy_val:0.9629354671556122,miou_train:0.8500038740389487,miou_val:0.7966117262840271
+iteration started
+Epoch: 98, train loss: 0.2539780378341675, val loss:0.2966695942661979,accuracy_train:0.9738569500065651,accuracy_val:0.9660668710843713,miou_train:0.8440834090990179,miou_val:0.8139232397079468
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+iteration started
+Epoch: 99, train loss: 0.25853758851687114, val loss:0.29916483344453754,accuracy_train:0.9762985760710535,accuracy_val:0.9599642347173246,miou_train:0.8459528680233395,miou_val:0.7798976547577802
+iteration started
+Epoch: 100, train loss: 0.2550972138290052, val loss:0.2878817961071477,accuracy_train:0.9764040870254352,accuracy_val:0.9615695399253452,miou_train:0.8585503096966183,miou_val:0.7915446407654706
+iteration started
+Epoch: 101, train loss: 0.2677237687287507, val loss:0.2982885611779762,accuracy_train:0.9738014102125224,accuracy_val:0.962941915047269,miou_train:0.8286814299576423,miou_val:0.787560340236215
+iteration started
+Epoch: 102, train loss: 0.2512448111066112, val loss:0.28675478425892914,accuracy_train:0.9786109145806762,accuracy_val:0.9599440850558975,miou_train:0.8678027777110829,miou_val:0.7787962626008427
+iteration started
+Epoch: 103, train loss: 0.25048170420858595, val loss:0.2882053761771231,accuracy_train:0.9782007407455171,accuracy_val:0.9596674118866296,miou_train:0.861962950843222,miou_val:0.7755361549994525
+iteration started
+Epoch: 104, train loss: 0.2535794754823049, val loss:0.2914919582280246,accuracy_train:0.9786507376388056,accuracy_val:0.9600361140549969,miou_train:0.857961958822082,miou_val:0.7856552215183482
+iteration started
+Epoch: 105, train loss: 0.2550957053899765, val loss:0.287215148860758,accuracy_train:0.9777456514832497,accuracy_val:0.958412051343975,miou_train:0.8635079759885284,miou_val:0.7710641447235557
+iteration started
+Epoch: 106, train loss: 0.24863385337370414, val loss:0.2908748144453222,accuracy_train:0.98017991376238,accuracy_val:0.959915582443915,miou_train:0.8745402080171248,miou_val:0.7781608735813814
+iteration started
+Epoch: 107, train loss: 0.25504135930979693, val loss:0.2982962926228841,accuracy_train:0.9816756780837333,accuracy_val:0.9610637467877775,miou_train:0.8707123048165265,miou_val:0.7833706736564636
+iteration started
+Epoch: 108, train loss: 0.2480946123600006, val loss:0.31544803308718133,accuracy_train:0.979224306910264,accuracy_val:0.9629905673206783,miou_train:0.8734602467978702,miou_val:0.7747529780163485
+iteration started
+Epoch: 109, train loss: 0.2738679426687735, val loss:0.35059635296012415,accuracy_train:0.9634284377813626,accuracy_val:0.9397941305428422,miou_train:0.8046583046807962,miou_val:0.690589683897355
+iteration started
+Epoch: 110, train loss: 0.27098570179056236, val loss:0.29713435425902857,accuracy_train:0.9593353821020595,accuracy_val:0.9514986658725992,miou_train:0.7850916560958413,miou_val:0.7455111987450543
+iteration started
+Epoch: 111, train loss: 0.263957522643937, val loss:0.2798843437975103,accuracy_train:0.9724648282164429,accuracy_val:0.9635847258825405,miou_train:0.8291402244392563,miou_val:0.7926807719118455
+iteration started
+Epoch: 112, train loss: 0.2597416458306489, val loss:0.2872682385372393,accuracy_train:0.977730264469069,accuracy_val:0.9630332846029037,miou_train:0.8442133467863587,miou_val:0.7836688195957857
+iteration started
+Epoch: 113, train loss: 0.25619561164467425, val loss:0.29312825293251965,accuracy_train:0.9792401335534213,accuracy_val:0.9576353002138355,miou_train:0.8565683242152718,miou_val:0.7713012484943166
+iteration started
+Epoch: 114, train loss: 0.2478814513595016, val loss:0.29873598434708337,accuracy_train:0.9786217953978467,accuracy_val:0.9540599442902161,miou_train:0.8602085358956281,miou_val:0.755162470480975
+iteration started
+Epoch: 115, train loss: 0.25430329839388527, val loss:0.288711692347671,accuracy_train:0.9762653108118249,accuracy_val:0.9581446836547118,miou_train:0.8442984530154396,miou_val:0.7724216685575598
+iteration started
+Epoch: 116, train loss: 0.24950184844158313, val loss:0.28890595923770557,accuracy_train:0.9800698966109882,accuracy_val:0.961187575616184,miou_train:0.8679026807932293,miou_val:0.7768333098467659
+iteration started
+Epoch: 117, train loss: 0.2501166355830652, val loss:0.2945615215735002,accuracy_train:0.978978590948098,accuracy_val:0.959162278192527,miou_train:0.8756345151101842,miou_val:0.7673135434879976
+iteration started
+Epoch: 118, train loss: 0.24308099261036625, val loss:0.3021409547690189,accuracy_train:0.9791507056924331,accuracy_val:0.9560535151560624,miou_train:0.8801012183813488,miou_val:0.7703581767923692
+iteration started
+Epoch: 119, train loss: 0.24956743319829305, val loss:0.3098694510532148,accuracy_train:0.9789211094594087,accuracy_val:0.95698655438738,miou_train:0.8595892383771784,miou_val:0.7700031539973091
+iteration started
+Epoch: 120, train loss: 0.2465701895731467, val loss:0.29247795903321466,accuracy_train:0.9800108397851327,accuracy_val:0.9596146564094388,miou_train:0.867507835959687,miou_val:0.7776417872484993
+iteration started
+Epoch: 121, train loss: 0.24296075856244123, val loss:0.3015792658834746,accuracy_train:0.9800892036502101,accuracy_val:0.9589320591517857,miou_train:0.8780985658659655,miou_val:0.7766196903060464
+iteration started
+Epoch: 122, train loss: 0.2495857803909867, val loss:0.2977524083672148,accuracy_train:0.9765771176634714,accuracy_val:0.9618452605651636,miou_train:0.8532835205688196,miou_val:0.7818202762042775
+iteration started
+Epoch: 123, train loss: 0.2425329641059593, val loss:0.29214256730946625,accuracy_train:0.9815739039756527,accuracy_val:0.9618898096347914,miou_train:0.8821151274092057,miou_val:0.7857028175802792
+iteration started
+Epoch: 124, train loss: 0.24749852021535237, val loss:0.2887412734103925,accuracy_train:0.9798404835567041,accuracy_val:0.9570597526119824,miou_train:0.8705601600163123,miou_val:0.7678566960727468
+wandb: - 0.166 MB of 0.166 MB uploaded (0.155 MB deduped)wandb: \ 0.166 MB of 0.166 MB uploaded (0.155 MB deduped)wandb: | 0.206 MB of 0.206 MB uploaded (0.155 MB deduped)wandb:                                                                                
+wandb: W&B sync reduced upload amount by 75.0%
+wandb: 
+wandb: Run history:
+wandb:     acc_train ▁▄▆▇▇▇▇▇▇███▇▇████████▇█████████████████
+wandb:  accuracy_val ▂▁▇█████████████████████████████████████
+wandb:         epoch ▁▁▁▂▂▂▂▂▂▃▃▃▃▃▄▄▄▄▄▄▅▅▅▅▅▅▆▆▆▆▆▇▇▇▇▇▇███
+wandb: learning_rate ████▇▇▇▆▆▆▅▅▅▅▅▅▄▄▄▃▃▃▃▃▃▃▂▂▂▂▂▂▂▂▂▁▁▁▁▁
+wandb:    miou_train ▁▃▅▅▅▆▆▆▆▇▇▇▆▇▇▇▇▇▇▇█▇▆██▇█▇▇▇█▇▇██▇████
+wandb:      miou_val ▁▁▆▇▇▇▇▇▇▇█▇▇▇▇█▇█▇▇█▇▇▇▇▇███▇▇███▇█▇▇██
+wandb:    train_loss █▆▅▄▄▄▃▃▃▃▃▂▃▂▂▂▂▂▂▂▂▂▂▁▁▂▁▂▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:      val_loss ▇█▄▃▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▂▂▃▂▂▁▁▂▂▁▁▁▂▁▁▁▁▁
+wandb: 
+wandb: Run summary:
+wandb:     acc_train 0.97984
+wandb:  accuracy_val 0.95706
+wandb:         epoch 125
+wandb: learning_rate 3e-05
+wandb:    miou_train 0.87056
+wandb:      miou_val 0.76786
+wandb:    train_loss 0.2475
+wandb:      val_loss 0.28874
+wandb: 
+wandb: 🚀 View run stellar-terrain-61 at: https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal/runs/cbdgv61v
+wandb: ⭐️ View project at: https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal
+wandb: Synced 6 W&B file(s), 0 media file(s), 29 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20240829_014832-cbdgv61v/logs
+wandb: WARNING The new W&B backend becomes opt-out in version 0.18.0; try it out with `wandb.require("core")`! See https://wandb.me/wandb-core for more information.

@@ -1,0 +1,78 @@
+Learning Rate: 0.0001
+Batch Size: 8
+Number of Epochs: 125
+Number of Input Channel: 6
+Number of Segmentation Class: 2
+Used device name: cuda
+Checkpoint Path: /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth
+Data input dir:/rhome/rghosal/burn_scar/hls_burn_scars/
+wandb: Currently logged in as: rinki447 (rinki447-the-university-of-alabama-in-huntsville). Use `wandb login --relogin` to force relogin
+wandb: wandb version 0.17.8 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.17.7
+wandb: Run data is saved locally in /nas/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_merra/prithvi_burn/wandb/run-20240829_014114-ccfo1bzb
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run happy-jazz-60
+wandb: ⭐️ View project at https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal
+wandb: 🚀 View run at https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal/runs/ccfo1bzb
+checkpoint names: dict_keys(['epoch', 'iter', 'model', 'optimizer', 'scheduler', 'scaler', 'loss', 'best_val_loss', 'steps_per_epoch'])
+iteration started
+Traceback (most recent call last):
+  File "/nas/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_merra/prithvi_burn/main_prithvi_burn.py", line 304, in <module>
+    main()
+  File "/nas/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_merra/prithvi_burn/main_prithvi_burn.py", line 237, in main
+    out=model(input)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/nas/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_merra/prithvi_burn/model.py", line 91, in forward
+    out=self.head(pri_out)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/nas/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_merra/prithvi_burn/model.py", line 48, in forward
+    x = self.up1(x)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/nn/modules/container.py", line 141, in forward
+    input = module(input)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1110, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/nn/modules/conv.py", line 447, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/nn/modules/conv.py", line 443, in _conv_forward
+    return F.conv2d(input, weight, bias, self.stride,
+RuntimeError: Expected 3D (unbatched) or 4D (batched) input to conv2d, but got input of size: [8, 512, 2, 28, 28]
+wandb: - 0.166 MB of 0.166 MB uploaded (0.145 MB deduped)wandb: \ 0.166 MB of 0.166 MB uploaded (0.145 MB deduped)wandb: | 0.166 MB of 0.171 MB uploaded (0.145 MB deduped)wandb: 🚀 View run happy-jazz-60 at: https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal/runs/ccfo1bzb
+wandb: ⭐️ View project at: https://wandb.ai/rinki447-the-university-of-alabama-in-huntsville/HLS-burn-finetune-prithviGlobal
+wandb: Synced 5 W&B file(s), 0 media file(s), 29 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20240829_014114-ccfo1bzb/logs
+wandb: WARNING The new W&B backend becomes opt-out in version 0.18.0; try it out with `wandb.require("core")`! See https://wandb.me/wandb-core for more information.
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 78169) of binary: /rhome/rghosal/anaconda3/envs/hls2/bin/python
+Traceback (most recent call last):
+  File "/rhome/rghosal/anaconda3/envs/hls2/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 345, in wrapper
+    return f(*args, **kwargs)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py", line 724, in main
+    run(args)
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/run.py", line 715, in run
+    elastic_launch(
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 245, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+main_prithvi_burn.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2024-08-29_01:41:54
+  host      : matrix101.nsstc.uah.edu
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 78169)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
