@@ -36,7 +36,7 @@ If anyone wants to use LORA adapter for peft (precision efficient fine tuning), 
 #SBATCH --mem-per-cpu=10G         # Memory per CPU core
 #SBATCH -t 00-05:00               # Runtime in D-HH:MM format
 #SBATCH -J hls_rinki                 # Job name
-#SBATCH -o slurm_logs_prithvi_crop/%j.txt   # Standard output and error log
+#SBATCH -o slurm_logs_prithvi_burn/%j.txt   # Standard output and error log
 
 # Activate your environment
 source activate hls2
@@ -46,7 +46,7 @@ torchrun \
   --standalone \
   --nnodes 1 \
   --nproc_per_node 1\
-  main_prithvi_crop.py 
+  main_prithvi_burn.py 
 ```
 
 
