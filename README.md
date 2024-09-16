@@ -27,7 +27,7 @@ If anyone wants to use LORA adapter for peft (precision efficient fine tuning), 
 
 2. Create .sh file:
 
-
+```python
 #!/bin/bash
 #SBATCH -p shared                 # Partition to submit to
 #SBATCH --gres=gpu:a100:1         # Request 4 A100 GPUs
@@ -47,9 +47,9 @@ torchrun \
   --nnodes 1 \
   --nproc_per_node 1\
   main_prithvi_crop.py 
+'''
 
-
-Run slurm script using:
+3. Run slurm script using:
    ```python
    sbatch prithvi_burn.sh
    ```
