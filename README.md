@@ -12,7 +12,11 @@ For all resourcses: https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5
 
 >> prithvi_burn_LORA_v2
 
-### Architecture:
+### Architecture: 
+
+For all  model except LORA: prithvi_encoder (not freezed) --> Upsampling_conv layers (not freezed)
+For LORA model: prithvi_encoder (other than linear layers rest are freezed) --> Upsampling_conv layers (not freezed)
+
 ![image](https://github.com/user-attachments/assets/d31c0a58-17f3-44a3-9d24-9347cbc95aac)
 ***************************************************************************************************************************************
 
