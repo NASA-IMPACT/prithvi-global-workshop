@@ -16,6 +16,10 @@ This code repo is created without using mmsegmentation purposefully
 
 If anyone wants to use LORA adapter for peft (precision efficient fine tuning), can use this model for any downstream
 
+### Requirements:
+ Set up environment (eg:hls2) following Setup section of https://github.com/NASA-IMPACT/hls-foundation-os
+
+
 ### Architecture: 
 
 1. For all  model except LORA: prithvi_encoder (not freezed) --> Upsampling_conv layers (not freezed)
