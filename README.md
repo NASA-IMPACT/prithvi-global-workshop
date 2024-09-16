@@ -2,9 +2,15 @@ For all resourcses: https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5
 
 ###  Other than Srija, rest of the people can use :
 >> prithvi_burn or
+
 >> prithvi_crop_10prcnt (10% dataset adopted) or
->>
+
+
+>> prithvi_burn_intensity
+
 folders for fine tuning
+
+
 ![image](https://github.com/user-attachments/assets/d31c0a58-17f3-44a3-9d24-9347cbc95aac)
 ***************************************************************************************************************************************
 
