@@ -14,6 +14,8 @@ This code repo is created without using mmsegmentation purposefully
 
 >> prithvi_burn_LORA_v2
 
+If anyone wants to use LORA adapter for peft (precision efficient fine tuning), can use this model for any downstream
+
 ### Architecture: 
 
 1. For all  model except LORA: prithvi_encoder (not freezed) --> Upsampling_conv layers (not freezed)
