@@ -22,7 +22,7 @@ If anyone wants to use LORA adapter for peft (precision efficient fine tuning), 
 
 2. For LORA model: prithvi_encoder (other than linear layers rest are freezed) --> Upsampling_conv layers (not freezed)
 
-### Instructions
+### Instructions:
 1. Go to required prithvi_burn_scar folder
 
 2. Run slurm script using:
@@ -51,7 +51,7 @@ Checkpoint: [ Pretrained Checkpoint](https://www.nsstc.uah.edu/data/sujit.roy/Pr
 MAE_VIT Encoder+Decoder (freezed) --> UNet(Unfreezed) 
 
 
-### Instructions
+### Instructions:
 1. Go to new_flood_v2 folder
 
 2. Run slurm script using:
