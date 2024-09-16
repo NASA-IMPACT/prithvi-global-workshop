@@ -1,6 +1,10 @@
 For all resourcses: https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5RzC3LD92CjcA/edit?usp=drive_link&ouid=107344732858203799494&rtpof=true&sd=true
 
-###  Other than Srija, rest of the people can use prithvi_burn (or prithvi_burn_segformer) or prithvi_crop_10prcnt folder for fine tuning
+###  Other than Srija, rest of the people can use :
+>> prithvi_burn or
+>> prithvi_crop_10prcnt (10% dataset adopted) or
+>>
+folders for fine tuning
 ![image](https://github.com/user-attachments/assets/d31c0a58-17f3-44a3-9d24-9347cbc95aac)
 ***************************************************************************************************************************************
 
