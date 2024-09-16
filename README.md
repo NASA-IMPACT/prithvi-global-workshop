@@ -14,8 +14,9 @@ For all resourcses: https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5
 
 ### Architecture: 
 
-For all  model except LORA: prithvi_encoder (not freezed) --> Upsampling_conv layers (not freezed)
-For LORA model: prithvi_encoder (other than linear layers rest are freezed) --> Upsampling_conv layers (not freezed)
+1. For all  model except LORA: prithvi_encoder (not freezed) --> Upsampling_conv layers (not freezed)
+
+2. For LORA model: prithvi_encoder (other than linear layers rest are freezed) --> Upsampling_conv layers (not freezed)
 
 ### Instructions
 1. Go to required prithvi_burn_scar folder
@@ -29,6 +30,9 @@ For LORA model: prithvi_encoder (other than linear layers rest are freezed) --> 
 4. prithvi_burn.sh runs main_burn_scar.py, which initializes model by calling model.py or model_old.py
 
 5. The model.py or model_old.py calls prithvi_global_loader.py (wrapper around Prithvi_global model), which actually calls Prithvi_global_v1/mae/models_mae.py (i.e. the core Prithvi model architecture).
+
+6. Example instruction is provided for burn_scar only.
+   Naming convention is similar for rest of the downstreams. 
 
 ![image](https://github.com/user-attachments/assets/d31c0a58-17f3-44a3-9d24-9347cbc95aac)
 ***************************************************************************************************************************************
