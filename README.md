@@ -1,5 +1,7 @@
 For all resourcses: https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5RzC3LD92CjcA/edit?usp=drive_link&ouid=107344732858203799494&rtpof=true&sd=true
 
+This code repo is created without using mmsegmentation purposefully
+
 ##  A. Other than Srija, rest of the people can use any of the fine tuning task folders:
 >> prithvi_burn or
 
