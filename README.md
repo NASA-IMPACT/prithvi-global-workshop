@@ -47,7 +47,9 @@ torchrun \
   --nnodes 1 \
   --nproc_per_node 1\
   main_prithvi_crop.py 
-'''
+```
+
+
 
 3. Run slurm script using:
    ```python
