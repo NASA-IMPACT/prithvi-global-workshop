@@ -22,7 +22,7 @@ If anyone wants to use LORA adapter for peft (precision efficient fine tuning), 
 ### Data:
 Use instruction from https://anaconda.org/conda-forge/git-lfs/ to install git-lfs in the environemnt.
 
-Use "install git-lfs" in your server before downloading data using "wget data_link", as the daat files are in git-lfs format
+Use "install git-lfs" in your server before downloading data using "wget data_link", as the data files are in git-lfs format
 
 For data links: Use https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5RzC3LD92CjcA/edit?usp=drive_link&ouid=107344732858203799494&rtpof=true&sd=true
 
