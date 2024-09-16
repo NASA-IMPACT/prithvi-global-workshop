@@ -25,17 +25,41 @@ If anyone wants to use LORA adapter for peft (precision efficient fine tuning), 
 ### Instructions:
 1. Go to required prithvi_burn_scar folder
 
-2. Run slurm script using:
+2. Create .sh file:
+
+
+#!/bin/bash
+#SBATCH -p shared                 # Partition to submit to
+#SBATCH --gres=gpu:a100:1         # Request 4 A100 GPUs
+#SBATCH --ntasks-per-node=1       # Number of tasks per node
+#SBATCH --cpus-per-task=24         # Number of CPU cores per task
+#SBATCH --mem-per-cpu=10G         # Memory per CPU core
+#SBATCH -t 00-05:00               # Runtime in D-HH:MM format
+#SBATCH -J hls_rinki                 # Job name
+#SBATCH -o slurm_logs_prithvi_crop/%j.txt   # Standard output and error log
+
+# Activate your environment
+source activate hls2
+
+# Run your commands
+torchrun \
+  --standalone \
+  --nnodes 1 \
+  --nproc_per_node 1\
+  main_prithvi_crop.py 
+
+
+Run slurm script using:
    ```python
    sbatch prithvi_burn.sh
    ```
-3. config file is: config.yaml
+4. config file is: config.yaml
 
-4. prithvi_burn.sh runs main_burn_scar.py, which initializes model by calling model.py or model_old.py
+5. prithvi_burn.sh runs main_burn_scar.py, which initializes model by calling model.py or model_old.py
 
-5. The model.py or model_old.py calls prithvi_global_loader.py (wrapper around Prithvi_global model), which actually calls Prithvi_global_v1/mae/models_mae.py (i.e. the core Prithvi model architecture).
+6. The model.py or model_old.py calls prithvi_global_loader.py (wrapper around Prithvi_global model), which actually calls Prithvi_global_v1/mae/models_mae.py (i.e. the core Prithvi model architecture).
 
-6. Example instruction is provided for burn_scar only.
+7. Example instruction is provided for burn_scar only.
    Naming convention is similar for rest of the downstreams. 
 
 ![image](https://github.com/user-attachments/assets/d31c0a58-17f3-44a3-9d24-9347cbc95aac)
