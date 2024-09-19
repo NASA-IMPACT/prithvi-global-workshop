@@ -13,7 +13,7 @@ This code repo is created without using mmsegmentation purposefully
 If anyone wants to use LORA adapter for peft (precision efficient fine tuning), can use this model for any downstream
 
 ### Requirements:
- Set up environment (eg:hls2) following Setup section of https://github.com/NASA-IMPACT/hls-foundation-os
+ Set up environment (eg:hls2) following Setup section of https://github.com/NASA-IMPACT/hls-foundation-os .
  You may need to uninstall Numpy and install its lower version, as some error might arise
 
 ### Data:
