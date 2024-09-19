@@ -8,7 +8,7 @@ This code repo is created without using mmsegmentation purposefully
 
 ### LORA model for burn_scar:
 
->> prithvi_burn_LORA_v2
+>> prithvi_crop_10prcnt_mmseg_LORA
 
 If anyone wants to use LORA adapter for peft (precision efficient fine tuning), can use this model for any downstream
 
