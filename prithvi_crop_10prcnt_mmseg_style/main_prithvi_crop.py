@@ -21,7 +21,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.optim.lr_scheduler import LambdaLR
 from torch.optim import Adam
 
-
+################################## useful class and functions ##################################################
 warmup_iters = 1500
 warmup_ratio = 1e-6
 power = 1.0
@@ -36,7 +36,7 @@ def lr_lambda(current_step):
         return (1 - (current_step - warmup_iters) / (total_steps - warmup_iters)) ** power
 
 
-################################## useful class and functions ##################################################
+
 def data_path(data_dir,annot):
 
     path=[]
@@ -55,13 +55,15 @@ def data_path(data_dir,annot):
         mask_path=os.path.join(data_dir,mask_name)
         path.append([img_path,mask_path])
 
-    # take 10% dataset     
+    ##### to take 10% dataset use this section, 
+    #### to take full dataset delete this section and return "path" only ########    
     path_len=len(path)
     ten_pp_len=int(0.1*path_len)
     random.seed(42)
     random_selection_path = random.sample(path, ten_pp_len)
 
     #print("10 percent length",len(random_selection_path))
+    ###############################################################################
      
     return random_selection_path
 
@@ -318,7 +320,7 @@ def main():
                 mask=mask.to(device)
                 #crop missing data is labeled as 0, need to push it to -1 for weighted cross entropy calculation
                 #hence all labels are shifted
-                mask=mask.long()-1 
+                mask=mask.long()-1 # for crop-downstream purposefully shifted target labels
                 out=model(input)
                 loss=segmentation_loss(mask,out,device,class_weights,ignore_index)
                 batch_acc=compute_accuracy(mask,out)
@@ -336,9 +338,8 @@ def main():
         
         print(f"Epoch: {i}, train loss: {epoch_loss_train}, val loss:{epoch_loss_val},accuracy_train:{acc_total_train},accuracy_val:{acc_total_val},miou_train:{miou_train},miou_val:{miou_valid}")
 
-        # scheduler will change learning rate based on validation loss
-        ##scheduler.step()
-        # best checkpoints saved based on best mIOU for validation data
+        
+        # best checkpoints saved based on best mIOU for validation/test data
         if i==0:
             best_loss=epoch_loss_val
             best_miou_val=miou_valid
