@@ -70,7 +70,8 @@ torchrun \
 7. Example instruction is provided for crop_segmentation only.
    Naming convention is similar for rest of the downstreams. 
 
-![image](https://github.com/user-attachments/assets/d31c0a58-17f3-44a3-9d24-9347cbc95aac)
+![model_hls (1)](https://github.com/user-attachments/assets/b13b25f5-2a4c-4407-894b-d16aa3eef016)
+
 ***************************************************************************************************************************************
 
 ## B. For Srija to adapt the model for CO2 flux fine tuning:
