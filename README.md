@@ -14,6 +14,7 @@ If anyone wants to use LORA adapter for peft (precision efficient fine tuning), 
 
 ### Requirements:
  Set up environment (eg:hls2) following Setup section of https://github.com/NASA-IMPACT/hls-foundation-os
+ You may need to uninstaall Numpy and install its lower version, as some error might arise
 
 ### Data:
 Use instruction from https://anaconda.org/conda-forge/git-lfs/ to install git-lfs in the environemnt.
@@ -42,7 +43,7 @@ For data links: Use https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5
 #SBATCH --mem-per-cpu=10G         # Memory per CPU core
 #SBATCH -t 00-05:00               # Runtime in D-HH:MM format
 #SBATCH -J hls_rinki                 # Job name
-#SBATCH -o slurm_logs_prithvi_burn/%j.txt   # Standard output and error log
+#SBATCH -o slurm_logs_prithvi_crop/%j.txt   # Standard output and error log
 
 # Activate your environment
 source activate hls2
@@ -52,7 +53,7 @@ torchrun \
   --standalone \
   --nnodes 1 \
   --nproc_per_node 1\
-  main_prithvi_burn.py 
+  main_prithvi_crop.py 
 ```
 
 
@@ -68,7 +69,10 @@ torchrun \
 6. The model.py calls Head.py, Neck.py and Seg_head.py
 
 7. Example instruction is provided for crop_segmentation only.
-   Naming convention is similar for rest of the downstreams. 
+   Naming convention is similar for rest of the downstreams.
+
+8. In config file, change n_frame and n_channel as per your data being loaded
+   and change the path to your prithvi_global checkpoint 
 
 ![model_hls (1)](https://github.com/user-attachments/assets/b13b25f5-2a4c-4407-894b-d16aa3eef016)
 
