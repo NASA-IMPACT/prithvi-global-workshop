@@ -14,7 +14,7 @@ If anyone wants to use LORA adapter for peft (precision efficient fine tuning), 
 
 ### Requirements:
  Set up environment (eg:hls2) following Setup section of https://github.com/NASA-IMPACT/hls-foundation-os
- You may need to uninstaall Numpy and install its lower version, as some error might arise
+ You may need to uninstall Numpy and install its lower version, as some error might arise
 
 ### Data:
 Use instruction from https://anaconda.org/conda-forge/git-lfs/ to install git-lfs in the environemnt.
