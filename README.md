@@ -72,7 +72,9 @@ torchrun \
    Naming convention is similar for rest of the downstreams.
 
 8. In config file, change n_frame and n_channel as per your data being loaded
-   and change the path to your prithvi_global checkpoint 
+   and change the path to your prithvi_global checkpoint
+   
+   Crop segmentation data is loaded as [batch,18,224,224], but it is basically stacked format of 6 channel and 3 timestep, squeezed into 18, in such case the data will be reshaped into batch,6,3,224,224 as seen in the architecture figure, only when n_frame=3 and n_channel=6 is provided in config file.
 
 ![model_hls (1)](https://github.com/user-attachments/assets/b13b25f5-2a4c-4407-894b-d16aa3eef016)
 
