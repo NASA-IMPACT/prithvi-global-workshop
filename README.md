@@ -4,7 +4,7 @@ This code repo is created without using mmsegmentation purposefully
 
 ##  A. Other than Srija, rest of the people can use any of the fine tuning task folders:
 
->> prithvi_crop_10prcnt_mmseg_style (10% dataset adopted) 
+>> prithvi_crop_10prcnt_mmseg_style (10% dataset adopted-can be changed in data_path function of main_prithvi_crop.py) 
 
 ### LORA model for crop-segmentation:
 
