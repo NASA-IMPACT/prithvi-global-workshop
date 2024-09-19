@@ -1,13 +1,12 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from prithvi_global_loader import prithvi
-from neck import Neck
 from Head import TemporalViTEncoder
+from neck import Neck
 from Seg_head import FCNHead
 
 
-###########################################################################
+########################################################################################
 ########################################################################################
 
 def print_model_details(model):
@@ -18,13 +17,14 @@ def print_model_details(model):
 
 
 class prithvi_wrapper(nn.Module):
-    def __init__(self,n_channels, n_classes,n_frame,embed_size,input_size,patch_size,prithvi_weight,prithvi_config,in_chans):
+    def __init__(self,n_channels, n_classes,n_frame,embed_size,input_size,
+                 patch_size,prithvi_weight,in_chans):
         super(prithvi_wrapper, self).__init__()
 
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.pr_weight=prithvi_weight
-        self.pr_config=prithvi_config
+        
         self.n_frame=n_frame
         self.input_size=input_size
         self.embed_size=embed_size
@@ -55,23 +55,23 @@ class prithvi_wrapper(nn.Module):
             self.norm_pix_loss, 
             self.pr_weight)
         
-        #print("model details",print_model_details(self.prithvi_backbone))
+        #print("model backbone details",print_model_details(self.prithvi_backbone))
         
         #initialize neck
         self.neck_embedding=self.embed_size*self.n_frame
         self.neck=Neck(self.neck_embedding)
+        #print("model neck details",print_model_details(self.neck))
 
         #initialize seg_head
         self.Seg_head=FCNHead(self.neck_embedding, 256, self.n_classes, dropout_p=0.1)
-
-        #print("model details",print_model_details(self.neck))
+        
 
 
     def forward(self, x):
 
         B,C,T,H,W=x.shape  #8,18,1,224,224
 
-        #Reshape the input into 6 channel and 3 timeframes
+        #Reshape the input into 6 channel and 3 timeframes say for crop
         C=int(C/self.n_frame) #18/3=6
         
         x=x.reshape(B,self.n_frame,C,H,W).contiguous() #8,3,6,224,224
@@ -82,7 +82,8 @@ class prithvi_wrapper(nn.Module):
         #eliminate class token
         pri_out=pri_out[:,1:,:]  #8,588,1024
         
-        # change no_patch and embedding size of prithvi_out to fit embedding size of neck(=prithvi_encoder_embed_size*no_frame)
+        # change no_patch and embedding size of prithvi_out to fit 
+        # embedding size of neck(=prithvi_encoder_embed_size*no_frame)
         n_patch=int(pri_out.shape[1]/self.n_frame) #588/3=196
         embed_size_neck=int(self.embed_size*self.n_frame) #1024*3=3096
         
