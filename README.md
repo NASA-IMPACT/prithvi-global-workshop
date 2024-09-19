@@ -3,12 +3,8 @@ For all resources: https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5R
 This code repo is created without using mmsegmentation purposefully
 
 ##  A. Other than Srija, rest of the people can use any of the fine tuning task folders:
->> prithvi_burn or
 
->> prithvi_crop_10prcnt (10% dataset adopted) or
-
-
->> prithvi_burn_intensity
+>> prithvi_crop_10prcnt_mmseg_style (10% dataset adopted) 
 
 ### LORA model for burn_scar:
 
@@ -33,7 +29,7 @@ For data links: Use https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5
 2. For LORA model: prithvi_encoder (other than linear layers rest are freezed) --> Upsampling_conv layers (not freezed)
 
 ### Instructions:
-1. Go to required prithvi_burn_scar folder
+1. Go to required folder
 
 2. Create .sh file:
 
@@ -63,15 +59,15 @@ torchrun \
 
 3. Run slurm script using:
    ```python
-   sbatch prithvi_burn.sh
+   sbatch prithvi_crop.sh
    ```
 4. config file is: config.yaml
 
-5. prithvi_burn.sh runs main_burn_scar.py, which initializes model by calling model.py or model_old.py
+5. prithvi_burn.sh runs main_prithvi_crop.py, which initializes model by calling model.py 
 
-6. The model.py or model_old.py calls prithvi_global_loader.py (wrapper around Prithvi_global model), which actually calls Prithvi_global_v1/mae/models_mae.py (i.e. the core Prithvi model architecture).
+6. The model.py calls Head.py, Neck.py and Seg_head.py
 
-7. Example instruction is provided for burn_scar only.
+7. Example instruction is provided for crop_segmentation only.
    Naming convention is similar for rest of the downstreams. 
 
 ![image](https://github.com/user-attachments/assets/d31c0a58-17f3-44a3-9d24-9347cbc95aac)
