@@ -11,7 +11,6 @@ import glob
 import os
 import wandb
 import argparse
-from Prithvi_global_v1.mae.config import get_config
 from PIL import Image
 from data_load_prithvi_crop import load_raster
 from data_load_prithvi_crop import preprocess_image
@@ -236,14 +235,12 @@ def main():
 
 
     #initialize model    
-    model_weights=config["prithvi_model_new_weight"]
-    config["prithvi_model_new_config"]= get_config(None) 
-    prithvi_config=config["prithvi_model_new_config"]
+    model_weights=config["prithvi_model_new_weight"] 
+
 
     #wrapper of prithvi #initialization of prithvi is done by initializing prithvi_loader.py
     model=prithvi_wrapper(n_channel,n_class,n_frame,embed_size,input_size,
-                          patch_size,model_weights,prithvi_config,
-                          n_channel) 
+                          patch_size,model_weights,n_channel) 
     model=model.to(device)
    
     '''#tried some combination of optimizer and scheduler and commented out
