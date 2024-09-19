@@ -6,7 +6,7 @@ This code repo is created without using mmsegmentation purposefully
 
 >> prithvi_crop_10prcnt_mmseg_style (10% dataset adopted) 
 
-### LORA model for burn_scar:
+### LORA model for crop-segmentation:
 
 >> prithvi_crop_10prcnt_mmseg_LORA
 
