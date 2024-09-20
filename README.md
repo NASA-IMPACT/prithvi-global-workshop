@@ -39,8 +39,8 @@ For data links: Use https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5
 #SBATCH -p shared                 # Partition to submit to
 #SBATCH --gres=gpu:a100:1         # Request 4 A100 GPUs
 #SBATCH --ntasks-per-node=1       # Number of tasks per node
-#SBATCH --cpus-per-task=24         # Number of CPU cores per task
-#SBATCH --mem-per-cpu=10G         # Memory per CPU core
+#SBATCH --cpus-per-task=2         # Number of CPU cores per task
+#SBATCH --mem-per-cpu=4G         # Memory per CPU core
 #SBATCH -t 00-05:00               # Runtime in D-HH:MM format
 #SBATCH -J hls_rinki                 # Job name
 #SBATCH -o slurm_logs_prithvi_crop/%j.txt   # Standard output and error log
