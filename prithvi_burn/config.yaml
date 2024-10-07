@@ -1,0 +1,70 @@
+model:
+  name: "Prithvi_Global_burn"
+  n_channel: 6
+  n_class: 2
+  embed_dim: 1024
+  dec_embed_dim: 512
+  dropout_rate: 0.2
+
+device_name: "cuda"
+wandb_project: "HLS-burn-finetune-prithviGlobal"
+
+n_iteration: 125
+
+prithvi_model_new_weight: "/rhome/rghosal/Rinki/rinki-hls-foundation-os/Prithvi_global.pt"
+
+training:
+  train_batch_size: 8
+  learning_rate: 0.0001
+  shuffle: True
+
+  optimizer:
+    name: "AdamW"
+    params:
+      lr: 0.0001
+       
+
+  scheduler:
+    name: "StepLR"
+    params:
+      step_size: 10
+      gamma: 0.9
+
+
+validation:
+  val_batch_size: 16
+  shuffle: False
+
+
+data:
+  n_frame: 1
+  data_dir: "/rhome/rghosal/burn_scar/hls_burn_scars/"
+  means: [
+        0.033349706741586264,
+        0.05701185520536176,
+        0.05889748132001316,
+        0.2323245113436119,
+        0.1972854853760658,
+        0.11944914225186566
+    ]
+  stds: [
+        0.02269135568823774,
+        0.026807560223070237,
+        0.04004109844362779,
+        0.07791732423672691,
+        0.08708738838140137,
+        0.07241979477437814
+    ]
+  input_size: [1,224,224]
+  patch_size: [1,16,16]
+  
+Loss: "CrossEntropyLoss"
+
+class_weights: [0.11, 0.88]
+ignore_index: -1
+
+logging:
+  checkpoint_dir: "/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth" 
+
+segment_input_path: "/rhome/rghosal/burn_scar/hls_burn_scars/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
+predicted_mask_dir: "./segment_out_prithvi_burn"

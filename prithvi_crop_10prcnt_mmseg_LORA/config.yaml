@@ -1,0 +1,98 @@
+model:
+  name: "Prithvi_Global_crop"
+  n_channel: 6
+  n_class: 13
+  encoder_embed_dim: 1024
+  dec_embed_dim: 512
+  dropout_rate: 0.2
+
+device_name: "cuda"
+wandb_project: "HLS-crop-finetune-10prcnt-prithviGlobal"
+
+n_iteration: 125
+
+prithvi_model_new_weight: "/rhome/rghosal/Rinki/rinki-hls-foundation-os/Prithvi_global.pt"
+
+training:
+  train_batch_size: 8
+  learning_rate: 0.0001
+  shuffle: True
+
+  optimizer:
+    name: "AdamW"
+    params:
+      lr: 0.0001
+       
+
+  scheduler:
+    name: "StepLR"
+    params:
+      step_size: 10
+      gamma: 0.9
+
+
+validation:
+  val_batch_size: 16
+  shuffle: False
+
+
+data:
+  n_frame: 3
+  train_dir_input: "/rhome/rghosal/crop/training_chips"
+  val_dir_input: "/rhome/rghosal/crop/validation_chips"
+  train_annot: "/rhome/rghosal/crop/training_data.txt"
+  val_annot: "/rhome/rghosal/crop/validation_data.txt"
+  means: [494.905781,815.239594,924.335066,2968.881459,2634.621962,1739.579917,
+        494.905781,815.239594,924.335066,2968.881459,2634.621962,1739.579917,
+        494.905781,815.239594,924.335066,2968.881459,2634.621962,1739.579917]
+  stds: [
+        284.925432,
+        357.84876,
+        575.566823,
+        896.601013,
+        951.900334,
+        921.407808,
+        284.925432,
+        357.84876,
+        575.566823,
+        896.601013,
+        951.900334,
+        921.407808,
+        284.925432,
+        357.84876,
+        575.566823,
+        896.601013,
+        951.900334,
+        921.407808
+    ]
+  input_size: [1,224,224]
+  patch_size: [1,16,16]
+  
+Loss: "CrossEntropyLoss"
+
+class_weights:  [
+    0.386375,
+    0.661126,
+    0.548184,
+    0.640482,
+    0.876862,
+    0.925186,
+    3.249462,
+    1.542289,
+    2.175141,
+    2.272419,
+    3.062762,
+    3.626097,
+    1.198702
+  ]
+
+ignore_index: -1
+
+logging:
+  checkpoint_dir: "/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_crop_checkpoint/checkpoint_crop10LORA_prithvi.pth" 
+
+segment_input_path: "/rhome/rghosal/crop/validation_chips/chip_304_542_merged.tif"
+predicted_mask_dir: "./segment_out_prithvi_crop"
+
+Lora_peft_layer_name: ["blocks","mlp.fc"]
+Lora_peft_layer_no: [0,23]

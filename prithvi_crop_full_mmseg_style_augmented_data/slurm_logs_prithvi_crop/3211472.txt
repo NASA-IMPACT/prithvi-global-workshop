@@ -1,0 +1,38 @@
+/rhome/rghosal/anaconda3/envs/hls2/lib/python3.9/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: libtorch_cuda_cu.so: cannot open shared object file: No such file or directory
+  warn(f"Failed to load image Python extension: {e}")
+Learning Rate: 0.0001
+Batch Size: 2
+Number of Epochs: 80
+Number of Input Channel: 6
+Number of Segmentation Class: 13
+Used device name: cuda
+Checkpoint Path: /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_crop_checkpoint/checkpoint_crop10_prithvi.pth
+Data input dir:/rhome/rghosal/crop/training_chips
+Data mask dir:/rhome/rghosal/crop/validation_chips
+Train annotation file:/rhome/rghosal/crop/training_data.txt
+Val annotation file:/rhome/rghosal/crop/validation_data.txt
+wandb: Currently logged in as: rg0121 (nasa-impact). Use `wandb login --relogin` to force relogin
+wandb: wandb version 0.18.2 is available!  To upgrade, please run:
+wandb:  $ pip install wandb --upgrade
+wandb: Tracking run with wandb version 0.17.7
+wandb: Run data is saved locally in /nas/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_merra/prithvi_crop_full_mmseg_style_augmented_data/wandb/run-20240930_144644-m3y1ytsu
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run restful-galaxy-68
+wandb: ⭐️ View project at https://wandb.ai/nasa-impact/HLS-crop-finetune-10prcnt-prithviGlobal
+wandb: 🚀 View run at https://wandb.ai/nasa-impact/HLS-crop-finetune-10prcnt-prithviGlobal/runs/m3y1ytsu
+load from /rhome/rghosal/Rinki/rinki-hls-foundation-os/Prithvi_global.pt
+/nas/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_merra/prithvi_crop_full_mmseg_style_augmented_data/Head.py:200: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(self.pretrained)
+iteration started
+Epoch: 0, train loss: 1.9536200984128296, val loss:1.6024280062136174,accuracy_train:0.41108599286930236,accuracy_val:0.45970884558891567,miou_train:0.18921084210141315,miou_val:0.21788359221090306
+iteration started
+Epoch: 1, train loss: 1.572970023527959, val loss:1.522787734460274,accuracy_train:0.5337975307462479,accuracy_val:0.43790912981125085,miou_train:0.26286570993089026,miou_val:0.20938343106928267
+iteration started
+Epoch: 2, train loss: 1.5012391709755506, val loss:1.4651768581721878,accuracy_train:0.5274417448764525,accuracy_val:0.47767805511129324,miou_train:0.26024991146321425,miou_val:0.2310162224068543
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_crop_checkpoint/checkpoint_crop10_prithvi.pth
+iteration started
+Epoch: 3, train loss: 1.4904345647878088, val loss:1.4201506639887542,accuracy_train:0.5109346165052839,accuracy_val:0.5027421610645554,miou_train:0.25372197479975983,miou_val:0.24613297960378344
+Checkpoint saved at /rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_crop_checkpoint/checkpoint_crop10_prithvi.pth
+iteration started
+Epoch: 4, train loss: 1.4862187353001761, val loss:1.4513841473948013,accuracy_train:0.5065461210779302,accuracy_val:0.5011392798902268,miou_train:0.2505159595432835,miou_val:0.23567710253241148
+iteration started
