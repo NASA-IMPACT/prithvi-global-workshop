@@ -1,6 +1,3 @@
 [submodule "Prithvi-global-v1"]
 	path = Prithvi-global-v1
 	url = https://github.com/NASA-IMPACT/Prithvi-global-v1.git
-[submodule "Prithvi-Global-downstream"]
-	path = Prithvi-Global-downstream
-	url = https://github.com/NASA-IMPACT/Prithvi-Global-downstream.git
