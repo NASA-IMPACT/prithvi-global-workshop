@@ -7,7 +7,7 @@ model:
   dropout_rate: 0.2
 
 device_name: "cuda"
-wandb_project: "HLS-burn-finetune-prithviGlobal"
+# wandb_project: "HLS-burn-finetune-prithviGlobal"
 
 n_iteration: 125
 
@@ -22,7 +22,7 @@ training:
     name: "AdamW"
     params:
       lr: 0.0001
-       
+
 
   scheduler:
     name: "StepLR"
@@ -57,14 +57,14 @@ data:
     ]
   input_size: [1,224,224]
   patch_size: [1,16,16]
-  
+
 Loss: "CrossEntropyLoss"
 
 class_weights: [0.11, 0.88]
 ignore_index: -1
 
 logging:
-  checkpoint_dir: "/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth" 
+  checkpoint_dir: "/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth"
 
 segment_input_path: "/rhome/rghosal/burn_scar/hls_burn_scars/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
 predicted_mask_dir: "./segment_out_prithvi_burn"
