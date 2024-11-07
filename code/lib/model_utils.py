@@ -7,7 +7,7 @@ import random
 from glob import glob
 from PIL import Image
 
-from lib.utils import load_raster, preprocess_image
+from lib.utils import load_raster
 
 
 def upscaling_block(in_channels, out_channels):
@@ -121,12 +121,12 @@ def compute_accuracy_and_f1(target, output):
     return accuracy_batch, precision_batch, recall_batch, f1_batch
 
 
-def plot_output_image(model, device, epoch,config,input_path,prediction_img_dir):
+def plot_output_image(model, device, epoch, config, input_path, prediction_img_dir):
 
     model.eval()
 
-    if_img=1
-    img=load_raster(input_path,if_img,crop=None)
+    if_img = 1
+    img = load_raster(input_path, if_img, crop=None)
 
     #normalize image
     mean = np.array(config["data"]["means"]).reshape(-1, 1, 1)  # Reshape to (6, 1, 1)
@@ -138,7 +138,7 @@ def plot_output_image(model, device, epoch,config,input_path,prediction_img_dir)
         #centre crop
         start = (512 - 224) // 2
         end = start + 224
-        final_image=final_image[:,start:end,start:end]
+        final_image=final_image[:, start:end, start:end]
 
     final_image=torch.from_numpy(final_image).float()
 
@@ -155,12 +155,7 @@ def plot_output_image(model, device, epoch,config,input_path,prediction_img_dir)
     predicted_mask = torch.argmax(output, dim=0)  # shape [224, 224]
     predicted_mask = predicted_mask.cpu().numpy()
 
-    if config["case"]=="burn" :
-
-        colormap = np.array([
-            [0, 0, 0],# Class 0
-            [255, 255, 255], # Class 1
-        ], dtype=np.uint8)
+    colormap = np.array(config['colormap'], dtype=np.uint8)
 
     # Apply the color map to the predicted mask
     colored_mask = colormap[predicted_mask]
@@ -171,6 +166,7 @@ def plot_output_image(model, device, epoch,config,input_path,prediction_img_dir)
     # Save the image
     output_image_path = os.path.join(prediction_img_dir,f"segmentation_output_epoch_{epoch}.png")
     img.save(output_image_path)
+
 
 def calculate_miou(output, target, device):
 

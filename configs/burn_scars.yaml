@@ -71,3 +71,8 @@ logging:
 segment_input_path: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
 predicted_mask_dir: "./segment_out_prithvi_burn"
 check_output: 2
+class_index_correction: 0
+colormap: [
+  [0, 0, 0],
+  [255, 255, 255],
+]
