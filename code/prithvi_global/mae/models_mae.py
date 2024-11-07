@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from timm.models.vision_transformer import Block
 
-from pos_embed import PatchEmbed, get_3d_sincos_pos_embed
+from .pos_embed import PatchEmbed, get_3d_sincos_pos_embed
 
 
 class TemporalViTEncoder(nn.Module):
