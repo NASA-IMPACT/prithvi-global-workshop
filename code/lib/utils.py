@@ -10,7 +10,7 @@ from consts import NO_DATA, NO_DATA_FLOAT
 from PIL import Image
 
 
-def load_raster(path,if_img,crop=None):
+def load_raster(path, crop=None):
         with rasterio.open(path) as src:
             img = src.read()
 
@@ -40,7 +40,7 @@ def random_crop(tensor, crop_size=(224, 224)):
 
 
 # Example processing function to simulate the pipeline
-def process_input(input_array,mask,img_norm_cfg):
+def process_input(input_array, mask, img_norm_cfg):
 
     input_array=input_array.astype(np.float32)
     img_tensor = torch.from_numpy(input_array)  # Assuming input_array is of type np.float32
@@ -131,36 +131,6 @@ def compute_accuracy(labels, output):
     f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
     return (TP + TN) / total, f1_score
-
-
-def plot_output_image(model, device, epoch, means, stds, input_path, prediction_img_dir):
-
-    model.eval()
-
-    if_img=1
-    img=load_raster(input_path,if_img,crop=(224, 224))
-
-    final_image=preprocess_image(img,means,stds)
-    final_image=final_image.to(device)
-
-
-    with torch.no_grad():
-        output = model(final_image)  # [1, n_segmentation_class, 224, 224]
-
-    # Remove batch dimension
-    output = output.squeeze(0)  # [n_segmentation_class, 224, 224]
-
-    predicted_mask = torch.argmax(output, dim=0)  # shape [224, 224]
-    predicted_mask = predicted_mask.cpu().numpy()
-    binary_image = (predicted_mask * 255).astype(np.uint8)
-    img = Image.fromarray(binary_image, mode='L') #PIL Image
-
-    # Save the image
-    output_image_path = os.path.join(
-        prediction_img_dir,
-        f"segmentation_output_epoch_{epoch}.png"
-    )
-    img.save(output_image_path)
 
 
 def calculate_miou(output, target, device):

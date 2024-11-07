@@ -131,8 +131,6 @@ class Trainer:
             iter = torch.tensor([i]).unsqueeze(0)
             print("iteration started")
 
-
-            ####### train phase ################################################################
             self.model.train()
 
             for input, mask in self.dataloaders['training']:
@@ -269,7 +267,7 @@ class Trainer:
 
                 input = input.to(self.device)
                 mask = mask.to(self.device)
-                mask = mask.long()
+                mask = mask.long() + self.config.get('class_index_correction', 0)
 
                 out = self.model(input)
                 loss = segmentation_loss(
