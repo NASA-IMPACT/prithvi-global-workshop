@@ -34,8 +34,8 @@ def data_path(data_dir,annot,config,mode):
 
     if config["case"]=="burn":
 
-        tif_path=os.path.join(f"{data_dir[0]}",f"{mode}/*tif")
-        list_file=glob.glob(tif_path)
+        tif_path = os.path.join(f"{data_dir[0]}",f"{mode}/*tif")
+        list_file = glob(tif_path)
 
         for i in list_file:
             tag=i.split("_")[-1]

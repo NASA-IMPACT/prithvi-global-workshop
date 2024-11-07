@@ -22,18 +22,15 @@ class DownstreamDataset(Dataset):
 
 
     def __getitem__(self,idx):
-
         image_path=self.data_dir[idx][0]
         mask_path=self.data_dir[idx][1]
         #print("image path:",image_path)
 
-        if_img=1
-        input_array = load_raster(image_path,if_img,crop=None)
+        input_array = load_raster(image_path, crop=None)
         if self.case=="flood":
             input_array=input_array[[1,2,3,8,11,12],:,:]
 
-        if_img=0
-        mask_array = load_raster(mask_path,if_img,crop=None)
+        mask_array = load_raster(mask_path, crop=None)
 
         img_norm_cfg={}
         img_norm_cfg["mean"]=self.means

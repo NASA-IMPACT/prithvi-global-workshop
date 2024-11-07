@@ -25,6 +25,7 @@ class Trainer:
 
         self.load_parameters()
         self.load_datasets()
+        self.load_model()
 
 
     def load_datasets(self):
