@@ -125,8 +125,7 @@ def plot_output_image(model, device, epoch, config, input_path, prediction_img_d
 
     model.eval()
 
-    if_img = 1
-    img = load_raster(input_path, if_img, crop=None)
+    img = load_raster(input_path, crop=None)
 
     #normalize image
     mean = np.array(config["data"]["means"]).reshape(-1, 1, 1)  # Reshape to (6, 1, 1)

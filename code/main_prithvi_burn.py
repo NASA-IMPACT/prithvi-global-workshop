@@ -129,7 +129,7 @@ class Trainer:
             f1_dataset_train = []
 
             iou_train = torch.tensor([])
-            iter = torch.tensor([i]).unsqueeze(0)
+            iteration = torch.tensor([i]).unsqueeze(0)
             print("iteration started")
 
             self.model.train()
@@ -159,7 +159,7 @@ class Trainer:
                 miou_batch, iou_batch = calculate_miou(out, mask, self.device)
                 miou_train.append(miou_batch)
                 iou_batch = iou_batch.cpu().unsqueeze(0)
-                iou_batch = torch.cat((iter, iou_batch), dim=1)
+                iou_batch = torch.tensor((iteration, iou_batch), dim=1)
 
                 if i == 0:
                     iou_train = iou_batch
@@ -253,7 +253,7 @@ class Trainer:
                     self.predicted_mask_dir
                 )
 
-    def validate(self):
+    def validate(self, iteration):
         self.model.eval()
 
         val_loss = 0.0
@@ -290,7 +290,7 @@ class Trainer:
                 miou_batch, iou_batch = calculate_miou(out, mask, self.device)
                 miou_valid.append(miou_batch)
                 iou_batch = iou_batch.cpu().unsqueeze(0)
-                iou_batch = torch.cat((iter, iou_batch), dim=1)
+                iou_batch = torch.cat((iteration, iou_batch), dim=1)
 
                 if index == 0:
                     iou_valid = iou_batch
