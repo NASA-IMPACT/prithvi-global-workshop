@@ -1,15 +1,18 @@
+case: "burn"
 model:
   name: "Prithvi_Global_burn"
   n_channel: 6
   n_class: 2
-  embed_dim: 1024
+  encoder_embed_dim: 1024
   dec_embed_dim: 512
   dropout_rate: 0.2
 
-device_name: "cuda"
-# wandb_project: "HLS-burn-finetune-prithviGlobal"
+dataset_used: 0.1
 
-n_iteration: 125
+device_name: "cuda"
+wandb_project: "HLS-burn-finetune-10prcnt-prithviGlobal"
+
+n_iteration: 10
 
 prithvi_model_new_weight: "/home/sagemaker-user/prithvi-global-finetuning/code/models/checkpoint.pt"
 
@@ -19,28 +22,15 @@ training:
   shuffle: True
   relative_path: 'training'
 
-  optimizer:
-    name: "AdamW"
-    params:
-      lr: 0.0001
-
-
-  scheduler:
-    name: "StepLR"
-    params:
-      step_size: 10
-      gamma: 0.9
-
-
 validation:
   batch_size: 16
   shuffle: False
   relative_path: 'validation'
 
-
 data:
   n_frame: 1
-  data_dir: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/"
+  data_dir_input: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/"
+  data_dir_mask: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/"
   means: [
         0.033349706741586264,
         0.05701185520536176,
@@ -62,16 +52,28 @@ data:
 
 Loss: "CrossEntropyLoss"
 
-class_weights: [0.11, 0.88]
+class_weights:  [0.11, 0.88]
+
 ignore_index: -1
 
 logging:
-  checkpoint_dir: "/home/sagemaker-user/prithvi-global-finetuning/code/models/checkpoint_burn_prithvi.pth"
+
+  checkpoint_dir: "/home/sagemaker-user/prithvi-global-finetuning/code/models/"
 
 segment_input_path: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
+
 predicted_mask_dir: "./segment_out_prithvi_burn"
+
+
+prithvi_backbone:
+  depth: 24
+  num_heads: 16
+  mlp_ratio: 4
+
 check_output: 2
+
 class_index_correction: 0
+
 colormap: [
   [0, 0, 0],
   [255, 255, 255],
