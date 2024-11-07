@@ -6,7 +6,7 @@ import rasterio
 import torch
 import torch.nn as nn
 
-from consts import NO_DATA, NO_DATA_FLOAT
+from lib.consts import NO_DATA, NO_DATA_FLOAT
 from PIL import Image
 
 
