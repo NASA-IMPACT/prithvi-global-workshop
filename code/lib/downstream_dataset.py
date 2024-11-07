@@ -1,13 +1,19 @@
+import numpy as np
+import torch
 from torch.utils.data import Dataset
+import rasterio
+import os
+import random
 
-from utils import load_raster, preprocess_image
-from consts import CROP_SIZE
+from lib.utils import load_raster, process_input
 
-class DonwstreamDataset(Dataset):
-    def __init__(self, path, means, stds):
-        self.data_dir = path
-        self.means = means
-        self.stds = stds
+
+class DownstreamDataset(Dataset):
+    def __init__(self,path,means,stds,config):
+        self.data_dir=path
+        self.means=means
+        self.stds=stds
+        self.case=config["case"]
 
 
     def __len__(self):
@@ -15,17 +21,26 @@ class DonwstreamDataset(Dataset):
         return len(self.data_dir)
 
 
-    def __getitem__(self, idx):
-        image_path = self.data_dir[idx][0]
-        mask_path = self.data_dir[idx][1]
+    def __getitem__(self,idx):
 
-        image = load_raster(image_path,crop=CROP_SIZE)
+        image_path=self.data_dir[idx][0]
+        mask_path=self.data_dir[idx][1]
+        #print("image path:",image_path)
 
-        final_image = preprocess_image(image,self.means,self.stds)
+        if_img=1
+        input_array = load_raster(image_path,if_img,crop=None)
+        if self.case=="flood":
+            input_array=input_array[[1,2,3,8,11,12],:,:]
 
-        final_mask = load_raster(mask_path,crop=CROP_SIZE)
+        if_img=0
+        mask_array = load_raster(mask_path,if_img,crop=None)
 
-        final_image = final_image.squeeze(0)
-        final_mask = final_mask.squeeze(0)
+        img_norm_cfg={}
+        img_norm_cfg["mean"]=self.means
+        img_norm_cfg["std"]=self.stds
 
-        return final_image, final_mask
+
+        img,mask = process_input(input_array,mask_array,img_norm_cfg)
+        img=img.unsqueeze(1)
+        mask=mask.squeeze(0)
+        return img.float(),mask

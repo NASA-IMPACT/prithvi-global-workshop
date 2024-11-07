@@ -11,7 +11,7 @@ device_name: "cuda"
 
 n_iteration: 125
 
-prithvi_model_new_weight: "/rhome/rghosal/Rinki/rinki-hls-foundation-os/Prithvi_global.pt"
+prithvi_model_new_weight: "/home/sagemaker-user/prithvi-global-finetuning/code/models/checkpoint.pt"
 
 training:
   train_batch_size: 8
@@ -38,7 +38,7 @@ validation:
 
 data:
   n_frame: 1
-  data_dir: "/rhome/rghosal/burn_scar/hls_burn_scars/"
+  data_dir: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/"
   means: [
         0.033349706741586264,
         0.05701185520536176,
@@ -64,7 +64,7 @@ class_weights: [0.11, 0.88]
 ignore_index: -1
 
 logging:
-  checkpoint_dir: "/rhome/rghosal/Rinki/rinki-hls-foundation-os/prithvi_burn_checkpoint/checkpoint_burn_prithvi.pth"
+  checkpoint_dir: "/home/sagemaker-user/prithvi-global-finetuning/code/models/checkpoint_burn_prithvi.pth"
 
-segment_input_path: "/rhome/rghosal/burn_scar/hls_burn_scars/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
+segment_input_path: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
 predicted_mask_dir: "./segment_out_prithvi_burn"

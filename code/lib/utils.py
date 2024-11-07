@@ -1,54 +1,81 @@
 import numpy as np
+import numpy as np
+import os
+import random
 import rasterio
 import torch
+import torch.nn as nn
 
 from consts import NO_DATA, NO_DATA_FLOAT
-
-import numpy as np
-import torch.nn as nn
-import os
-
 from PIL import Image
 
 
-def load_raster(path, crop=None):
-    """Load raster data using rasterio and crop if needed
-    """
-    with rasterio.open(path) as src:
-        img = src.read()
+def load_raster(path,if_img,crop=None):
+        with rasterio.open(path) as src:
+            img = src.read()
 
-        img = np.where(img == NO_DATA, NO_DATA_FLOAT, img)
+            img = np.where(img == NO_DATA, NO_DATA_FLOAT, img)
 
-        # Crop image if crop size is provided
-        if crop:
-            img = img[:, -crop[0]:, -crop[1]:]
-    return img
+        return img
 
+def random_crop(tensor, crop_size=(224, 224)):
+    # Get original dimensions: channel, height (H), width (W)
+    C, H, W = tensor["img"].shape
 
-def preprocess_image(image,means,stds):
-    """Calculate normalized values of the read image.
+    # Ensure the crop size fits within the original dimensions
+    crop_h, crop_w = crop_size
+    if H < crop_h or W < crop_w:
+        raise ValueError(f"Original size ({H}, {W}) is smaller than the crop size ({crop_h}, {crop_w})")
 
-    """
-    # Mean across height and width, for each channel
-    reshaped_means = means.reshape(-1, 1, 1)
-    # Std deviation across height and width, for each channel
-    reshaped_stds = stds.reshape(-1, 1, 1)
+    # Randomly select the top-left corner for the crop
+    top = random.randint(0, H - crop_h)
+    left = random.randint(0, W - crop_w)
 
-    normalized = image.copy()
-    # Normalize
-    normalized = ((image - reshaped_means) / reshaped_stds)
+    # Perform the crop (channel dimension remains unchanged)
+    tensor["img"] = tensor["img"][:, top:top + crop_h, left:left + crop_w]
+    tensor["mask"] = tensor["mask"][:,top:top + crop_h, left:left + crop_w]
 
-    return torch.from_numpy(
-        normalized.reshape(
-            1,
-            normalized.shape[0],
-            1,
-            *normalized.shape[-2:]
-        )
-    ).to(torch.float32)
+    return tensor
 
 
-################################## useful class and functions ##################################################
+
+# Example processing function to simulate the pipeline
+def process_input(input_array,mask,img_norm_cfg):
+
+    input_array=input_array.astype(np.float32)
+    img_tensor = torch.from_numpy(input_array)  # Assuming input_array is of type np.float32
+    img_tensor=img_tensor.float()
+    mask_tensor = torch.from_numpy(mask)
+
+    processed_data = {}
+    processed_data['img'] = img_tensor
+    processed_data['mask'] = mask_tensor
+    # step['type'] == "RandomFlip":
+    p=np.random.rand()
+    if p < 0.5:
+        processed_data['img'] = torch.flip(img_tensor, [2])  # Flip along width
+        processed_data['mask'] = torch.flip(mask_tensor, [2])  # Flip along width
+
+    #print("flipped img shape",processed_data['img'].shape)
+    #print("flipped mask shape",processed_data['mask'].shape)
+
+    mean=torch.tensor(img_norm_cfg['mean']).view(-1, 1, 1)
+    std=torch.tensor(img_norm_cfg['std']).view(-1, 1, 1)
+
+    #print("mean shape",mean.shape)
+    #print("std shape",std.shape)
+
+    # step['type'] == "TorchNormalize":
+    processed_data['img'] = (processed_data['img'] - mean)/ std
+    #print("normalized img shape",processed_data['img'].shape)
+
+    # step['type'] == "TorchRandomCrop":
+    processed_data = random_crop(processed_data, (224, 224))
+    #print("cropped img shape",processed_data['img'].shape)
+    #print("cropped mask shape",processed_data['mask'].shape)
+
+    return processed_data['img'],processed_data['mask']
+
 
 def segmentation_loss(mask, pred, device, class_weights, ignore_index):
 
@@ -169,3 +196,10 @@ def calculate_miou(output, target, device):
     mean_iou = iou.mean().item()
 
     return mean_iou
+
+
+def print_model_details(model):
+    for name, module in model.named_modules():
+        #print(f"Layer Name: {name}")
+        #print(f"Layer Type: {module.__class__.__name__}")
+        print("name",name)

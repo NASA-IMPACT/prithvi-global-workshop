@@ -1,17 +1,36 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-# All rights reserved.
-
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
-# --------------------------------------------------------
-# Position embedding utils
-# --------------------------------------------------------
-
 import numpy as np
-import torch
+from torch import nn
+
+def get_1d_sincos_pos_embed_from_grid(embed_dim: int, pos: torch.Tensor):
+    """
+    embed_dim: output dimension for each position
+    pos: a list of positions to be encoded: size (M,)
+    out: (M, D)
+    """
+    assert embed_dim % 2 == 0
+    omega = np.arange(embed_dim // 2, dtype=np.float32)
+    omega /= embed_dim / 2.0
+    omega = 1.0 / 10000**omega  # (D/2,)
+
+    pos = pos.reshape(-1)  # (M,)
+    out = np.einsum("m,d->md", pos, omega)  # (M, D/2), outer product
+
+    emb_sin = np.sin(out)  # (M, D/2)
+    emb_cos = np.cos(out)  # (M, D/2)
+
+    emb = np.concatenate([emb_sin, emb_cos], axis=1)  # (M, D)
+    return emb
 
 
-def get_3d_sincos_pos_embed(embed_dim, grid_size, cls_token=False):
+def get_3d_sincos_pos_embed(embed_dim: int, grid_size: tuple, cls_token: bool = False):
+    # Copyright (c) Meta Platforms, Inc. and affiliates.
+    # All rights reserved.
+
+    # This source code is licensed under the license found in the
+    # LICENSE file in the root directory of this source tree.
+    # --------------------------------------------------------
+    # Position embedding utils
+    # --------------------------------------------------------
     """
     grid_size: 3d tuple of grid size: t, h, w
     return:
@@ -40,107 +59,69 @@ def get_3d_sincos_pos_embed(embed_dim, grid_size, cls_token=False):
         pos_embed = np.concatenate([np.zeros([1, embed_dim]), pos_embed], axis=0)
     return pos_embed
 
-# --------------------------------------------------------
-# 2D sine-cosine position embedding
-# References:
-# Transformer: https://github.com/tensorflow/models/blob/master/official/nlp/transformer/model_utils.py
-# MoCo v3: https://github.com/facebookresearch/moco-v3
-# --------------------------------------------------------
-def get_2d_sincos_pos_embed(embed_dim, grid_size, cls_token=False):
+
+class PatchEmbed(nn.Module):
+    """Frames of 2D Images to Patch Embedding
+    The 3D version of timm.models.vision_transformer.PatchEmbed
     """
-    grid_size: int of the grid height and width
-    return:
-    pos_embed: [grid_size*grid_size, embed_dim] or [1+grid_size*grid_size, embed_dim] (w/ or w/o cls_token)
-    """
-    grid_h = np.arange(grid_size, dtype=np.float32)
-    grid_w = np.arange(grid_size, dtype=np.float32)
-    grid = np.meshgrid(grid_w, grid_h)  # here w goes first
-    grid = np.stack(grid, axis=0)
 
-    grid = grid.reshape([2, 1, grid_size, grid_size])
-    pos_embed = get_2d_sincos_pos_embed_from_grid(embed_dim, grid)
-    if cls_token:
-        pos_embed = np.concatenate([np.zeros([1, embed_dim]), pos_embed], axis=0)
-    return pos_embed
+    def __init__(
+        self,
+        img_size: int = 224,
+        patch_size: int = 16,
+        num_frames: int = 3,
+        tubelet_size: int = 1,
+        in_chans: int = 6,
+        embed_dim: int = 1024,
+        norm_layer: nn.Module = None,
+        flatten: bool = True,
+        bias: bool = True,
+    ):
+        super().__init__()
+        img_size = img_size
+        patch_size = patch_size
+        self.img_size = img_size
+        self.patch_size = patch_size
+        self.num_frames = num_frames
+        self.tubelet_size = tubelet_size
 
+        self.grid_size = (
+            num_frames // tubelet_size,
+            img_size[1] // patch_size[1],
+            img_size[2] // patch_size[2],
+        )
 
-def get_2d_sincos_pos_embed_from_grid(embed_dim, grid):
-    assert embed_dim % 2 == 0
-
-    # use half of dimensions to encode grid_h
-    emb_h = get_1d_sincos_pos_embed_from_grid(embed_dim // 2, grid[0])  # (H*W, D/2)
-    emb_w = get_1d_sincos_pos_embed_from_grid(embed_dim // 2, grid[1])  # (H*W, D/2)
-
-    emb = np.concatenate([emb_h, emb_w], axis=1) # (H*W, D)
-    return emb
-
-
-def get_1d_sincos_pos_embed_from_grid_torch(embed_dim, pos):
-    """
-    embed_dim: output dimension for each position
-    pos: a list of positions to be encoded: size (M,)
-    out: (M, D)
-    """
-    assert embed_dim % 2 == 0
-    omega = torch.arange(embed_dim // 2).to(pos.device).type(torch.float32)
-    omega /= embed_dim / 2.0
-    omega = 1.0 / 10000**omega  # (D/2,)
-
-    pos = pos.reshape(-1)  # (M,)
-    out = torch.einsum("m,d->md", pos, omega)  # (M, D/2), outer product
-
-    emb_sin = torch.sin(out)  # (M, D/2)
-    emb_cos = torch.cos(out)  # (M, D/2)
-
-    emb = torch.cat([emb_sin, emb_cos], dim=1)  # (M, D)
-    return emb
+        self.num_patches = self.grid_size[0] * self.grid_size[1] * self.grid_size[2]
+        self.flatten = flatten
 
 
-def get_1d_sincos_pos_embed_from_grid(embed_dim, pos):
-    """
-    embed_dim: output dimension for each position
-    pos: a list of positions to be encoded: size (M,)
-    out: (M, D)
-    """
-    assert embed_dim % 2 == 0
-    omega = np.arange(embed_dim // 2, dtype=np.float32)
-    omega /= embed_dim / 2.
-    omega = 1. / 10000**omega  # (D/2,)
-
-    pos = pos.reshape(-1)  # (M,)
-    out = np.einsum('m,d->md', pos, omega)  # (M, D/2), outer product
-
-    emb_sin = np.sin(out) # (M, D/2)
-    emb_cos = np.cos(out) # (M, D/2)
-
-    emb = np.concatenate([emb_sin, emb_cos], axis=1)  # (M, D)
-    return emb
+        self.proj = nn.Conv3d(
+            in_chans,
+            embed_dim,
+            kernel_size=(tubelet_size, patch_size[1], patch_size[2]),
+            stride=(tubelet_size, patch_size[1], patch_size[2]),
+            bias=bias,
+        )
+        self.norm = norm_layer(embed_dim) if norm_layer else nn.Identity()
 
 
-# --------------------------------------------------------
-# Interpolate position embeddings for high-resolution
-# References:
-# DeiT: https://github.com/facebookresearch/deit
-# --------------------------------------------------------
-def interpolate_pos_embed(model, checkpoint_model):
-    if 'pos_embed' in checkpoint_model:
-        pos_embed_checkpoint = checkpoint_model['pos_embed']
-        embedding_size = pos_embed_checkpoint.shape[-1]
-        num_patches = model.patch_embed.num_patches
-        num_extra_tokens = model.pos_embed.shape[-2] - num_patches
-        # height (== width) for the checkpoint position embedding
-        orig_size = int((pos_embed_checkpoint.shape[-2] - num_extra_tokens) ** 0.5)
-        # height (== width) for the new position embedding
-        new_size = int(num_patches ** 0.5)
-        # class_token and dist_token are kept unchanged
-        if orig_size != new_size:
-            print("Position interpolate from %dx%d to %dx%d" % (orig_size, orig_size, new_size, new_size))
-            extra_tokens = pos_embed_checkpoint[:, :num_extra_tokens]
-            # only the position tokens are interpolated
-            pos_tokens = pos_embed_checkpoint[:, num_extra_tokens:]
-            pos_tokens = pos_tokens.reshape(-1, orig_size, orig_size, embedding_size).permute(0, 3, 1, 2)
-            pos_tokens = torch.nn.functional.interpolate(
-                pos_tokens, size=(new_size, new_size), mode='bicubic', align_corners=False)
-            pos_tokens = pos_tokens.permute(0, 2, 3, 1).flatten(1, 2)
-            new_pos_embed = torch.cat((extra_tokens, pos_tokens), dim=1)
-            checkpoint_model['pos_embed'] = new_pos_embed
+    def forward(self, x):
+
+        B, C, T, H, W = x.shape
+
+        '''assert (
+            H == self.img_size[0]
+        ), f"Input image height ({H}) doesn't match model ({self.img_size[0]})."
+        assert (
+            W == self.img_size[1]
+        ), f"Input image width ({W}) doesn't match model ({self.img_size[1]})." '''
+
+        x = self.proj(x)
+
+        #Hp, Wp = x.shape[3], x.shape[4]
+
+        if self.flatten:
+            x = x.flatten(2).transpose(1, 2).contiguous()  # B,C,T,H,W -> B,C,L -> B,L,C
+        x = self.norm(x)
+
+        return x

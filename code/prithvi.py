@@ -1,48 +1,117 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+#from prithvi_global_loader import prithvi
+from neck import Neck
+from Head import TemporalViTEncoder
+from Seg_head import FCNHead
 
-from prithvi_global.mae.models_mae import MaskedAutoencoderViT
-from functools import partial
+
+###########################################################################
+########################################################################################
+
+def print_model_details(model):
+    for name, module in model.named_modules():
+        #print(f"Layer Name: {name}")
+        #print(f"Layer Type: {module.__class__.__name__}")
+        print("name",name)
 
 
-class Prithvi(nn.Module):
-    def __init__(self, prithvi_weight, prithvi_config, n_frame,input_size):
-        super(Prithvi, self).__init__()
+class PrithviWrapper(nn.Module):
+    def __init__(
+        self,
+        n_channels,
+        n_classes,
+        n_frame,
+        embed_size,
+        input_size,
+        patch_size,
+        prithvi_weight,
+        prithvi_config,
+        in_chans,
+        config
+    ):
+        super(PrithviWrapper, self).__init__()
 
-        self.weights_path = prithvi_weight
-        self.checkpoint = torch.load(self.weights_path)
+        self.n_channels = n_channels
+        self.n_classes = n_classes
+        self.pr_weight = prithvi_weight
+        self.pr_config = prithvi_config
+        self.n_frame = n_frame
+        self.input_size = input_size
+        self.embed_size = embed_size
+        self.patch_size = patch_size
 
-        self.config = prithvi_config
+        self.tubelet_size = 1
+        self.depth = config["prithvi_backbone"]["depth"]
+        self.num_heads = config["prithvi_backbone"]["num_heads"]
+        self.mlp_ratio = config["prithvi_backbone"]["mlp_ratio"]
+        self.norm_layer = nn.LayerNorm
+        self.norm_pix_loss = False
 
-        self.prithvi_model = MaskedAutoencoderViT(
-            input_size=input_size,
-            patch_size=self.config.MODEL.PATCH_SIZE,
-            in_chans=len(self.config.DATA.BANDS),
-            embed_dim=self.config.MODEL.EMBED_DIM,
-            depth=self.config.MODEL.DEPTH,
-            num_heads=self.config.MODEL.NUM_HEADS,
-            decoder_embed_dim=self.config.MODEL.DECODER_EMBED_DIM,
-            decoder_depth=self.config.MODEL.DECODER_DEPTH,
-            decoder_num_heads=self.config.MODEL.DECODER_NUM_HEADS,
-            mlp_ratio=self.config.MODEL.MLP_RATIO,
-            norm_layer=partial(nn.LayerNorm, eps=1e-6),
-            norm_pix_loss=self.config.MODEL.NORM_PIX_LOSS,
-            coords_encoding=self.config.MODEL.COORDS_ENCODING,
-            coords_drop_rate=self.config.MODEL.COORDS_DROP_RATE,
-            coords_scale_learn=self.config.MODEL.COORDS_SCALE_LEARN,
-            drop_channels_rate=self.config.MODEL.DROP_CHANNELS_RATE
+
+        #(self.pr_weight,self.pr_config,n_frame,input_size,in_chans)
+
+        #initialize and load weights for backbone from prithvi
+        self.prithvi_backbone = TemporalViTEncoder(
+            self.input_size,
+            self.patch_size,
+            self.n_frame,
+            self.tubelet_size,
+            self.n_channels,
+            self.embed_size,
+            self.depth,
+            self.num_heads,
+            self.mlp_ratio,
+            self.norm_layer,
+            self.norm_pix_loss,
+            self.pr_weight
         )
 
+        #print("model details",print_model_details(self.prithvi_backbone))
 
-        print("checkpoint names:",self.checkpoint.keys())
+        #initialize neck
+        self.neck_embedding = self.embed_size*self.n_frame
+        self.neck = Neck(self.neck_embedding)
 
-        _ = self.prithvi_model.load_state_dict(self.checkpoint, strict=False)
-        #print("initialized model")
+        #initialize seg_head
+        self.seg_head = FCNHead(self.neck_embedding, 256, self.n_classes, dropout_p=0.1)
 
-    def forward(self,x,temp,loc,mask):
 
-        latent, mask, ids_restore = self.prithvi_model.forward_encoder(x, temp, loc, 0)#mask_ratio=0
+    def forward(self, x):
 
-        pred = latent
+        B, C, T, H, W = x.shape #8,18,1,224,224
 
-        return pred
+
+        #Reshape the input into 6 channel and 3 timeframes
+        C = int(C / self.n_frame) #18/3=6
+
+        x1 = x
+        x2 = x1.reshape(B, self.n_frame, C, H, W) #8,3,6,224,224
+        x3 = x2.transpose(1, 2) #8,6,3,224,224
+
+
+        #print("x shape",x.shape)
+        pri_out = self.prithvi_backbone(x3)  #8,589,1024
+
+        #eliminate class token
+        pri_out = pri_out[:,1:,:]  #8,588,1024
+
+        # change no_patch and embedding size of prithvi_out to fit embedding size of neck(=prithvi_encoder_embed_size*no_frame)
+        n_patch = int(pri_out.shape[1] / self.n_frame) #588/3=196
+        embed_size_neck = int(self.embed_size*self.n_frame) #1024*3=3096
+
+        pri_op1 = pri_out
+        pri_op2 = pri_op1.reshape(B, self.n_frame, n_patch, self.embed_size) #8,3,196,1024
+        pri_op3 = pri_op2.transpose(1, 2) #8,196,3,1024
+        pri_op4 =pri_op3.flatten(2) #8,196,3*1024 =8,196,3072
+        pri_op5 = pri_op4.transpose(1, 2) #8,3072,196
+
+        H = int(self.input_size[1] / self.patch_size[1]) #224/16=14
+        pri_out = pri_op5.reshape(B, embed_size_neck, H, H) #8,3072,14,14
+
+        neck_out = self.neck(pri_out) #8, 3072, 224, 224
+
+        out = self.seg_head(neck_out) #8,13,224,224
+
+        return out
