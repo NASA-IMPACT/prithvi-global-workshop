@@ -68,7 +68,7 @@ ignore_index: -1
 logging:
   checkpoint_dir: "/home/sagemaker-user/prithvi-global-finetuning/code/models/"
 
-segment_input_path: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
+segment_input_path: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/burn_scars/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
 
 predicted_mask_dir: "./segment_out_prithvi_burn"
 
