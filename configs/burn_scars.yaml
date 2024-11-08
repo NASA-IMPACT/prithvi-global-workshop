@@ -1,4 +1,13 @@
 case: "burn"
+check_output: 2
+
+class_index_correction: 0
+
+colormap: [
+  [0, 0, 0],
+  [255, 255, 255],
+]
+
 model:
   name: "Prithvi_Global_burn"
   n_channel: 6
@@ -14,7 +23,7 @@ wandb_project: "HLS-burn-finetune-10prcnt-prithviGlobal"
 
 n_iteration: 10
 
-prithvi_model_new_weight: "/home/sagemaker-user/prithvi-global-finetuning/code/models/checkpoint.pt"
+prithvi_model_new_weight: "/home/sagemaker-user/prithvi-global-finetuning/code/models/prithvi_global_v1.pt"
 
 training:
   batch_size: 8
@@ -29,8 +38,8 @@ validation:
 
 data:
   n_frame: 1
-  data_dir_input: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/"
-  data_dir_mask: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/"
+  data_dir_input: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/burn_scars"
+  data_dir_mask: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/burn_scars"
   means: [
         0.033349706741586264,
         0.05701185520536176,
@@ -57,7 +66,6 @@ class_weights:  [0.11, 0.88]
 ignore_index: -1
 
 logging:
-
   checkpoint_dir: "/home/sagemaker-user/prithvi-global-finetuning/code/models/"
 
 segment_input_path: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
@@ -69,12 +77,3 @@ prithvi_backbone:
   depth: 24
   num_heads: 16
   mlp_ratio: 4
-
-check_output: 2
-
-class_index_correction: 0
-
-colormap: [
-  [0, 0, 0],
-  [255, 255, 255],
-]
