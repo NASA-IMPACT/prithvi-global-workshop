@@ -28,22 +28,25 @@ def upscaling_block2(in_channels, out_channels):
         )
     return block
 
-def data_path(data_dir,annot,config,mode):
-
+def data_path(data_dir, annot, config, mode):
     path=[]
+    list_file = []
 
-    if config["case"]=="burn":
-
+    if annot:
+        with open (annot,"r") as f:
+            list_file = f.readlines()
+    else:
         tif_path = os.path.join(f"{data_dir[0]}",f"{mode}/*tif")
         list_file = glob(tif_path)
 
-        for i in list_file:
-            tag=i.split("_")[-1]
-            if tag=="merged.tif":
-                j=i.strip("_merged.tif")
-                mask=j+".mask.tif"
-                if os.path.exists(mask):
-                    path.append([i,mask])
+    for file_name in list_file:
+        tag = file_name.i.strip().split("_")[-1]
+
+        if tag == "merged.tif":
+            file_prefix = file_name.strip("_merged.tif")
+            mask = file_prefix + ".mask.tif"
+            if os.path.exists(mask):
+                path.append([file_name, mask])
 
     if mode=="training":
         path_len=len(path)
@@ -133,11 +136,10 @@ def plot_output_image(model, device, epoch, config, input_path, prediction_img_d
 
     final_image = (img - mean)/ std
 
-    if config["case"]=="burn":
-        #centre crop
-        start = (512 - 224) // 2
-        end = start + 224
-        final_image=final_image[:, start:end, start:end]
+    #centre crop
+    start = (512 - 224) // 2
+    end = start + 224
+    final_image=final_image[:, start:end, start:end]
 
     final_image=torch.from_numpy(final_image).float()
 

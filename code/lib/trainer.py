@@ -38,7 +38,7 @@ class Trainer:
                 dataset_dir = [data_dir, mask_dir]
                 dataset_path = data_path(
                     dataset_dir,
-                    None,
+                    self.config[split].get('annot'),
                     self.config,
                     self.config[split]['relative_path']
                 )
