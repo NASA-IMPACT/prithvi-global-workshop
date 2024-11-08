@@ -158,7 +158,7 @@ class Trainer:
                 miou_batch, iou_batch = calculate_miou(out, mask, self.device)
                 miou_train.append(miou_batch)
                 iou_batch = iou_batch.cpu().unsqueeze(0)
-                iou_batch = torch.tensor((iteration, iou_batch), dim=1)
+                iou_batch = torch.cat((iteration, iou_batch), dim=1)
 
                 if i == 0:
                     iou_train = iou_batch
