@@ -213,7 +213,7 @@ class Trainer:
                 "miou_train": miou_train,
                 "mF1_train": mean_f1_train
             })
-            miou_valid, mean_acc_val, mean_f1_val, epoch_loss_val = self.validate()
+            miou_valid, mean_acc_val, mean_f1_val, epoch_loss_val = self.validate(iteration)
 
             if i == 0:
                 best_miou_val = miou_valid
