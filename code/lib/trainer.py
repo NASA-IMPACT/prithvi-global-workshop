@@ -1,19 +1,18 @@
-import torch
-from torch.utils.data import DataLoader
-from lib.downstream_dataset import DownstreamDataset
-from prithvi_wrapper import PrithviWrapper
-import numpy as np
-import yaml
-import os
-from prithvi_global.mae.config import get_config
-from lib.utils import load_raster
-
-from torch.optim import Adam
 import csv
+import numpy as np
+import os
+import torch
+import yaml
 
 from lib.consts import SPLITS
-
+from lib.downstream_dataset import DownstreamDataset
 from lib.model_utils import *
+from lib.prithvi_wrapper import PrithviWrapper
+
+from prithvi_global.mae.config import get_config
+
+from torch.optim import Adam
+from torch.utils.data import DataLoader
 
 
 class Trainer:

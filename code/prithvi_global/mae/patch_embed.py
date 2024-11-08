@@ -68,15 +68,15 @@ class PatchEmbed(nn.Module):
 
     def __init__(
         self,
-        img_size: int = 224,
-        patch_size: int = 16,
-        num_frames: int = 3,
-        tubelet_size: int = 1,
-        in_chans: int = 6,
-        embed_dim: int = 1024,
-        norm_layer: nn.Module = None,
-        flatten: bool = True,
-        bias: bool = True,
+        img_size: int=224,
+        patch_size: int=16,
+        num_frames: int=3,
+        tubelet_size: int=1,
+        in_chans: int=6,
+        embed_dim: int=1024,
+        norm_layer: nn.Module=None,
+        flatten: bool=True,
+        bias: bool=True,
     ):
         super().__init__()
         img_size = img_size

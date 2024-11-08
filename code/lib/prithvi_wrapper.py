@@ -1,9 +1,10 @@
 import torch.nn as nn
-#from prithvi_global_loader import prithvi
+
+from lib.segmentation_head import FCNHead
+
 from neck import Neck
 from prithvi_global.mae.models_mae import TemporalViTEncoder
-from segmentation_head import FCNHead
-from lib.utils import print_model_details
+
 
 
 class PrithviWrapper(nn.Module):
@@ -60,8 +61,6 @@ class PrithviWrapper(nn.Module):
 
         #initialize seg_head
         self.Seg_head = FCNHead(self.neck_embedding, 256, self.n_classes, dropout_p=0.1)
-
-        #print("model details",print_model_details(self.neck))
 
 
     def forward(self, x):

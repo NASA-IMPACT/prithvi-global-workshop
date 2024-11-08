@@ -1,0 +1,111 @@
+case: "crop"
+check_output: 2
+
+class_index_correction: -1
+
+colormap: [
+    [0, 0, 0],
+    [255, 0, 0],
+    [0, 255, 0],
+    [0, 0, 255],
+    [255, 255, 0],
+    [255, 0, 255],
+    [0, 255, 255],
+    [128, 0, 128],
+    [128, 128, 0],
+    [128, 128, 128],
+    [255, 165, 0],
+    [75, 0, 130],
+    [173, 216, 230]
+]
+
+model:
+  name: "Prithvi_Global_crop"
+  n_channel: 6
+  n_class: 13
+  encoder_embed_dim: 1024
+  dec_embed_dim: 512
+  dropout_rate: 0.2
+
+dataset_used: 0.1
+
+device_name: "cuda"
+wandb_project: "HLS-crop-finetune-10prcnt-prithviGlobal"
+
+n_iteration: 10
+
+prithvi_model_new_weight: "/home/sagemaker-user/prithvi-global-finetuning/code/models/prithvi_global_v1.pt"
+
+training:
+  train_batch_size: 8
+  learning_rate: 0.0001
+  shuffle: True
+  relative_path: 'training_chips'
+  annot: 'training_data.txt'
+
+validation:
+  val_batch_size: 16
+  shuffle: False
+  relative_path: 'validation_chips'
+  annot: 'validation_data.txt'
+
+data:
+  n_frame: 3
+  data_dir_input: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/crop_segmentation"
+  data_dir_mask: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/crop_segmentation"
+  means: [494.905781,815.239594,924.335066,2968.881459,2634.621962,1739.579917,
+        494.905781,815.239594,924.335066,2968.881459,2634.621962,1739.579917,
+        494.905781,815.239594,924.335066,2968.881459,2634.621962,1739.579917]
+  stds: [
+        284.925432,
+        357.84876,
+        575.566823,
+        896.601013,
+        951.900334,
+        921.407808,
+        284.925432,
+        357.84876,
+        575.566823,
+        896.601013,
+        951.900334,
+        921.407808,
+        284.925432,
+        357.84876,
+        575.566823,
+        896.601013,
+        951.900334,
+        921.407808
+    ]
+  input_size: [1,224,224]
+  patch_size: [1,16,16]
+
+Loss: "CrossEntropyLoss"
+
+class_weights:  [
+    0.386375,
+    0.661126,
+    0.548184,
+    0.640482,
+    0.876862,
+    0.925186,
+    3.249462,
+    1.542289,
+    2.175141,
+    2.272419,
+    3.062762,
+    3.626097,
+    1.198702
+  ]
+
+ignore_index: -1
+
+logging:
+  checkpoint_dir: "/home/sagemaker-user/prithvi-global-finetuning/code/models/"
+
+segment_input_path: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/crop_segmentation/validation_chips/chip_304_542_merged.tif"
+predicted_mask_dir: "./segment_out_prithvi_crop"
+
+prithvi_backbone:
+  depth: 24
+  num_heads: 16
+  mlp_ratio: 4
