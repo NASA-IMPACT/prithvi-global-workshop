@@ -40,7 +40,7 @@ def data_path(data_dir, annot, config, mode):
         list_file = glob(tif_path)
 
     for file_name in list_file:
-        tag = file_name.i.strip().split("_")[-1]
+        tag = file_name.strip().split("_")[-1]
 
         if tag == "merged.tif":
             file_prefix = file_name.strip("_merged.tif")
