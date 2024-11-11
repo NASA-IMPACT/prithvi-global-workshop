@@ -12,6 +12,7 @@ einops
 yacs
 tqdm
 fastapi
+sagemaker-training
 
 # The following packages are required for preprocessing only
 rasterio
