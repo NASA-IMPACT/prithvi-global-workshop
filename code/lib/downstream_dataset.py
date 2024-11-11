@@ -38,6 +38,6 @@ class DownstreamDataset(Dataset):
 
 
         img,mask = process_input(input_array,mask_array,img_norm_cfg)
-        img=img.unsqueeze(1)
-        mask=mask.squeeze(0)
-        return img.float(),mask
+        img = img.unsqueeze(1)
+        mask = mask.squeeze(0)
+        return img.float(), mask
