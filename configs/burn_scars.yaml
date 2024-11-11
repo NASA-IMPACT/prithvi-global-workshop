@@ -70,7 +70,7 @@ logging:
 
 segment_input_path: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/burn_scars/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
 
-predicted_mask_dir: "./segment_out_prithvi_burn"
+predicted_mask_dir: "./predicted"
 
 
 prithvi_backbone:
