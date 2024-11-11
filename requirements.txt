@@ -1,7 +1,6 @@
 peft==0.12.0
 pyyaml
-python == 3.10
-pytorch >= 2.0.0
+torch >= 2.0.0
 torchvision
 xarray
 dask
@@ -12,6 +11,7 @@ timm
 einops
 yacs
 tqdm
+fastapi
 
 # The following packages are required for preprocessing only
 rasterio
