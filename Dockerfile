@@ -15,12 +15,9 @@ RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
 
-
 RUN pip3 install --upgrade pip
 
 # RUN pip3 install GDAL
-
-
 
 COPY requirements.txt requirements.txt
 
