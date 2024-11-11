@@ -10,6 +10,7 @@ import yaml
 import logging
 
 from lib.trainer import Trainer
+from lib.consts import SPLITS, DEFAULT_BASE_PATH
 from lib.utils import download_data, assumed_role_session, upload_model_artifacts
 
 ROLE_ARN = os.environ.get('ROLE_ARN')
@@ -25,17 +26,21 @@ def train():
     print(f"Environment variables: {os.environ}")
 
     # download and prepare data for training:
-    for split in ['training', 'validation', 'test', 'configs', 'models']:
+    for split in ['configs', 'models']:
         download_data(os.environ.get('S3_URL'), split)
 
     with open(config_file) as config:
         config = yaml.safe_load(config)
 
+    for split in SPLITS:
+        if config.get(split):
+            download_data(os.environ.get('S3_URL'), config[split]['relative_path'])
+
     # init the logger before other steps
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
-    model_path = f"/opt/ml/code/{os.environ['VERSION']}/{os.environ['EVENT_TYPE']}/"
+    model_path = f"{DEFAULT_BASE_PATH}/code/{os.environ['VERSION']}/{os.environ['EVENT_TYPE']}/"
     os.makedirs(model_path)
-    os.makedirs('/opt/ml/code/predicted')
+    os.makedirs(f"{DEFAULT_BASE_PATH}/code/{config['predicted_mask_dir']}")
 
     log_file = osp.join(config['logging']['checkpoint_dir'], f'{timestamp}.log')
     logging.basicConfig(filename=log_file, level=logging.INFO)
