@@ -35,7 +35,7 @@ def train():
     timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
     model_path = f"/opt/ml/code/{os.environ['VERSION']}/{os.environ['EVENT_TYPE']}/"
     os.makedirs(model_path)
-    os.makedirs('predicted')
+    os.makedirs('/opt/ml/code/predicted')
 
     log_file = osp.join(config['logging']['checkpoint_dir'], f'{timestamp}.log')
     logging.basicConfig(filename=log_file, level=logging.INFO)
