@@ -206,7 +206,6 @@ def calculate_miou(output, target, device):
 
 
 def save_checkpoint(model, optimizer, epoch, train_loss, val_loss, filename):
-
     checkpoint = {
         'epoch': epoch,
         'model_state_dict': model.state_dict(),
@@ -214,5 +213,6 @@ def save_checkpoint(model, optimizer, epoch, train_loss, val_loss, filename):
         'train_loss': train_loss,
         'val_loss':val_loss
     }
+
     torch.save(checkpoint, filename)
     print(f"Checkpoint saved at {filename}")
