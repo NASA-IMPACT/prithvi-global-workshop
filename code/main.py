@@ -33,6 +33,9 @@ from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+CONFIG_FILENAME = os.environ.get('S3_CONFIG_FILENAME')
+CHECKPOINT_FILE = os.environ.get('CHECKPOINT_FILENAME')
+
 def download_from_s3(s3_path, download_path):
     session = assumed_role_session()
     s3_connection = session.resource('s3')
@@ -44,8 +47,8 @@ def download_from_s3(s3_path, download_path):
 
 
 def load_model():
-    config_file_path = download_from_s3(os.environ.get('CONFIG_FILE'), 'configs')
-    model_weights_path = download_from_s3(os.environ.get('MODEL_WEIGHT'), 'models')
+    config_file_path = download_from_s3(CONFIG_FILENAME)
+    model_weights_path = download_from_s3(CHECKPOINT_FILE, 'models')
     infer = Infer(config_file_path, model_weights_path)
     with open(config_file_path) as config:
         config = yaml.safe_load(config)
@@ -206,8 +209,6 @@ def infer(model_id, infer_date, bounding_box):
         model_id: {'s3_link': s3_link}
     }
 
-CONFIG_FILENAME = os.environ.get('S3_CONFIG_FILENAME')
-CHECKPOINT_FILE = os.environ.get('CHECKPOINT_FILENAME')
 INFER = Infer(CONFIG_FILENAME, CHECKPOINT_FILE)
 
 # MODEL = Trainer(CONFIG_FILENAME)
