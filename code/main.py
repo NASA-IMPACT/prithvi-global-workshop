@@ -18,9 +18,7 @@ from lib.infer import Infer
 from lib.post_process import PostProcess
 from lib.trainer import Trainer
 from lib.consts import BUCKET_NAME, LAYERS
-from lib.utils import process_input_for_inference, assumed_role_session
-
-from multiprocessing import Pool, cpu_count
+from lib.utils import assumed_role_session
 
 from rasterio.io import MemoryFile
 from rasterio.merge import merge
@@ -142,14 +140,14 @@ async def infer_from_model(request: Request):
     return JSONResponse(content=jsonable_encoder(final_geojson))
 
 
-def infer(model_id, infer_date, bounding_box, background_tasks):
+def infer(model_id, infer_date, bounding_box):
     if model_id not in MODELS:
         response = {'statusCode': 422}
         return JSONResponse(content=jsonable_encoder(response))
     infer = MODELS[model_id]
     all_tiles = list()
-    geojson_list = list()
-    geojson = {'type': 'FeatureCollection', 'features': []}
+    # geojson_list = list()
+    # geojson = {'type': 'FeatureCollection', 'features': []}
 
     for layer in LAYERS:
         tiles = download_files(infer_date, layer, bounding_box)
@@ -212,17 +210,13 @@ CONFIG_FILENAME = os.environ.get('S3_CONFIG_FILENAME')
 CHECKPOINT_FILE = os.environ.get('CHECKPOINT_FILENAME')
 INFER = Infer(CONFIG_FILENAME, CHECKPOINT_FILE)
 
-MODEL = Trainer(CONFIG_FILENAME)
+# MODEL = Trainer(CONFIG_FILENAME)
 
 @app.post('/invocations')
 async def invocations(request: Request):
     # model() is a hypothetical function that gets the inference output:
-    params = dict(request)
-    # download data from params['data_url']
-    # process inference without random cropping
-    input = process_input_for_inference()
-    # infer
-    model_resp = await MODEL(Request)
+    params = request.json()
+    model_resp = infer(params['model_id'], params['infer_date'], params['bounding_box'])
     # postprocess data and store as s3 file or send back a geojson
 
     response = Response(
