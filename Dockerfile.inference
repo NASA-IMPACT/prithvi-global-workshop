@@ -10,7 +10,7 @@ RUN apt-get update && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt install -y python3.11-dev
 
-RUN apt-get update && apt-get install -y libgl1 python3-pip git libgdal-dev --fix-missing
+RUN apt-get update && apt-get install -y libgl1 python3-pip nginx git libgdal-dev --fix-missing
 RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
@@ -31,6 +31,10 @@ RUN mkdir models
 
 # Copies code under /opt/ml/code where sagemaker-containers expects to find the script to run
 COPY code /opt/program
+
+ENV PYTHONUNBUFFERED=TRUE
+ENV PYTHONDONTWRITEBYTECODE=TRUE
+ENV PATH="/opt/program:${PATH}"
 
 # Copies code under /opt/ml/code where sagemaker-containers expects to find the script to run
 WORKDIR /opt/program
