@@ -3,17 +3,17 @@ import yaml
 import numpy as np
 import rasterio
 
-BACKBONE_PATH = '../models/prithvi_global_v1.pt'
-
 class Infer:
-    def __init__(self, config, checkpoint):
+    def __init__(self, config, checkpoint, backbone_path):
+        self.config_filename = config
         with open(self.config_filename) as config:
             self.config = yaml.safe_load(config)
         self.checkpoint_filename = checkpoint
+        self.backbone_path = backbone_path
         self.load_model()
 
     def load_model(self):
-        self.model = torch.loads(BACKBONE_PATH)
+        self.model = torch.load(self.backbone_path)
         self.model.load_state_dict(
             torch.load(self.checkpoint_filename, weights_only=True)
         )

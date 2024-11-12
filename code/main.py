@@ -35,21 +35,26 @@ app = FastAPI()
 
 CONFIG_FILENAME = os.environ.get('S3_CONFIG_FILENAME')
 CHECKPOINT_FILE = os.environ.get('CHECKPOINT_FILENAME')
+BACKBONE_PATH = os.environ.get('BACKBONE_FILENAME')
 
-def download_from_s3(s3_path, download_path):
+def download_from_s3(s3_path, download_path='config'):
     session = assumed_role_session()
     s3_connection = session.resource('s3')
     bucket = s3_connection.Bucket(BUCKET_NAME)
     filename = s3_path.split('/')[-1]
     file_path = f"{download_path}/{filename}"
-    bucket.download_file(s3_path.replace(f's3://{BUCKET_NAME}', ''), file_path)
+    print('====================')
+    print(s3_path.replace(f's3://{BUCKET_NAME}/', ''), file_path)
+    os.makedirs(download_path, exist_ok=True)
+    bucket.download_file(s3_path.replace(f's3://{BUCKET_NAME}/', ''), file_path)
     return file_path
 
 
 def load_model():
     config_file_path = download_from_s3(CONFIG_FILENAME)
     model_weights_path = download_from_s3(CHECKPOINT_FILE, 'models')
-    infer = Infer(config_file_path, model_weights_path)
+    backbone_path = download_from_s3(BACKBONE_PATH, 'models')
+    infer = Infer(config_file_path, model_weights_path, backbone_path)
     with open(config_file_path) as config:
         config = yaml.safe_load(config)
     return {config['case']: infer}
