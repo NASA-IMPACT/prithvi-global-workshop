@@ -132,7 +132,7 @@ def subset_geojson(geojson, bounding_box):
     return json.loads(geom.overlay(bbox, how='intersection').to_json())
 
 
-def batch(tiles, spacing=50):
+def batch(tiles, spacing=60):
     length = len(tiles)
     for tile in range(0, length, spacing):
         yield tiles[tile : min(tile + spacing, length)]
@@ -141,7 +141,7 @@ def infer(model_id, infer_date, bounding_box):
     if model_id not in MODELS:
         response = {'statusCode': 422}
         return JSONResponse(content=jsonable_encoder(response))
-    infer = MODELS[model_id]
+    inference = MODELS[model_id]
     all_tiles = list()
     # geojson_list = list()
     # geojson = {'type': 'FeatureCollection', 'features': []}
@@ -164,16 +164,15 @@ def infer(model_id, infer_date, bounding_box):
             profiles = list()
             with torch.no_grad():
                 for tiles in batch(all_tiles):
-                    batch_results, batch_profiles = infer.infer(tiles)
+                    batch_results, batch_profiles = inference.infer(tiles)
                     results.extend(batch_results)
                     profiles.extend(batch_profiles)
             memory_files = list()
-            del infer
             torch.cuda.empty_cache()
             for index, profile in enumerate(profiles):
                 memfile = MemoryFile()
                 profile.update({
-                    'count': infer.config['n_channels'],
+                    'count': inference.config['n_channels'],
                     'dtype': 'float32'
                 })
                 with memfile.open(**profile) as memoryfile:
@@ -197,6 +196,7 @@ def infer(model_id, infer_date, bounding_box):
             print('!!! infer error', infer_date, model_id, bounding_box, e)
             torch.cuda.empty_cache()
         print("!!! Infer Time:", time.time() - start_time)
+    del inference
     gc.collect()
 
     return {
