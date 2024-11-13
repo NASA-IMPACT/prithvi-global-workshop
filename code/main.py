@@ -137,17 +137,6 @@ def batch(tiles, spacing=40):
     for tile in range(0, length, spacing):
         yield tiles[tile : min(tile + spacing, length)]
 
-@app.post(os.environ['AIP_PREDICT_ROUTE'])
-async def infer_from_model(request: Request):
-    instances = await request.json()
-
-    model_id = instances['model_id']
-    infer_date = instances['date']
-    bounding_box = instances['bounding_box']
-    final_geojson = infer(model_id, infer_date, bounding_box)
-    return JSONResponse(content=jsonable_encoder(final_geojson))
-
-
 def infer(model_id, infer_date, bounding_box):
     if model_id not in MODELS:
         response = {'statusCode': 422}
@@ -214,24 +203,16 @@ def infer(model_id, infer_date, bounding_box):
         model_id: {'s3_link': s3_link}
     }
 
-INFER = Infer(CONFIG_FILENAME, CHECKPOINT_FILE)
-
-# MODEL = Trainer(CONFIG_FILENAME)
-
 @app.post('/invocations')
-async def invocations(request: Request):
-    # model() is a hypothetical function that gets the inference output:
-    params = request.json()
-    model_resp = infer(params['model_id'], params['infer_date'], params['bounding_box'])
-    # postprocess data and store as s3 file or send back a geojson
+async def infer_from_model(request: Request):
+    instances = await request.json()
 
-    response = Response(
-        content=model_resp,
-        status_code=status.HTTP_200_OK,
-        media_type="text/plain",
-    )
-    return response
+    model_id = instances['model_id']
+    infer_date = instances['date']
+    bounding_box = instances['bounding_box']
+    final_geojson = infer(model_id, infer_date, bounding_box)
+    return JSONResponse(content=jsonable_encoder(final_geojson))
 
-@app.post('/ping')
+@app.get('/ping')
 async def ping(request: Request):
     return { 'successCode': 200, 'message': 'pong'}
