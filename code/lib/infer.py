@@ -50,6 +50,6 @@ class Infer:
         # forward the model
         with torch.no_grad():
             images, profiles = self.preprocess(images)
-            result = self.model(images)
+            result = self.model(images.to(self.config['device_name']))
         return result, profiles
 
