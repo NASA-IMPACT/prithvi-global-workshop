@@ -53,6 +53,7 @@ class Downloader:
                 y=y_index,
             )
         )
+
         if response.status_code == 200:
             with open(filename, "wb") as download_file:
                 download_file.write(response.content)
@@ -65,7 +66,7 @@ class Downloader:
                 raster_file.crs,
                 raster_file.width,
                 raster_file.height,
-                raster_file.bounds,
+                *[raster_file.bounds.left, raster_file.bounds.bottom, raster_file.bounds.right, raster_file.bounds.top],
                 resolution=(WIDTH, HEIGHT)
             )
 
@@ -107,7 +108,7 @@ class Downloader:
                 tile_infos.append((x_index, y_index, filename))
         # parallelize download here
         pool = Pool(cpu_count() - 1)
-        downloaded_files = pool.map(self.download_tile, tile_infos)
+        downloaded_files = pool.starmap(self.download_tile, tile_infos)
         downloaded_files = [
             downloaded_file for downloaded_file in downloaded_files if downloaded_file
         ]
