@@ -1,115 +1,327 @@
-For all resources: https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5RzC3LD92CjcA/edit?usp=drive_link&ouid=107344732858203799494&rtpof=true&sd=true
+<!---- Provide an overview of what is being achieved in this repo ---->
+# IGARSS Tutorial 2024
+This repo contains materials for the tutorial: [GRSS ESI/HDCRS Machine Learning Lifecycle in High Performance Computers and Cloud: A Focus on Geospatial Foundation Models](https://www.2024.ieeeigarss.org/tutorials.php#tut1). In this tutorial we will cover geospatial foundation models and Large Language Models for science. We will also be fine-tuning the aforementioned models for specific usecases. For the purposes of this tutorial, we will be utilizing AWS sagemaker environment. The repo will also demonstrate how to get inferences from the fine-tuned geospatial and LLM models after the training is complete.
 
-This code repo is created without using mmsegmentation purposefully
+# Slides:
+[MACHINE LEARNING LIFECYCLE IN HIGH PERFORMANCE COMPUTERS AND CLOUD: A FOCUS ON GEOSPATIAL FOUNDATION MODELS - Gabriele](https://drive.google.com/file/d/1Dn2ZqdP242FaET8W5qeW0fJKwRc1TRrQ/view?usp=sharing)
 
-##  A. Other than Srija, rest of the people can use any of the fine tuning task folders:
+[Geospatial Foundation Models and LLMs for Science - Rahul](https://docs.google.com/presentation/d/1lvs3l6cHoUV-h8_nbNWC700CduWRupfmTOk2X6JGVAs/edit?usp=sharing)
 
->> prithvi_crop_10prcnt_mmseg_style (10% dataset adopted-can be changed in data_path function of main_prithvi_crop.py) 
+# Prerequisites
+1. Basic understanding of git
+2. Python and jupyter environment knowledge
+3. Basic understanding of docker
+4. Basic understanding of cloud services
+5. Machine Learning knowledge
+6. Some understanding of Geo-spatial datasets.
 
-### LORA model for crop-segmentation:
+# Getting started
+1. Get your credentials and other information using https://creds-workshop.nasa-impact.net/
+![Get Credentials](images/credential.png)
+![Credentials](images/credentials-show.png)
+2. Navigate to [Login URL](https://ieeeworkshop.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=6jbiuqf95egh4mke5g8r48dkro&response_type=code&scope=openid+profile&redirect_uri=https%3A%2F%2Fvupp3dvvji.execute-api.us-west-2.amazonaws.com%2Fdev%2Furl)
+![Login Page](images/login-1.png)
+3. Log in using the credential provided
+![Login with username and password](images/login-2.png)
+4. Once the Studio starts, Click on JupyterLab
+![Sagemaker studio](images/sagemaker-studio.png)
+![JupyterLab spaces](images/jupyterlab-spaces.png)
+5. Click `Create JupyterLab Space`
+![JupyterLab spaces](images/create-jupyterlab-env.png)
+6. Give it a name. Eg: `Workshop`
+7. Once initialized, change Instance type to `ml.t3.2xlarge` and storage to `50`
+![Change instance type](images/update-instance-type.png)
+8. Click on `Run Space`. If it throws an error, you might have to pick an Image. The top setting called `Latest` works.
+![Run space](images/updated-instance-config.png)
 
->> prithvi_crop_10prcnt_mmseg_LORA
+# Steps to Train (Parts of these steps are also available in the [fine-tuning notebook](notebooks/hls-fm-finteuning.ipynb)):
+1. Clone this repository `git clone https://github.com/nasa-impact/prithvi-global-workshop.git`
+```
+a. Click `git`
+b. Click on `Git Clone Repo`
+![Git clone](images/git-clone-1.png)
+c. Paste `https://github.com/nasa-impact/prithvi-global-workshop.git` and Click on `Clone`.
+![Cloned repository](images/smd-hls-git-clone.png)
+![Cloned repository](images/smd-hls-cloned-content.png)
+```
 
-If anyone wants to use LORA adapter for peft (precision efficient fine tuning), can use this model for any downstream
+**Note: We will follow through in the Notebook from this step.**
+2. Change directory into the cloned repository `cd prithvi-global-workshop`
+3. Open the [fine-tuning notebook](notebooks/prithvi-finetuning.ipynb)
+4. Install required packages
+```
+pip install -r requirements.txt
+```
+5. Create required folders
+```
+!mkdir datasets
+!mkdir models
+!mkdir configs
+```
+6. Install git LFS (needed for data download from huggingface)
+```
+! sudo apt-get install git-lfs; git lfs install
+```
+7. Download HLS Burn scars dataset
+```
+! cd datasets; git clone https://huggingface.co/datasets/ibm-nasa-geospatial/hls_burn_scars; tar -xvzf hls_burn_scars/hls_burn_scars.tar.gz
+```
+6. Define constants. **Note: Please update the variables as needed**
+```
+BUCKET_NAME = '<your-bucket-name>' # Replace this with the bucket name available from https://creds-workshop.nasa-impact.net/
+CONFIG_PATH = './configs'
+DATASET_PATH = './datasets'
+MODEL_PATH = './models'
+```
+7. Download model configuration and pre-trained model from huggingface
+```
+from huggingface_hub import hf_hub_download
 
-### Requirements:
- Set up environment (eg:hls2) following Setup section of https://github.com/NASA-IMPACT/hls-foundation-os .
- You may need to uninstall Numpy and install its lower version, as some error might arise
+hf_hub_download(repo_id="ibm-nasa-geospatial/Prithvi-100M-burn-scar", filename="burn_scars_Prithvi_100M.py", local_dir='./configs')
+hf_hub_download(repo_id="ibm-nasa-geospatial/Prithvi-100M", filename="Prithvi_100M.pt", local_dir='./models')
+```
+8. Update the configuration file
+```
+1. Update line number 13 from `data_root = '<path to data root>'` to `data_root = '/opt/ml/data/'`. This is the base of our data inside of sagemaker.
+2. Update line number 41 from `pretrained_weights_path = '<path to pretrained weights>'` to `pretrained_weights_path = f"{data_root}/models/Prithvi_100M.pt"`. This provides the pre-trained model path to the train script.
+3. Update line number 53 from `experiment = '<experiment name>'` to `experiment = 'burn_scars'` or your choice of experiment name.
+4. Update line number 54 from `project_dir = '<project directory name>'` to `project_dir = 'v1'` or your choice of project directory name.
+5. Save the config file.
+```
+9. Upload downloaded data using sagemaker to the desired s3 bucket
+```
+import sagemaker
 
-### Data:
-Use instruction from https://anaconda.org/conda-forge/git-lfs/ to install git-lfs in the environemnt.
+sagemaker_session = sagemaker.Session()
+train_images = sagemaker_session.upload_data(path='datasets/training', bucket=BUCKET_NAME, key_prefix='data/training')
+val_images = sagemaker_session.upload_data(path='datasets/validation', bucket=BUCKET_NAME, key_prefix='data/validation')
+test_images = sagemaker_session.upload_data(path='datasets/validation', bucket=BUCKET_NAME, key_prefix='data/test')
+```
+10. Rename and upload configuration file and pre-trained model
+```
+import os
 
-Use "install git-lfs" in your server before downloading data using "wget data_link", as the data files are in git-lfs format
+identifier = '<your choice of identifier>' # Please update this with an identifier
 
-For data links: Use https://docs.google.com/spreadsheets/d/1Fkl0BG3eHujYGRiVm0l5RzC3LD92CjcA/edit?usp=drive_link&ouid=107344732858203799494&rtpof=true&sd=true
+config_filename = 'configs/burn_scars_Prithvi_100M.py'
+new_config_filename = f"configs/{identifier}-burn_scars_Prithvi_100M.py"
+os.rename(config_filename, new_config_filename)
 
-### Architecture: 
+configs = sagemaker_session.upload_data(path=new_config_filename, bucket=BUCKET_NAME, key_prefix='data/configs')
+models = sagemaker_session.upload_data(path='models/Prithvi_100M.pt', bucket=BUCKET_NAME, key_prefix='data/models')
+```
+11. Setup variables for training using Sagemaker
+```
+from datetime import time
+from sagemaker import get_execution_role
+from sagemaker.estimator import Estimator
 
-1. For all  model except LORA: prithvi_encoder (not freezed) --> Upsampling_conv layers (not freezed)
 
-2. For LORA model: prithvi_encoder (other than linear layers rest are freezed) --> Upsampling_conv layers (not freezed)
+name = f'{identifier}-sagemaker'
+role = get_execution_role()
+input_s3_uri = f"s3://{BUCKET_NAME}/data"
 
-### Instructions:
-1. Go to required folder
+environment_variables = {
+    'CONFIG_FILE': f"/opt/ml/data/{new_config_filename}",
+    'MODEL_DIR': "/opt/ml/models/",
+    'MODEL_NAME': f"{identifier}-workshop.pth",
+    'S3_URL': input_s3_uri,
+    'ROLE_ARN': role,
+    'ROLE_NAME': role.split('/')[-1],
+    'EVENT_TYPE': 'burn_scars',
+    'VERSION': 'v1'
+}
 
-2. Create .sh file:
+ecr_container_url = '574347909231.dkr.ecr.us-west-2.amazonaws.com/sagemaker_hls:latest'
+sagemaker_role = 'SageMaker-ExecutionRole-20240206T151814'
 
-```python
-#!/bin/bash
-#SBATCH -p shared                 # Partition to submit to
-#SBATCH --gres=gpu:a100:1         # Request 4 A100 GPUs
-#SBATCH --ntasks-per-node=1       # Number of tasks per node
-#SBATCH --cpus-per-task=2         # Number of CPU cores per task
-#SBATCH --mem-per-cpu=4G         # Memory per CPU core
-#SBATCH -t 00-05:00               # Runtime in D-HH:MM format
-#SBATCH -J hls_rinki                 # Job name
-#SBATCH -o slurm_logs_prithvi_crop/%j.txt   # Standard output and error log
+instance_type = 'ml.p3.2xlarge'
 
-# Activate your environment
-source activate hls2
-
-# Run your commands
-torchrun \
-  --standalone \
-  --nnodes 1 \
-  --nproc_per_node 1\
-  main_prithvi_crop.py 
+instance_count = 1
+memory_volume = 50
+```
+12. Initialize sagemaker estimator and start training
+```
+estimator = Estimator(image_uri=ecr_container_url,
+                      role=get_execution_role(),
+                      base_job_name=name,
+                      instance_count=1,
+                      environment=environment_variables,
+                      instance_type=instance_type)
+estimator.fit()
 ```
 
 
+# Interacting with the fine-tuned model (Parts of these steps are covered in the [fm-usage notebook](notebooks/prithvi-usage.ipynb))
+1. Install required packages
+```
+! pip install leafmap numpy --quiet
+```
+2. Import packages
+```
+import json
+import leafmap
+import numpy as np
+import xarray as xr
+```
+3. Set existing events
+```
+#configure settings for selected events
+INFERENCE_URL = 'https://hls-01.workshop.nasa-impact.net'
 
-3. Run slurm script using:
-   ```python
-   sbatch prithvi_crop.sh
-   ```
-4. config file is: config.yaml
+EVENT_DETAILS = {
+    'mongolian_fire': {
+        'center_lon': 119.3,
+        'center_lat': 47.1,
+        'default_zoom': 8,
+        'start_date': '2022-04-19T00:00:00Z',
+        'end_date': '2022-04-19T23:59:59Z'
+    },
+    'new_mexico_black_fire': {
+        'center_lon': -107.5,
+        'center_lat': 33.5,
+        'default_zoom': 10,
+        'start_date': '2022-05-16T00:00:00Z',
+        'end_date': '2022-06-10T23:59:59Z'
+    },
+    'alberta_fire': {
+        'center_lon': -124.2,
+        'center_lat': 61.8,
+        'default_zoom': 8,
+        'start_date': '2023-05-27T00:00:00Z',
+        'end_date': '2023-05-28T23:59:59Z'
+    },
+    'maui_fire': {
+        'center_lon': -156.659394,
+        'center_lat': 20.886984,
+        'default_zoom': 12,
+        'start_date': '2023-08-13T00:00:00Z',
+        'end_date': '2023-08-13T23:59:59Z'
+    }
+}
 
-5. prithvi_burn.sh runs main_prithvi_crop.py, which initializes model by calling model.py 
+event = 'maui_fire'
+event_details = EVENT_DETAILS[event]
 
-6. The model.py calls Head.py, Neck.py and Seg_head.py
+#configure settings for selected events
+INFERENCE_URL = 'https://hls-01.workshop.nasa-impact.net'
 
-7. Example instruction is provided for crop_segmentation only.
-   Naming convention is similar for rest of the downstreams.
+EVENT_DETAILS = {
+    'mongolian_fire': {
+        'center_lon': 119.3,
+        'center_lat': 47.1,
+        'default_zoom': 8,
+        'start_date': '2022-04-19T00:00:00Z',
+        'end_date': '2022-04-19T23:59:59Z'
+    },
+    'new_mexico_black_fire': {
+        'center_lon': -107.5,
+        'center_lat': 33.5,
+        'default_zoom': 10,
+        'start_date': '2022-05-16T00:00:00Z',
+        'end_date': '2022-06-10T23:59:59Z'
+    },
+    'alberta_fire': {
+        'center_lon': -124.2,
+        'center_lat': 61.8,
+        'default_zoom': 8,
+        'start_date': '2023-05-27T00:00:00Z',
+        'end_date': '2023-05-28T23:59:59Z'
+    },
+    'maui_fire': {
+        'center_lon': -156.659394,
+        'center_lat': 20.886984,
+        'default_zoom': 12,
+        'start_date': '2023-08-13T00:00:00Z',
+        'end_date': '2023-08-13T23:59:59Z'
+    }
+}
+```
+4. Initialize a map for bounding box selection
+```
+map = leafmap.Map(
+        center=(event_details['center_lat'],
+        event_details['center_lon']),
+        zoom=event_details['default_zoom'],
+        draw_control=True,
+        measure_control=False,
+        fullscreen_control=False,
+        attribution_control=True
+    )
+map.add_tile_layer(HLSL30_TILE_LAYER, name='HLSL30', attribution='NASA')
+map.add_tile_layer(HLSS30_TILE_LAYER, name='HLSS30', attribution='NASA')
+map
+```
+5. Draw a bounding box and save it to `bbox.geojson`
+```
+map.save_draw_features("bbox.geojson")
+```
+6. Prepare payload and call API for results using the fine-tuned model
+```
 
-8. In config file, change n_frame and n_channel as per your data being loaded
-   and change the path to your prithvi_global checkpoint
-   
-   Crop segmentation data is loaded as [batch,18,224,224], but it is basically stacked format of 6 channel and 3 timestep, squeezed into 18, in such case the data will be reshaped into batch,6,3,224,224 as seen in the architecture figure, only when n_frame=3 and n_channel=6 is provided in config file.
+def bbox_from_geojson(geojson):
+    """
+        Get the coordinates of bounding box from an extended notation to flat coordinate
+        notation
+    Args:
+        geojson: File path of geojson
 
+    Returns:
+        list: [left, down, right, top]
+    """
+    with open(geojson) as geojson_file:
+        geojson_detail = json.load(geojson_file)
+    coordinates = np.asarray(geojson_detail['features'][0]['geometry']['coordinates'])
+    lats = coordinates[:, :, 1]
+    lons = coordinates[:, :, 0]
+    return [lons.min(), lats.min(), lons.max(), lats.max()]
 
+# Convert geojson to flat bounding box representation.
+bbox = bbox_from_geojson('bbox.geojson')
 
-   
+import requests
+import json
 
-![model_hls (1)](https://github.com/user-attachments/assets/b13b25f5-2a4c-4407-894b-d16aa3eef016)
+# prepare payload
+payload = json.dumps({
+  "config_path": f"s3://{BUCKET_NAME}/data/configs/{new_config_filename}",
+  "model_path": f"s3://smd-workshop-01/{MODEL_NAME}",
+  "model_type": "burn_scars",
+  "date": event_details['start_date'].split('T')[0],
+  "bounding_box": bbox
+})
 
+headers = {
+  'Content-Type': 'application/json'
+}
 
+# Use deployed app to get inference on the selected date/location
+response = requests.request(
+      "POST",
+      f"{INFERENCE_URL}/infer",
+      headers=headers,
+      data=payload
+  )
 
+predictions = response.json()
+```
+7. Visualize the result
+```
+geojson = predictions['predictions']
 
+detection_map = leafmap.Map(
+        center=(event_details['center_lat'],
+        event_details['center_lon']),
+        zoom=event_details['default_zoom'],
+        draw_control=True,
+        measure_control=False,
+        fullscreen_control=False,
+        attribution_control=True
+    )
+detection_map.add_tile_layer(HLSL30_TILE_LAYER, name='HLSL30', attribution='NASA')
+detection_map.add_tile_layer(HLSS30_TILE_LAYER, name='HLSS30', attribution='NASA')
+detection_map.add_geojson(geojson, layer_name=f"{event}-detections")
 
-
-***************************************************************************************************************************************
-
-## B. For Srija to adapt the model for CO2 flux fine tuning:
-### new_flood_v2 Model details: Prithvi HLS Global+ UNet: finetuning for flood map
-<!---- Provide an overview of what is being achieved in this repo ----> 
-Checkpoint: [ Pretrained Checkpoint](https://www.nsstc.uah.edu/data/sujit.roy/Prithvi_checkpoints/)
-
-### Architecture:
-
-MAE_VIT Encoder+Decoder (freezed) --> UNet(Unfreezed) 
-
-
-### Instructions:
-1. Go to new_flood_v2 folder
-
-2. Run slurm script using:
-   ```python
-   sbatch unet_flood_new.sh
-   ```
-3. config file is: config.yaml
-
-4. unet_flood_new.sh runs main_flood_new.py, which initializes model by calling unet.py.
-
-5. The unet.py calls prithvi_global_loader.py (wrapper around Prithvi_global model), which actually calls Prithvi_global_v1/mae/models_mae.py (i.e. the core Prithvi model architecture). 
-
-![IMG_3948](https://github.com/user-attachments/assets/ae5c0b64-31e3-495c-b485-6e4cb9eecb06)
+detection_map
+```
+Note: `BUCKET_NAME`, `new_config_filename`, and `MODEL_NAME` are variables set in the previous notebook. Please copy paste those variables here for this step to run smoothly.
