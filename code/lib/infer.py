@@ -32,8 +32,8 @@ class Infer:
         imgs_tensor = torch.from_numpy(np.asarray(images_array))  # Assuming input_array is of type np.float32
         imgs_tensor = imgs_tensor.float()
 
-        mean = torch.tensor(self.config['mean']).view(-1, 1, 1)
-        std = torch.tensor(self.config['std']).view(-1, 1, 1)
+        mean = torch.tensor(self.config['data']['means']).view(-1, 1, 1)
+        std = torch.tensor(self.config['data']['stds']).view(-1, 1, 1)
 
         processed_images = (imgs_tensor - mean) / std
 

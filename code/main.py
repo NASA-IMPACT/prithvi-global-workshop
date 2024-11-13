@@ -132,7 +132,7 @@ def subset_geojson(geojson, bounding_box):
     return json.loads(geom.overlay(bbox, how='intersection').to_json())
 
 
-def batch(tiles, spacing=40):
+def batch(tiles, spacing=50):
     length = len(tiles)
     for tile in range(0, length, spacing):
         yield tiles[tile : min(tile + spacing, length)]
