@@ -180,7 +180,7 @@ def infer(model_id, infer_date, bounding_box):
                 memory_files.append(memfile.open())
 
             mosaic, transform = merge(memory_files)
-            for index in len(mosaic):
+            for index in range(len(mosaic)):
                 mosaic[index] = binary_closing(mosaic[index], disk(6))
             [memfile.close() for memfile in memory_files]
             prediction_filename = f"predictions/{start_time}-predictions.tif"
