@@ -1,7 +1,7 @@
 # Part of the implementation of this container is based on the Amazon SageMaker Apache MXNet container.
 # https://github.com/aws/sagemaker-mxnet-container
 
-FROM nvidia/cuda:11.5.2-base-ubuntu20.04
+FROM nvidia/cuda:12.1.1-base-ubuntu22.04
 
 LABEL maintainer="NASA IMPACT"
 
