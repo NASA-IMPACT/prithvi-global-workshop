@@ -165,7 +165,7 @@ def infer(model_id, infer_date, bounding_box):
             with torch.no_grad():
                 for tiles in batch(all_tiles):
                     batch_results, batch_profiles = inference.infer(tiles)
-                    results.extend(batch_results)
+                    results.extend(batch_results.cpu())
                     profiles.extend(batch_profiles)
             memory_files = list()
             torch.cuda.empty_cache()
