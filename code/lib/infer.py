@@ -39,6 +39,7 @@ class Infer:
 
         # increase dimensions to match input size
         processed_images = processed_images.unsqueeze(2)
+        print(processed_images.shape)
         return processed_images, profiles
 
     def infer(self, images):
