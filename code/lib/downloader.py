@@ -67,7 +67,8 @@ class Downloader:
                 raster_file.width,
                 raster_file.height,
                 *[raster_file.bounds.left, raster_file.bounds.bottom, raster_file.bounds.right, raster_file.bounds.top],
-                resolution=(WIDTH, HEIGHT)
+                dst_width=WIDTH,
+                dst_height=HEIGHT
             )
 
             unscaled_raster_file = rasterio.open(filename, 'w', **profile)
