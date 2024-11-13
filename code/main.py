@@ -172,7 +172,7 @@ def infer(model_id, infer_date, bounding_box):
             for index, profile in enumerate(profiles):
                 memfile = MemoryFile()
                 profile.update({
-                    'count': inference.config['n_channels'],
+                    'count': inference.config['model']['n_class'],
                     'dtype': 'float32'
                 })
                 with memfile.open(**profile) as memoryfile:
@@ -180,7 +180,8 @@ def infer(model_id, infer_date, bounding_box):
                 memory_files.append(memfile.open())
 
             mosaic, transform = merge(memory_files)
-            mosaic[0] = binary_closing(mosaic[0], disk(6))
+            for index in len(mosaic):
+                mosaic[index] = binary_closing(mosaic[index], disk(6))
             [memfile.close() for memfile in memory_files]
             prediction_filename = f"predictions/{start_time}-predictions.tif"
 
