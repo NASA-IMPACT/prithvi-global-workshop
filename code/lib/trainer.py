@@ -16,14 +16,15 @@ from torch.utils.data import DataLoader
 
 
 class Trainer:
-    def __init__(self, config_filename):
+    def __init__(self, config_filename, model_path=None, model_only=False):
         if not(os.path.exists(config_filename)):
             raise(f"Config file: {config_filename} not found")
         with open(config_filename) as config:
             self.config = yaml.safe_load(config)
-
+        self.model_path = model_path
+        if not(model_only):
+            self.load_datasets()
         self.load_parameters()
-        self.load_datasets()
         self.load_model()
 
 
@@ -96,7 +97,7 @@ class Trainer:
 
     def load_model(self):
        #initialize model
-        model_weights = self.config["prithvi_model_new_weight"]
+        model_weights = self.model_path or self.config["prithvi_model_new_weight"]
         self.config["prithvi_model_new_config"] = get_config(None)
         prithvi_config = self.config["prithvi_model_new_config"]
 

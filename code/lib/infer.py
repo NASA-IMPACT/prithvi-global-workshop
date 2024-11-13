@@ -2,6 +2,7 @@ import torch
 import yaml
 import numpy as np
 import rasterio
+from lib.trainer import Trainer
 
 class Infer:
     def __init__(self, config, checkpoint, backbone_path):
@@ -13,9 +14,10 @@ class Infer:
         self.load_model()
 
     def load_model(self):
-        self.model = torch.load(self.backbone_path)
+        trainer = Trainer(self.config_filename, model_path=self.backbone_path, model_only=True)
+        self.model = trainer.model
         self.model.load_state_dict(
-            torch.load(self.checkpoint_filename, weights_only=True)
+            torch.load(self.checkpoint_filename)['model_state_dict']
         )
 
     def preprocess(self, images):
