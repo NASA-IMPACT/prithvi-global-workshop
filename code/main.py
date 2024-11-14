@@ -46,6 +46,7 @@ def download_from_s3(s3_path, download_path='config'):
     print('====================')
     print(s3_path.replace(f's3://{BUCKET_NAME}/', ''), file_path)
     os.makedirs(download_path, exist_ok=True)
+    os.makedirs('predictions', exist_ok=True)
     bucket.download_file(s3_path.replace(f's3://{BUCKET_NAME}/', ''), file_path)
     return file_path
 
@@ -75,11 +76,11 @@ def save_cog(mosaic, profile, transform, filename):
             "width": mosaic.shape[2],
             "transform": transform,
             "dtype": 'float32',
-            "count": 1,
+            "count": len(mosaic),
         }
     )
     with rasterio.open(filename, 'w', **profile) as raster:
-        raster.write(mosaic[0], 1)
+        raster.write(mosaic)
     output_profile = cog_profiles.get('deflate')
     output_profile.update(dict(BIGTIFF="IF_SAFER"))
     output_profile.update(profile)
@@ -177,11 +178,12 @@ def infer(model_id, infer_date, bounding_box):
                 })
                 with memfile.open(**profile) as memoryfile:
                     memoryfile.write(results[index])
+                    print(index, results[index].min(), results[index].max())
                 memory_files.append(memfile.open())
 
             mosaic, transform = merge(memory_files)
-            for index in range(len(mosaic)):
-                mosaic[index] = binary_closing(mosaic[index], disk(6))
+            # for index in range(len(mosaic)):
+            #     mosaic[index] = binary_closing(mosaic[index], disk(6))
             [memfile.close() for memfile in memory_files]
             prediction_filename = f"predictions/{start_time}-predictions.tif"
 
