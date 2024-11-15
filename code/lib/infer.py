@@ -19,6 +19,7 @@ class Infer:
         self.model.load_state_dict(
             torch.load(self.checkpoint_filename)['model_state_dict']
         )
+        self.model.eval()
 
     def preprocess(self, images):
         images_array = []
