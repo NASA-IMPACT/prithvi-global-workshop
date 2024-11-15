@@ -14,11 +14,16 @@ class Infer:
         self.load_model()
 
     def load_model(self):
-        trainer = Trainer(self.config_filename, model_path=self.backbone_path, model_only=True)
+        model_weights = torch.load(self.checkpoint_filename)
+        model_weights["model"] = model_weights.pop("model_state_dict")
+        if 'prithvi_backbone.pos_embed' in model_weights['model']:
+            del model_weights['model']['prithvi_backbone.pos_embed']
+
+        trainer = Trainer(self.config_filename, model_path=model_weights, model_only=True)
         self.model = trainer.model
-        self.model.load_state_dict(
-            torch.load(self.checkpoint_filename)['model_state_dict']
-        )
+        self.model = self.model.to(self.config['device_name'])
+
+        self.model.load_state_dict(model_weights["model"], strict=False)
         self.model.eval()
 
     def preprocess(self, images):

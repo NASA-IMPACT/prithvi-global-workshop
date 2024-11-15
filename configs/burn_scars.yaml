@@ -9,21 +9,21 @@ colormap: [
 ]
 
 model:
-  name: "Prithvi_Global_burn"
+  name: "burn_scars"
   n_channel: 6
   n_class: 2
   encoder_embed_dim: 1024
   dec_embed_dim: 512
   dropout_rate: 0.2
 
-dataset_used: 0.1
+dataset_used: 1
 
-device_name: "cuda"
+device_name: "cpu"
 wandb_project: "HLS-burn-finetune-10prcnt-prithviGlobal"
 
-n_iteration: 10
+n_iteration: 30
 
-prithvi_model_new_weight: "/home/sagemaker-user/prithvi-global-finetuning/code/models/prithvi_global_v1.pt"
+prithvi_model_new_weight: "/opt/ml/data/models/prithvi_global_v1.pt"
 
 training:
   batch_size: 8
@@ -38,8 +38,8 @@ validation:
 
 data:
   n_frame: 1
-  data_dir_input: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/burn_scars"
-  data_dir_mask: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/burn_scars"
+  data_dir_input: "/opt/ml/data/"
+  data_dir_mask: "/opt/ml/data/"
   means: [
         0.033349706741586264,
         0.05701185520536176,
@@ -66,9 +66,9 @@ class_weights:  [0.11, 0.88]
 ignore_index: -1
 
 logging:
-  checkpoint_dir: "/home/sagemaker-user/prithvi-global-finetuning/code/models/"
+  checkpoint_dir: "/opt/ml/data/models/"
 
-segment_input_path: "/home/sagemaker-user/prithvi-global-finetuning/code/datasets/burn_scars/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
+segment_input_path: "/opt/ml/data/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
 
 predicted_mask_dir: "./predicted"
 
