@@ -72,15 +72,15 @@ def save_cog(mosaic, profile, transform, filename):
     profile.update(
         {
             "driver": "GTiff",
-            "height": mosaic.shape[1],
-            "width": mosaic.shape[2],
+            "height": mosaic.shape[0],
+            "width": mosaic.shape[1],
             "transform": transform,
             "dtype": 'float32',
-            "count": len(mosaic),
+            "count": 1,
         }
     )
     with rasterio.open(filename, 'w', **profile) as raster:
-        raster.write(mosaic)
+        raster.write(mosaic, 1)
     output_profile = cog_profiles.get('deflate')
     output_profile.update(dict(BIGTIFF="IF_SAFER"))
     output_profile.update(profile)
@@ -173,11 +173,11 @@ def infer(model_id, infer_date, bounding_box):
             for index, profile in enumerate(profiles):
                 memfile = MemoryFile()
                 profile.update({
-                    'count': inference.config['model']['n_class'],
+                    'count': 1,
                     'dtype': 'float32'
                 })
                 with memfile.open(**profile) as memoryfile:
-                    memoryfile.write(results[index])
+                    memoryfile.write(results[index], 1)
                     print(index, results[index].min(), results[index].max())
                 memory_files.append(memfile.open())
 
@@ -187,7 +187,7 @@ def infer(model_id, infer_date, bounding_box):
             [memfile.close() for memfile in memory_files]
             prediction_filename = f"predictions/{start_time}-predictions.tif"
 
-            s3_link = save_cog(mosaic, profile, transform, prediction_filename)
+            s3_link = save_cog(mosaic[0], profile, transform, prediction_filename)
 
             # geojson = post_process(mosaic[0], transform)
 
