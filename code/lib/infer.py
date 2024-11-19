@@ -3,6 +3,7 @@ import yaml
 import numpy as np
 import rasterio
 from lib.trainer import Trainer
+from lib.consts import NO_DATA, NO_DATA_FLOAT
 
 class Infer:
     def __init__(self, config, checkpoint, backbone_path):
@@ -36,6 +37,7 @@ class Infer:
         for image in images:
             with rasterio.open(image) as raster_file:
                 image = torch.from_numpy(raster_file.read())
+                image = np.where(image == NO_DATA, NO_DATA_FLOAT, image)
                 image = (image - mean) / std
                 images_array.append(image)
                 profiles.append(raster_file.profile)
