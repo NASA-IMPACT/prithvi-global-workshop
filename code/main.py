@@ -43,11 +43,12 @@ def download_from_s3(s3_path, download_path='config'):
     bucket = s3_connection.Bucket(BUCKET_NAME)
     filename = s3_path.split('/')[-1]
     file_path = f"{download_path}/{filename}"
-    print('====================')
-    print(s3_path.replace(f's3://{BUCKET_NAME}/', ''), file_path)
-    os.makedirs(download_path, exist_ok=True)
-    os.makedirs('predictions', exist_ok=True)
-    bucket.download_file(s3_path.replace(f's3://{BUCKET_NAME}/', ''), file_path)
+    if not(os.path.exists(file_path)):
+        print('====================')
+        print(s3_path.replace(f's3://{BUCKET_NAME}/', ''), file_path)
+        os.makedirs(download_path, exist_ok=True)
+        os.makedirs('predictions', exist_ok=True)
+        bucket.download_file(s3_path.replace(f's3://{BUCKET_NAME}/', ''), file_path)
     return file_path
 
 
