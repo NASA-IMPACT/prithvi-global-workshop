@@ -6,6 +6,7 @@ import rasterio
 import requests
 
 from multiprocessing import Pool, cpu_count
+from lib.consts import NO_DATA_FLOAT
 from rasterio.warp import calculate_default_transform, reproject, Resampling
 
 BASE_URL = "https://d1nzvsko7rbono.cloudfront.net"
@@ -76,15 +77,16 @@ class Downloader:
 
             for band in range(profile['count']):
                 index = band + 1
-                resampled_data = data = raster_file.read(
+                resampled_data = raster_file.read(
                     index,
                     out_shape=(profile['height'], profile['width']),
                     resampling=Resampling.bilinear # Choose a resampling method
                 ).astype('float32')
-                resampled_data = np.clip(resampled_data, 0, resampled_data.max())
+                resampled_data = np.clip(resampled_data, NO_DATA_FLOAT, resampled_data.max())
                 unscaled_raster_file.write(resampled_data, index)
 
                 scaled_data = resampled_data * 0.0001
+                scaled_data = np.clip(scaled_data, NO_DATA_FLOAT, 1)
                 scaled_raster_file.write(scaled_data, index)
 
             raster_file.close()
