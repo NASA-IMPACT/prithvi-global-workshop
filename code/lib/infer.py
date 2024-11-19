@@ -29,22 +29,23 @@ class Infer:
     def preprocess(self, images):
         images_array = []
         profiles = []
+
+        mean = torch.tensor(self.config['data']['means']).view(-1, 1, 1)
+        std = torch.tensor(self.config['data']['stds']).view(-1, 1, 1)
+
         for image in images:
             with rasterio.open(image) as raster_file:
-                images_array.append(raster_file.read())
+                image = torch.from_numpy(raster_file.read())
+                image = (image - mean) / std
+                images_array.append(image)
                 profiles.append(raster_file.profile)
                 raster_file.close()
         # Example processing function to simulate the pipeline
         imgs_tensor = torch.from_numpy(np.asarray(images_array))  # Assuming input_array is of type np.float32
         imgs_tensor = imgs_tensor.float()
 
-        mean = torch.tensor(self.config['data']['means']).view(-1, 1, 1)
-        std = torch.tensor(self.config['data']['stds']).view(-1, 1, 1)
-
-        processed_images = (imgs_tensor - mean) / std
-
         # increase dimensions to match input size
-        processed_images = processed_images.unsqueeze(2)
+        processed_images = imgs_tensor.unsqueeze(2)
         return processed_images, profiles
 
     def infer(self, images):
@@ -59,4 +60,3 @@ class Infer:
             result = self.model(images.to(self.config['device_name']))
             result = torch.argmax(result, dim=1)
         return result, profiles
-
