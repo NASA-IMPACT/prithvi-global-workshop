@@ -1,11 +1,11 @@
 <!---- Provide an overview of what is being achieved in this repo ---->
 # Prithvi Finetuning
-This repo contains materials for Prithvi Global Finetuning. Here, we will cover geospatial foundation models and Large Language Models for science. We will also be fine-tuning the aforementioned models for specific usecases. For the purposes of this tutorial, we will be utilizing AWS sagemaker environment. The repo will also demonstrate how to get inferences from the fine-tuned prithvi models after the training is complete.
+This repo contains materials for Prithvi Global Finetuning. Here, we will cover geospatial foundation models and Weather Foundation model. We will also be fine-tuning the aforementioned models for specific usecases. For the purposes of this tutorial, we will be utilizing AWS sagemaker environment. The repo will also demonstrate how to get inferences from the fine-tuned prithvi models after the training is complete.
 
 # Slides:
-[MACHINE LEARNING LIFECYCLE IN HIGH PERFORMANCE COMPUTERS AND CLOUD: A FOCUS ON GEOSPATIAL FOUNDATION MODELS - Gabriele](https://drive.google.com/file/d/1Dn2ZqdP242FaET8W5qeW0fJKwRc1TRrQ/view?usp=sharing)
+[Geospatial Foundation Model - TBD](https://drive.google.com/file/d/1Dn2ZqdP242FaET8W5qeW0fJKwRc1TRrQ/view?usp=sharing)
 
-[Geospatial Foundation Models and LLMs for Science - Rahul](https://docs.google.com/presentation/d/1lvs3l6cHoUV-h8_nbNWC700CduWRupfmTOk2X6JGVAs/edit?usp=sharing)
+[Prithvi Weather and Foundation Model - TBD](https://docs.google.com/presentation/d/1pQatA97zSc8Eu76IlwHVkFgcfgEwWhCs/edit#slide=id.p1)
 
 # Prerequisites
 1. Basic understanding of git
