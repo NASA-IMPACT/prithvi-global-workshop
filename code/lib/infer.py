@@ -36,8 +36,9 @@ class Infer:
 
         for image in images:
             with rasterio.open(image) as raster_file:
-                image = torch.from_numpy(raster_file.read())
+                image = raster_file.read()
                 image = np.where(image == NO_DATA, NO_DATA_FLOAT, image)
+                image = torch.from_numpy(image)
                 image = (image - mean) / std
                 images_array.append(image)
                 profiles.append(raster_file.profile)
