@@ -3,6 +3,8 @@
 
 FROM nvidia/cuda:12.1.1-base-ubuntu22.04
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 LABEL maintainer="NASA IMPACT"
 
 RUN apt-get update && \
