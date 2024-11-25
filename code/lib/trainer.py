@@ -8,6 +8,7 @@ from lib.consts import SPLITS
 from lib.downstream_dataset import DownstreamDataset
 from lib.model_utils import *
 from lib.prithvi_wrapper import PrithviWrapper
+from lib.utils import dice_loss
 
 from prithvi_global.mae.config import get_config
 
@@ -94,6 +95,8 @@ class Trainer:
         self.stds = self.config["data"]["stds"]
         self.means = np.array(self.means)
         self.stds = np.array(self.stds)
+        self.criterion = nn.BCEWithLogitsLoss()
+
 
     def load_model(self):
        #initialize model
@@ -116,11 +119,36 @@ class Trainer:
         )
         self.model = self.model.to(self.device)
 
-        self.optimizer = Adam(self.model.parameters(), lr=1e-5, betas=(0.9, 0.999), weight_decay=0.05)
+    def forward_pass(self, input, mask):
+        input = input.to(self.device)
+        mask = mask.to(self.device)
+        mask = mask.long()
+
+        self.optimizer.zero_grad()
+        out = self.model(input)
+        loss = self.criterion(out, mask)
+        loss += dice_loss(
+            torch.sigmoid(out), mask,
+            multiclass=False,
+        )
+        return loss, input, out, mask
+
 
 
     def train(self):
         best_miou_val = 0
+
+        self.optimizer = torch.optim.Adam(
+            self.model.parameters(),
+            lr=self.learning_rate,
+        )
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            self.optimizer, "max", patience=5
+        )  # goal: maximize Dice score
+        grad_scaler = torch.cuda.amp.GradScaler(enabled=False)
+
+        class_wts = torch.tensor(self.config["class_weights"]).to(self.device)
+
 
         for i in range(self.n_iteration):
             loss_i = 0.0
@@ -135,24 +163,17 @@ class Trainer:
             self.model.train()
 
             for input, mask in self.dataloaders['training']:
+                loss, input, out, mask = self.forward_pass(input, mask)
+                loss_i += loss.item() * input.size(0)
+                self.optimizer.zero_grad(set_to_none=True)
+                grad_scaler.scale(loss).backward()
+                grad_scaler.unscale_(self.optimizer)
 
-                input = input.to(self.device)
-                mask = mask.to(self.device)
-                mask = mask.long()
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), gradient_clipping=1.0)
 
-                self.optimizer.zero_grad()
-                out = self.model(input)
-                loss = segmentation_loss(
-                    mask,
-                    out,
-                    self.device,
-                    self.class_weights,
-                    self.ignore_index
-                )
+                grad_scaler.step(self.optimizer)
+                grad_scaler.update()
 
-                loss_i += loss.item() * input.size(0)  # Multiply by batch size
-
-                #batch_acc=compute_accuracy(mask,out)
                 accuracy_batch, precision_batch, recall_batch, f1_batch = compute_accuracy_and_f1(mask,out)
                 acc_dataset_train.append(accuracy_batch)
                 f1_dataset_train.append(f1_batch)
@@ -186,34 +207,6 @@ class Trainer:
             miou_train = np.mean(iou_train[1:])
 
             epoch_loss_train = loss_i / len(self.dataloaders['training'].dataset)
-            log_postfix = f"{self.case}_{self.used_data}.csv"
-
-            with open(f'iou_train_{log_postfix}.csv', mode='a', newline='') as file:
-                writer = csv.writer(file)
-                row=iou_train
-                # Write the list as a row
-                writer.writerow(row)
-
-            with open(f'acc_train_{log_postfix}.csv', mode='a', newline='') as file:
-                writer = csv.writer(file)
-                row=acc_total_train
-                # Write the list as a row
-                writer.writerow(row)
-
-            with open(f'f1_train_{log_postfix}.csv', mode='a', newline='') as file:
-                writer = csv.writer(file)
-                row=f1_total_train
-                # Write the list as a row
-                writer.writerow(row)
-
-            print({
-                "epoch": i + 1,
-                "train_loss": epoch_loss_train,
-                "acc_train": mean_acc_train,
-                "learning_rate": self.optimizer.param_groups[0]['lr'],
-                "miou_train": miou_train,
-                "mF1_train": mean_f1_train
-            })
             miou_valid, mean_acc_val, mean_f1_val, epoch_loss_val = self.validate(iteration)
 
             if i == 0:
@@ -265,19 +258,7 @@ class Trainer:
 
         with torch.no_grad():
             for index, (input, mask) in enumerate(self.dataloaders['validation']):
-
-                input = input.to(self.device)
-                mask = mask.to(self.device)
-                mask = mask.long() + self.config.get('class_index_correction', 0)
-
-                out = self.model(input)
-                loss = segmentation_loss(
-                    mask,
-                    out,
-                    self.device,
-                    self.class_weights,
-                    self.ignore_index
-                )
+                loss, input, out, mask = self.forward_pass(input, mask)
 
                 val_loss += loss.item() * input.size(0)
 
