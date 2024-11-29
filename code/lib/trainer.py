@@ -15,6 +15,8 @@ from prithvi_global.mae.config import get_config
 from torch.optim import Adam
 from torch.utils.data import DataLoader
 
+from tqdm import tqdm
+
 
 class Trainer:
     def __init__(self, config_filename, model_path=None, model_only=False):
@@ -146,11 +148,17 @@ class Trainer:
 
         for iteration in range(self.n_iteration):
             loss_i = 0.0
-            print("iteration started")
 
             self.model.train()
-
-            for input, mask in self.dataloaders['training']:
+            current_iteration = 0
+            total_iteration = len(self.dataloaders['training'])
+            pbar = tqdm(
+                self.dataloaders['training'],
+                total=total_iteration,
+                desc=f"Iteration [{current_iteration}/{total_iteration}]",
+                bar_format="{l_bar}{bar} [ time left: {remaining}, time spent: {elapsed}]"
+            )
+            for input, mask in pbar:
                 loss, input, out, mask = self.forward_pass(input, mask)
                 loss_i += loss.item() * input.size(0)
                 self.optimizer.zero_grad(set_to_none=True)
@@ -166,16 +174,6 @@ class Trainer:
             epoch_loss_val = self.validate()
 
             print(f"Epoch {iteration} - Train Loss: {epoch_loss_train}, Validation Loss: {epoch_loss_val}")
-
-            if iteration % (self.config['check_output'] or 2) == 0:
-                plot_output_image(
-                    self.model,
-                    self.device,
-                    iteration,
-                    self.config,
-                    self.segment_input,
-                    self.predicted_mask_dir
-                )
             state_dict = self.model.state_dict()
             torch.save(state_dict, self.checkpoint)
 
@@ -183,12 +181,18 @@ class Trainer:
         self.model.eval()
 
         val_loss = 0.0
-
+        total_samples = len(self.dataloaders['validation'])
+        current_sample = 0
+        pbar = tqdm(
+            self.dataloaders['validation'],
+            total=total_samples,
+            desc=f"Iteration [{current_sample}/{total_samples}]",
+            bar_format="{l_bar}{bar} [ time left: {remaining}, time spent: {elapsed}]"
+        )
         with torch.no_grad():
-            for index, (input, mask) in enumerate(self.dataloaders['validation']):
+            for input, mask in pbar:
                 self.model.eval()
                 loss, input, out, mask = self.forward_pass(input, mask)
-
                 val_loss += loss.item() * input.size(0)
 
         epoch_loss_val = val_loss / len(self.dataloaders['validation'].dataset)
