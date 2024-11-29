@@ -169,6 +169,7 @@ class Trainer:
 
                 grad_scaler.step(self.optimizer)
                 grad_scaler.update()
+                current_iteration += 1
 
             epoch_loss_train = loss_i / len(self.dataloaders['training'].dataset)
             epoch_loss_val = self.validate()
@@ -194,6 +195,7 @@ class Trainer:
                 self.model.eval()
                 loss, input, out, mask = self.forward_pass(input, mask)
                 val_loss += loss.item() * input.size(0)
+                current_sample += 1
 
         epoch_loss_val = val_loss / len(self.dataloaders['validation'].dataset)
 
