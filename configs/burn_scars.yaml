@@ -3,6 +3,8 @@ check_output: 2
 
 class_index_correction: 0
 
+threshold: 0.5
+
 colormap: [
   [0, 0, 0],
   [255, 255, 255],
@@ -11,14 +13,14 @@ colormap: [
 model:
   name: "burn_scars"
   n_channel: 6
-  n_class: 2
+  n_class: 1
   encoder_embed_dim: 1024
   dec_embed_dim: 512
   dropout_rate: 0.2
 
 dataset_used: 1
 
-device_name: "cpu"
+device_name: "cuda"
 wandb_project: "HLS-burn-finetune-10prcnt-prithviGlobal"
 
 n_iteration: 30
@@ -66,12 +68,11 @@ class_weights:  [0.11, 0.88]
 ignore_index: -1
 
 logging:
-  checkpoint_dir: "/opt/ml/data/models/"
+  checkpoint_dir: "/opt/ml/models/"
 
 segment_input_path: "/opt/ml/data/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
 
 predicted_mask_dir: "./predicted"
-
 
 prithvi_backbone:
   depth: 24
