@@ -145,14 +145,14 @@ def infer(model_id, infer_date, bounding_box):
         return JSONResponse(content=jsonable_encoder(response))
     inference = MODELS[model_id]
     all_tiles = list()
-    # geojson_list = list()
-    # geojson = {'type': 'FeatureCollection', 'features': []}
+    geojson_list = list()
+    geojson = {'type': 'FeatureCollection', 'features': []}
 
     for layer in LAYERS:
         tiles = download_files(infer_date, layer, bounding_box)
         for tile in tiles:
             tile_name = tile
-            if model_id == 'burn_scars':
+            if model_id == 'burn':
                 tile_name = tile_name.replace('.tif', '_scaled.tif')
             all_tiles.append(tile_name)
 
@@ -167,7 +167,7 @@ def infer(model_id, infer_date, bounding_box):
             with torch.no_grad():
                 for tiles in batch(all_tiles):
                     batch_results, batch_profiles = inference.infer(tiles)
-                    results.extend(batch_results.cpu())
+                    results.extend(batch_results)
                     profiles.extend(batch_profiles)
             memory_files = list()
             torch.cuda.empty_cache()
@@ -190,12 +190,12 @@ def infer(model_id, infer_date, bounding_box):
 
             s3_link = save_cog(mosaic[0], profile, transform, prediction_filename)
 
-            # geojson = post_process(mosaic[0], transform)
+            geojson = post_process(mosaic[0], transform)
 
-            # for geometry in geojson:
-            #     updated_geometry = PostProcess.convert_geojson(geometry)
-            #     geojson_list.append(updated_geometry)
-            # geojson = subset_geojson(geojson_list, bounding_box)
+            for geometry in geojson:
+                updated_geometry = PostProcess.convert_geojson(geometry)
+                geojson_list.append(updated_geometry)
+            geojson = subset_geojson(geojson_list, bounding_box)
         except Exception as e:
             print('!!! infer error', infer_date, model_id, bounding_box, e)
             torch.cuda.empty_cache()
@@ -204,7 +204,7 @@ def infer(model_id, infer_date, bounding_box):
     gc.collect()
 
     return {
-        model_id: {'s3_link': s3_link}
+        model_id: {'s3_link': s3_link, 'predictions': geojson}
     }
 
 @app.post('/invocations')
