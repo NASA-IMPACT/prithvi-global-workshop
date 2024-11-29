@@ -23,9 +23,9 @@ class Trainer:
         with open(config_filename) as config:
             self.config = yaml.safe_load(config)
         self.model_path = model_path
+        self.load_parameters()
         if not(model_only):
             self.load_datasets()
-        self.load_parameters()
         self.load_model()
 
 
@@ -120,12 +120,12 @@ class Trainer:
         self.model = self.model.to(self.device)
 
     def forward_pass(self, input, mask):
-        input = input.to(self.device)
-        mask = mask.to(self.device)
-        mask = mask.long()
+        input = input.to(device=self.device, dtype=torch.float32)
+        mask = mask.to(device=self.device, dtype=torch.float32)
 
         self.optimizer.zero_grad()
         out = self.model(input)
+        out = out.squeeze(1)
         loss = self.criterion(out, mask)
         loss += dice_loss(
             torch.sigmoid(out), mask,
@@ -136,28 +136,16 @@ class Trainer:
 
 
     def train(self):
-        best_miou_val = 0
-
         self.optimizer = torch.optim.Adam(
             self.model.parameters(),
             lr=self.learning_rate,
         )
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            self.optimizer, "max", patience=5
-        )  # goal: maximize Dice score
+
         grad_scaler = torch.cuda.amp.GradScaler(enabled=False)
 
-        class_wts = torch.tensor(self.config["class_weights"]).to(self.device)
 
-
-        for i in range(self.n_iteration):
+        for iteration in range(self.n_iteration):
             loss_i = 0.0
-            miou_train = []
-            acc_dataset_train = []
-            f1_dataset_train = []
-
-            iou_train = torch.tensor([])
-            iteration = torch.tensor([i]).unsqueeze(0)
             print("iteration started")
 
             self.model.train()
@@ -169,157 +157,40 @@ class Trainer:
                 grad_scaler.scale(loss).backward()
                 grad_scaler.unscale_(self.optimizer)
 
-                torch.nn.utils.clip_grad_norm_(self.model.parameters(), gradient_clipping=1.0)
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
 
                 grad_scaler.step(self.optimizer)
                 grad_scaler.update()
 
-                accuracy_batch, precision_batch, recall_batch, f1_batch = compute_accuracy_and_f1(mask,out)
-                acc_dataset_train.append(accuracy_batch)
-                f1_dataset_train.append(f1_batch)
-                miou_batch, iou_batch = calculate_miou(out, mask, self.device)
-                miou_train.append(miou_batch)
-                iou_batch = iou_batch.cpu().unsqueeze(0)
-                iou_batch = torch.cat((iteration, iou_batch), dim=1)
-
-                if i == 0:
-                    iou_train = iou_batch
-                else:
-                    iou_train = torch.cat(
-                        (iou_train,iou_batch),
-                        dim=0
-                    )
-
-                loss.backward()
-                self.optimizer.step()
-
-            acc_dataset_train = np.array(acc_dataset_train) #B,n_class
-            acc_total_train = np.mean(acc_dataset_train,axis=0) #1,n_class
-            mean_acc_train = np.mean(acc_total_train) #1
-
-            f1_dataset_train = np.array(f1_dataset_train) #B,n_class
-            f1_total_train = np.mean(f1_dataset_train,axis=0) #1,n_class
-            mean_f1_train = np.mean(f1_total_train) #1
-
-            iou_train = iou_train.numpy()
-            iou_train = np.mean(iou_train,axis=0)
-
-            miou_train = np.mean(iou_train[1:])
-
             epoch_loss_train = loss_i / len(self.dataloaders['training'].dataset)
-            miou_valid, mean_acc_val, mean_f1_val, epoch_loss_val = self.validate(iteration)
+            epoch_loss_val = self.validate()
 
-            if i == 0:
-                best_miou_val = miou_valid
+            print("Epoch {iteration} - Train Loss: {epoch_loss_train}, Validation Loss: {epoch_loss_val}")
 
-            print(f"""
-                Epoch: {i}
-                Train loss: {epoch_loss_train}
-                Val loss: {epoch_loss_val}
-                Accuracy train: {mean_acc_train}
-                Accuracy val: {mean_acc_val}
-                MIOU train: {miou_train}
-                MIOU val: {miou_valid}
-                MF1 train: {mean_f1_train}
-                MF1_val: {mean_f1_val}
-            """
-            )
-
-            if miou_valid > best_miou_val:
-                save_checkpoint(
-                    self.model,
-                    self.optimizer,
-                    i,
-                    epoch_loss_train,
-                    epoch_loss_val,
-                    self.checkpoint
-                )
-                best_miou_val = miou_valid
-
-            if i % (self.config['check_output'] or 2) == 0:
+            if iteration % (self.config['check_output'] or 2) == 0:
                 plot_output_image(
                     self.model,
                     self.device,
-                    i,
+                    iteration,
                     self.config,
                     self.segment_input,
                     self.predicted_mask_dir
                 )
+            state_dict = self.model.state_dict()
+            torch.save(state_dict, f'{self.config["logging"]["checkpoint_dir"]}latest_model.pth')
 
-    def validate(self, iteration):
+    def validate(self):
         self.model.eval()
 
         val_loss = 0.0
-        miou_valid=[]
-        acc_dataset_val=[]
-        f1_dataset_val=[]
-
-        iou_valid=torch.tensor([])
 
         with torch.no_grad():
             for index, (input, mask) in enumerate(self.dataloaders['validation']):
+                self.model.eval()
                 loss, input, out, mask = self.forward_pass(input, mask)
 
                 val_loss += loss.item() * input.size(0)
 
-                accuracy_batch, precision_batch, recall_batch, f1_batch = compute_accuracy_and_f1(
-                    mask,
-                    out
-                )
-                acc_dataset_val.append(accuracy_batch)
-                f1_dataset_val.append(f1_batch)
-                miou_batch, iou_batch = calculate_miou(out, mask, self.device)
-                miou_valid.append(miou_batch)
-                iou_batch = iou_batch.cpu().unsqueeze(0)
-                iou_batch = torch.cat((iteration, iou_batch), dim=1)
+        epoch_loss_val = val_loss / len(self.dataloaders['validation'].dataset)
 
-                if index == 0:
-                    iou_valid = iou_batch
-                else:
-                    iou_valid=torch.cat((iou_valid, iou_batch), dim=0)
-
-
-        acc_dataset_val = np.array(acc_dataset_val)
-        acc_total_val = np.mean(acc_dataset_val,axis=0)
-        mean_acc_val = np.mean(acc_total_val)
-        #print("mean acc", mean_acc_val)
-
-        f1_dataset_val = np.array(f1_dataset_val)
-        f1_total_val = np.mean(f1_dataset_val,axis=0)
-        mean_f1_val = np.mean(f1_total_val)
-        #print("mean acc", mean_acc_val)
-
-        #miou_valid=np.mean(miou_valid)
-        iou_valid = iou_valid.numpy()
-        iou_valid = np.mean(iou_valid,axis=0)
-        miou_valid = np.mean(iou_valid[1:])
-
-        epoch_loss_val = val_loss /len(self.dataloaders['validation'].dataset)
-
-        log_postfix = f"{self.case}_{self.used_data}.csv"
-        with open(f'acc_val_{log_postfix}.csv', mode='a', newline='') as file:
-            writer = csv.writer(file)
-            row=acc_total_val
-            # Write the list as a row
-            writer.writerow(row)
-
-        with open(f'f1_val_{log_postfix}.csv', mode='a', newline='') as file:
-            writer = csv.writer(file)
-            row=f1_total_val
-            # Write the list as a row
-            writer.writerow(row)
-
-        with open(f'iou_val_{log_postfix}.csv', mode='a', newline='') as file:
-            writer = csv.writer(file)
-            row=iou_valid
-            # Write the list as a row
-            writer.writerow(row)
-
-        return miou_valid, mean_acc_val, mean_f1_val, epoch_loss_val
-
-def main():
-    trainer = Trainer('../configs/burn_scars.yaml')
-    trainer.train()
-
-if __name__ == "__main__":
-    main()
+        return epoch_loss_val

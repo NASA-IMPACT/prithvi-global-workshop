@@ -16,15 +16,12 @@ class Infer:
 
     def load_model(self):
         model_weights = torch.load(self.checkpoint_filename)
-        model_weights["model"] = model_weights.pop("model_state_dict")
-        if 'prithvi_backbone.pos_embed' in model_weights['model']:
-            del model_weights['model']['prithvi_backbone.pos_embed']
 
         trainer = Trainer(self.config_filename, model_path=model_weights, model_only=True)
         self.model = trainer.model
         self.model = self.model.to(self.config['device_name'])
 
-        self.model.load_state_dict(model_weights["model"], strict=False)
+        self.model.load_state_dict(model_weights)
         self.model.eval()
 
     def preprocess(self, images):
@@ -61,5 +58,13 @@ class Infer:
         with torch.no_grad():
             images, profiles = self.preprocess(images)
             result = self.model(images.to(self.config['device_name']))
-            result = torch.argmax(result, dim=1)
-        return result, profiles
+            predicted_masks = list()
+            for mask in result:
+                output = mask.cpu()  # [n_segmentation_class, 224, 224]
+                if self.config['model']['n_class'] == 1:
+                    updated_mask = torch.sigmoid(output.clone()).squeeze(0)
+                    predicted_mask = (updated_mask > self.config.get('threshold', 0.5)).int()
+                else:
+                    predicted_mask = torch.argmax(output, 0)
+                predicted_masks.append(predicted_mask)
+        return predicted_masks, profiles
