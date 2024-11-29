@@ -165,7 +165,7 @@ class Trainer:
             epoch_loss_train = loss_i / len(self.dataloaders['training'].dataset)
             epoch_loss_val = self.validate()
 
-            print("Epoch {iteration} - Train Loss: {epoch_loss_train}, Validation Loss: {epoch_loss_val}")
+            print(f"Epoch {iteration} - Train Loss: {epoch_loss_train}, Validation Loss: {epoch_loss_val}")
 
             if iteration % (self.config['check_output'] or 2) == 0:
                 plot_output_image(
@@ -177,7 +177,7 @@ class Trainer:
                     self.predicted_mask_dir
                 )
             state_dict = self.model.state_dict()
-            torch.save(state_dict, f'{self.config["logging"]["checkpoint_dir"]}latest_model.pth')
+            torch.save(state_dict, self.checkpoint)
 
     def validate(self):
         self.model.eval()

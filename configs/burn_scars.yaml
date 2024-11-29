@@ -68,7 +68,7 @@ class_weights:  [0.11, 0.88]
 ignore_index: -1
 
 logging:
-  checkpoint_dir: "/opt/ml/models/"
+  checkpoint_dir: "/opt/ml/data/models/"
 
 segment_input_path: "/opt/ml/data/validation/subsetted_512x512_HLS.S30.T16SFD.2019100.v1.4_merged.tif"
 
