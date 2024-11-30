@@ -35,60 +35,58 @@ This repo contains materials for Prithvi Global Finetuning. Here, we will cover 
 ![Run space](images/updated-instance-config.png)
 
 # Steps to Train (Parts of these steps are also available in the [fine-tuning notebook](notebooks/hls-fm-finteuning.ipynb)):
-1. Clone this repository `git clone https://github.com/nasa-impact/prithvi-global-workshop.git`
-```
-a. Click `git`
-b. Click on `Git Clone Repo`
-![Git clone](images/git-clone-1.png)
-c. Paste `https://github.com/nasa-impact/prithvi-global-workshop.git` and Click on `Clone`.
-![Cloned repository](images/smd-hls-git-clone.png)
+1. Open a new terminal and run the following command to install git lfs
+
+`sudo apt update;sudo apt-get install git-lfs; git lfs install`
+
+2. Clone this repository
+
+`git clone https://github.com/NASA-IMPACT/prithvi-global-workshop.git `
+
 ![Cloned repository](images/smd-hls-cloned-content.png)
-```
+
 
 **Note: We will follow through in the Notebook from this step.**
-2. Change directory into the cloned repository `cd prithvi-global-workshop`
-3. Open the [fine-tuning notebook](notebooks/prithvi-finetuning.ipynb)
-4. Install required packages
+3. Change directory into the cloned repository `cd prithvi-global-workshop`
+4. Open the [fine-tuning notebook](notebooks/hls-fm-finteuning.ipynb)
+5. Install required packages
 ```
 pip install -r requirements.txt
 ```
-5. Create required folders
+6. Create required folders
 ```
 !mkdir datasets
 !mkdir models
 !mkdir configs
 ```
-6. Install git LFS (needed for data download from huggingface)
-```
-! sudo apt-get install git-lfs; git lfs install
-```
+
 7. Download HLS Burn scars dataset
 ```
 ! cd datasets; git clone https://huggingface.co/datasets/ibm-nasa-geospatial/hls_burn_scars; tar -xvzf hls_burn_scars/hls_burn_scars.tar.gz
 ```
-6. Define constants. **Note: Please update the variables as needed**
+8. Define constants. **Note: Please update the variables as needed**
 ```
-BUCKET_NAME = '<your-bucket-name>' # Replace this with the bucket name available from https://creds-workshop.nasa-impact.net/
+BUCKET_NAME = '<your-bucket-name>' # Replace this with the bucket name available from http://smd-ai-workshop-creds-webapp.s3-website-us-east-1.amazonaws.com/
 CONFIG_PATH = './configs'
 DATASET_PATH = './datasets'
 MODEL_PATH = './models'
 ```
-7. Download model configuration and pre-trained model from huggingface
+9. Download model configuration and pre-trained model from huggingface
 ```
 from huggingface_hub import hf_hub_download
 
 hf_hub_download(repo_id="ibm-nasa-geospatial/Prithvi-100M-burn-scar", filename="burn_scars_Prithvi_100M.py", local_dir='./configs')
 hf_hub_download(repo_id="ibm-nasa-geospatial/Prithvi-100M", filename="Prithvi_100M.pt", local_dir='./models')
 ```
-8. Update the configuration file
+10. Update the configuration file
 ```
 1. Update line number 13 from `data_root = '<path to data root>'` to `data_root = '/opt/ml/data/'`. This is the base of our data inside of sagemaker.
-2. Update line number 41 from `pretrained_weights_path = '<path to pretrained weights>'` to `pretrained_weights_path = f"{data_root}/models/Prithvi_100M.pt"`. This provides the pre-trained model path to the train script.
-3. Update line number 53 from `experiment = '<experiment name>'` to `experiment = 'burn_scars'` or your choice of experiment name.
-4. Update line number 54 from `project_dir = '<project directory name>'` to `project_dir = 'v1'` or your choice of project directory name.
+2. Update line number 41 from `pretrained_weights_path = '<path to pretrained weights>'` to `pretrained_weights_path = f"{data_root}/models/prithvi-global-300M.pt"`. This provides the pre-trained model path to the train script.
+3. Update line number 52 from `experiment = '<experiment name>'` to `experiment = 'burn_scars'` or your choice of experiment name.
+4. Update line number 53 from `project_dir = '<project directory name>'` to `project_dir = 'v1'` or your choice of project directory name.
 5. Save the config file.
 ```
-9. Upload downloaded data using sagemaker to the desired s3 bucket
+11. Upload downloaded data using sagemaker to the desired s3 bucket
 ```
 import sagemaker
 
@@ -97,7 +95,7 @@ train_images = sagemaker_session.upload_data(path='datasets/training', bucket=BU
 val_images = sagemaker_session.upload_data(path='datasets/validation', bucket=BUCKET_NAME, key_prefix='data/validation')
 test_images = sagemaker_session.upload_data(path='datasets/validation', bucket=BUCKET_NAME, key_prefix='data/test')
 ```
-10. Rename and upload configuration file and pre-trained model
+12. Rename and upload configuration file and pre-trained model
 ```
 import os
 
@@ -110,7 +108,7 @@ os.rename(config_filename, new_config_filename)
 configs = sagemaker_session.upload_data(path=new_config_filename, bucket=BUCKET_NAME, key_prefix='data/configs')
 models = sagemaker_session.upload_data(path='models/Prithvi_100M.pt', bucket=BUCKET_NAME, key_prefix='data/models')
 ```
-11. Setup variables for training using Sagemaker
+13. Setup variables for training using Sagemaker
 ```
 from datetime import time
 from sagemaker import get_execution_role
@@ -132,7 +130,7 @@ environment_variables = {
     'VERSION': 'v1'
 }
 
-ecr_container_url = '574347909231.dkr.ecr.us-west-2.amazonaws.com/sagemaker_hls:latest'
+ecr_container_url = '637423382292.dkr.ecr.us-west-2.amazonaws.com/sagemaker_hls:latest'
 sagemaker_role = 'SageMaker-ExecutionRole-20240206T151814'
 
 instance_type = 'ml.p3.2xlarge'
@@ -140,7 +138,7 @@ instance_type = 'ml.p3.2xlarge'
 instance_count = 1
 memory_volume = 50
 ```
-12. Initialize sagemaker estimator and start training
+14. Initialize sagemaker estimator and start training
 ```
 estimator = Estimator(image_uri=ecr_container_url,
                       role=get_execution_role(),
@@ -150,7 +148,6 @@ estimator = Estimator(image_uri=ecr_container_url,
                       instance_type=instance_type)
 estimator.fit()
 ```
-
 
 # Interacting with the fine-tuned model (Parts of these steps are covered in the [fm-usage notebook](notebooks/prithvi-usage.ipynb))
 1. Install required packages
