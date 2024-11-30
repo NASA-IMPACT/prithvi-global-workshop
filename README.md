@@ -1,11 +1,11 @@
 <!---- Provide an overview of what is being achieved in this repo ---->
 # Prithvi Finetuning
-This repo contains materials for Prithvi Global Finetuning. Here, we will cover geospatial foundation models and Large Language Models for science. We will also be fine-tuning the aforementioned models for specific usecases. For the purposes of this tutorial, we will be utilizing AWS sagemaker environment. The repo will also demonstrate how to get inferences from the fine-tuned prithvi models after the training is complete.
+This repo contains materials for Prithvi Global Finetuning. Here, we will cover geospatial foundation models and Weather Foundation model. We will also be fine-tuning the aforementioned models for specific usecases. For the purposes of this tutorial, we will be utilizing AWS sagemaker environment. The repo will also demonstrate how to get inferences from the fine-tuned prithvi models after the training is complete.
 
 # Slides:
-[MACHINE LEARNING LIFECYCLE IN HIGH PERFORMANCE COMPUTERS AND CLOUD: A FOCUS ON GEOSPATIAL FOUNDATION MODELS - Gabriele](https://drive.google.com/file/d/1Dn2ZqdP242FaET8W5qeW0fJKwRc1TRrQ/view?usp=sharing)
+[Geospatial Foundation Model - Dr. Sujit Roy](https://docs.google.com/presentation/d/1i06aDGXIHcXYLqzXNkBRaA4EC3ggpD2E/edit?usp=drive_link&ouid=110979708004719970003&rtpof=true&sd=true)
 
-[Geospatial Foundation Models and LLMs for Science - Rahul](https://docs.google.com/presentation/d/1lvs3l6cHoUV-h8_nbNWC700CduWRupfmTOk2X6JGVAs/edit?usp=sharing)
+[Prithvi Weather and Foundation Model - Dr. Rajat Shinde](https://docs.google.com/presentation/d/14jnTbak9xAt36Bfy15oBH8pcR_AiKa9p/edit?usp=drive_link&ouid=110979708004719970003&rtpof=true&sd=true)
 
 # Prerequisites
 1. Basic understanding of git
@@ -17,9 +17,9 @@ This repo contains materials for Prithvi Global Finetuning. Here, we will cover 
 
 # Getting started
 1. Get your credentials and other information using https://creds-workshop.nasa-impact.net/
-![Get Credentials](images/credential.png)
+![Get Credentials](images/credentials.png)
 ![Credentials](images/credentials-show.png)
-2. Navigate to [Login URL](https://ieeeworkshop.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=6jbiuqf95egh4mke5g8r48dkro&response_type=code&scope=openid+profile&redirect_uri=https%3A%2F%2Fvupp3dvvji.execute-api.us-west-2.amazonaws.com%2Fdev%2Furl)
+2. Navigate to [Login URL](https://workshop-domain-3vgdzxn4.auth.us-west-2.amazoncognito.com/login?client_id=6mm4re0d41kcffjp2mlbmtatji&response_type=code&scope=aws.cognito.signin.user.admin+openid+profile&redirect_uri=https://jck7myoluc.execute-api.us-west-2.amazonaws.com/invoke)
 ![Login Page](images/login-1.png)
 3. Log in using the credential provided
 ![Login with username and password](images/login-2.png)
@@ -29,7 +29,7 @@ This repo contains materials for Prithvi Global Finetuning. Here, we will cover 
 5. Click `Create JupyterLab Space`
 ![JupyterLab spaces](images/create-jupyterlab-env.png)
 6. Give it a name. Eg: `Workshop`
-7. Once initialized, change Instance type to `ml.t3.2xlarge` and storage to `50`
+7. Once initialized, change Instance type to `ml.t3.2xlarge` and storage to `75`
 ![Change instance type](images/update-instance-type.png)
 8. Click on `Run Space`. If it throws an error, you might have to pick an Image. The top setting called `Latest` works.
 ![Run space](images/updated-instance-config.png)
